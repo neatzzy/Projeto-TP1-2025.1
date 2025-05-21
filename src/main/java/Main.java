@@ -1,4 +1,5 @@
 import java.sql.Connection;
+import database.DbFunctions;
 import io.github.cdimascio.dotenv.Dotenv;
 
 public class Main {
