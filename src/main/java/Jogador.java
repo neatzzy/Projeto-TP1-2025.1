@@ -1,22 +1,23 @@
 import database.*;
+import java.sql.*;
 
 public class Jogador {
-    private static int nroJogadores = 0;
-
-    private final int id;
+    private int id;
     private String nome;
     private Posicao posicao;
     private Clube clube;
     private double preco;
     private double overall;
     private Stats stats;
+    private final DbFunctions db = new DbFunctions();
 
-    public Jogador(String nome, Posicao posicao, Clube clube, double preco) {
-        this.id = nroJogadores++;
+    public Jogador(int id, String nome, Posicao posicao, Clube clube, double preco, double overall) {
+        this.id = id;
         this.nome = nome;
         this.posicao = posicao;
         this.clube = clube;
         this.preco = preco;
+        this.overall = overall;
     }
 
     public String getNome() {
@@ -39,6 +40,15 @@ public class Jogador {
         return overall;
     }
 
+    public String getStringPosicao(){
+        return switch (posicao) {
+            case ATACANTE -> "ATACANTE";
+            case MEIA -> "MEIA";
+            case ZAGUEIRO -> "ZAGUEIRO";
+            case GOLEIRO -> "GOLEIRO";
+        };
+    }
+
 
     public Stats getStats() {
         return stats;
@@ -49,42 +59,3 @@ public class Jogador {
     }
 }
 
-public class Goleiro extends Jogador{
-    public Goleiro(String nome, Posicao posicao, Clube clube, double preco) {
-        super(nome, posicao, clube, preco);
-    }
-
-    public double calcularPontuacao(){
-        return 0;
-    }
-}
-
-public class Zagueiro extends Jogador{
-    public Zagueiro(String nome, Posicao posicao, Clube clube, double preco) {
-        super(nome, posicao, clube, preco);
-    }
-
-    public double calcularPontuacao(){
-        return 0;
-    }
-}
-
-public class Meia extends Jogador{
-    public Meia(String nome, Posicao posicao, Clube clube, double preco) {
-        super(nome, posicao, clube, preco);
-    }
-
-    public double calcularPontuacao(){
-        return 0;
-    }
-}
-
-public class Atacante extends Jogador{
-    public Atacante(String nome, Posicao posicao, Clube clube, double preco) {
-        super(nome, posicao, clube, preco);
-    }
-
-    public double calcularPontuacao(){
-        return 0;
-    }
-}
