@@ -18,11 +18,10 @@ public class DbFunctions {
         }catch(Exception e){
             System.out.println(e);
         }
-
         return conn;
     }
 
-    // Cria tabela dos times
+    // Cria tabela dos times (clubeid , nome, overdefesa, overataque)
     public void createTableClubes(Connection conn){
         String createQuery= "CREATE TABLE clubes"+
                 "(clubeid SERIAL, nome VARCHAR(200), " +
@@ -37,7 +36,7 @@ public class DbFunctions {
         }
     }
 
-    // Cria tabela dos jogadores
+    // Cria tabela dos jogadores(jogadorid, nome, posicao, preco, overall, clubeid)
     public void createTableJogadores(Connection conn){
         String createQuery= "CREATE TABLE jogadores"+
                 "(jogadorid SERIAL, nome VARCHAR(200), " +
@@ -47,7 +46,7 @@ public class DbFunctions {
                 "overall DOUBLE PRECISION, " +
                 "clubeid INT, " +
                 "PRIMARY KEY(jogadorid)," +
-                "FOREIGN KEY (clubeid) REFERENCES clubes(clubeid))";
+                "FOREIGN KEY (clubeid) REFERENCES clubes(clubeid) ON DELETE CASCADE)";
         try(PreparedStatement createStmt = conn.prepareStatement(createQuery)){
             createStmt.executeUpdate();
             System.out.println("Table jogadores created");
@@ -84,10 +83,11 @@ public class DbFunctions {
         throw new SQLException("Jogador not found: " + name);
     }
 
-    // Insere um time na database(nota: quando tiver a implementação das classes, mudar parâmetro para objeto)
-    public void insertClube(Connection conn, String name, double overDefesa, double overAtaque){
+    // Insere um time na database e retorna o id desse time
+    // caso de erro, retorna uma exceção do tipo SQL
+    public int insertClube(Connection conn, String name, double overDefesa, double overAtaque) throws SQLException {
         String insertQuery = "INSERT INTO clubes (nome, overDefesa, overAtaque) VALUES (?, ?, ?)";
-        try(PreparedStatement insertStmt = conn.prepareStatement(insertQuery)){
+        try(PreparedStatement insertStmt = conn.prepareStatement(insertQuery, Statement.RETURN_GENERATED_KEYS)){
 
             insertStmt.setString(1, name);
             insertStmt.setDouble(2, overDefesa);
@@ -95,43 +95,81 @@ public class DbFunctions {
 
             int clubsInserted = insertStmt.executeUpdate();
 
-            if (clubsInserted > 0) {
-                System.out.println("Club " + name + " inserted.");
-            } else {
-                System.out.println("Failed to insert club.");
+            if(clubsInserted == 0){
+                throw new SQLException("Insert failed: nenhum clube inserido");
             }
-        }catch(Exception e){
+
+            try (ResultSet generatedKeys = insertStmt.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                    int newId = generatedKeys.getInt(1); // Pega o primeiro campo (clubeid)
+                    System.out.println("Clube '" + name + "' inserido com ID: " + newId);
+                    return newId;
+                }
+            }
+
+            throw new SQLException("Falha ao obter ID do clube inserido.");
+
+        }catch(SQLException e){
+            System.out.println(e);
+            throw e;
+        }
+
+    }
+
+    // atualiza os valores de overDefesa e overAtaque do time
+    public void atualizarClubeById(Connection conn, int id, double overDefesa, double overAtaque){
+        String updateQuery = "UPDATE clubes SET overDefesa = ?, overAtaque = ? WHERE id = ?";
+        try(PreparedStatement updateStmt = conn.prepareStatement(updateQuery)){
+            updateStmt.setDouble(1, overDefesa);
+            updateStmt.setDouble(2, overAtaque);
+            updateStmt.setInt(3, id);
+
+            int clubsUpdated = updateStmt.executeUpdate();
+            if (clubsUpdated > 0) {
+                System.out.println("Club " + id + " updated.");
+            } else {
+                System.out.println("Failed to update club.");
+            }
+
+        } catch (Exception e) {
             System.out.println(e);
         }
     }
 
     // Insere um jogador na database(nota: quando tiver a implementação das classes, mudar parâmetro para objeto)
-    public void insertJogador(Connection conn, String name, String posicao, String clube, double preco, double overall){
+    // caso de erro, retorna uma exceção do tipo SQL
+    public int insertJogador(Connection conn, String name, String posicao, String clube, double preco, double overall) throws SQLException{
         String insertQuery = "INSERT INTO jogadores (nome, posicao, preco, overall, clubeid) VALUES (?, ?, ?, ?, ?)";
-        try(PreparedStatement insertStmt = conn.prepareStatement(insertQuery)){
+        try(PreparedStatement insertStmt = conn.prepareStatement(insertQuery, Statement.RETURN_GENERATED_KEYS)){
 
             insertStmt.setString(1, name);
             insertStmt.setString(2, posicao);
             insertStmt.setDouble(3, preco);
             insertStmt.setDouble(4, overall);
 
-            try {
-                insertStmt.setInt(5, getClubeIdByName(conn, clube));
-            } catch (SQLException e) {
-                System.err.println("Failed to get team ID: " + e.getMessage());
-                return;
-            }
+            int clubeId = getClubeIdByName(conn, clube);
+            insertStmt.setInt(5, clubeId);
 
             int jogadoresInserted = insertStmt.executeUpdate();
 
-            if (jogadoresInserted > 0) {
-                System.out.println("Jogador " + name + " inserted.");
-            } else {
-                System.out.println("Failed to insert Jogador.");
+            if(jogadoresInserted == 0){
+                throw new SQLException("Insert failed: nenhum jogador inserido.");
             }
-        }catch(Exception e){
+
+            try (ResultSet generatedKeys = insertStmt.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                    int newId = generatedKeys.getInt(1); // Pega o primeiro campo (clubeid)
+                    System.out.println("Jogador '" + name + "' inserido com ID: " + newId);
+                    return newId;
+                } else {
+                    throw new SQLException("Falha ao obter ID do jogador inserido.");
+                }
+            }
+        } catch (SQLException e) {
             System.out.println(e);
+            throw e;
         }
+
     }
 
     // Retorna dados dos times(nota: quando tiver a implementação das classes, retornar lista de objetos do tipo Clube())
@@ -224,34 +262,55 @@ public class DbFunctions {
         }
     }
 
-    // Remove jogador por nome
-    public void deleteJogadorByName(Connection conn, String name){
-        String deleteQuery = "DELETE FROM jogadores WHERE nome = ?";
+    // Remove jogador por id
+    public void deleteJogadorById(Connection conn, int id){
+        String deleteQuery = "DELETE FROM jogadores WHERE jogadorid = ?";
         try(PreparedStatement deleteStmt = conn.prepareStatement(deleteQuery)){
-            deleteStmt.setString(1, name);
-            deleteStmt.executeUpdate();
-            System.out.println("Jogador " + name + " deleted.");
+            deleteStmt.setInt(1, id);
+            int jogadorDeletado = deleteStmt.executeUpdate();
+            if (jogadorDeletado > 0) {
+                System.out.println("Jogador com ID " + id + " foi deletado com sucesso.");
+            } else {
+                System.out.println("Nenhum jogador encontrado com ID " + id + ".");
+            }
         } catch (Exception e) {
             System.out.println(e);
         }
     }
 
-    // Remove time por nome(nota: depois complementar com a retirada dos jogadores!)
-    public void deleteClubesByName(Connection conn, String clube){
-        String deleteQuery = "DELETE FROM clubes WHERE nome = ?";
-        try(PreparedStatement deleteStmt = conn.prepareStatement(deleteQuery)){
-            deleteStmt.setString(1, clube);
-            deleteStmt.executeUpdate();
-            System.out.println("Clube " + clube + " deleted.");
+    // Remove time por id(também remove os jogadores associados)
+    public void deleteClubeById(Connection conn, int id){
+
+        try {
+            String deleteJogadores = "DELETE FROM jogadores WHERE clubeid = ?";
+            try (PreparedStatement deleteJogadoresStmt= conn.prepareStatement(deleteJogadores)) {
+                deleteJogadoresStmt.setInt(1, id);
+                int jogadoresDeleted = deleteJogadoresStmt.executeUpdate();
+                System.out.println(jogadoresDeleted + " jogadores deletados vinculados ao clube " + id);
+            } catch (SQLException e) {
+                System.out.println("Erro ao deletar jogadores vinculados: " + e.getMessage());
+            }
+
+
+            String deleteQuery = "DELETE FROM clubes WHERE clubeid = ?";
+
+            try (PreparedStatement deleteClubeStmt = conn.prepareStatement(deleteQuery)) {
+                deleteClubeStmt.setInt(1, id);
+                int clubDeleted = deleteClubeStmt.executeUpdate();
+                if (clubDeleted > 0) {
+                    System.out.println("Clube com ID " + id + " deletado.");
+                } else {
+                    System.out.println("Nenhum clube encontrado com ID " + id);
+                }
+            }
         } catch (Exception e) {
             System.out.println(e);
         }
     }
 
-    // deleta tabela de times
-    /*
-    public void deleteTeamTable(Connection conn) {
-        String deleteQuery = "DROP TABLE IF EXISTS team";
+    // deleta tabela de times(também deleta a de jogadores)
+    public void deleteClubesTable(Connection conn) {
+        String deleteQuery = "DROP TABLE IF EXISTS jogadores, clubes CASCADE;";
         try (Statement stmt = conn.createStatement()) {
             stmt.executeUpdate(deleteQuery);
             System.out.println("Team table deleted");
@@ -259,8 +318,6 @@ public class DbFunctions {
             System.out.println(e);
         }
     }
-    */
-
 
     // deleta tabela de jogadores
     public void deleteJogadoresTable(Connection conn) {
