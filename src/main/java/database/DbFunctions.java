@@ -1,5 +1,4 @@
 package database;
-
 import java.sql.*;
 
 public class DbFunctions {
@@ -188,6 +187,55 @@ public class DbFunctions {
         catch(Exception e){
             System.out.println(e);
         }
+    }
+
+    public Jogador getPlayerById(Connection conn, int id){
+        String dataQuery = "SELECT * FROM jogadores WHERE id = ?";
+        try(PreparedStatement dataStmt = conn.prepareStatement(dataQuery)){
+            dataStmt.setInt(1, id);
+            ResultSet rs = dataStmt.executeQuery();
+
+            if (rs.next()) {
+                int jogadorId = rs.getInt("id");
+                String nome = rs.getString("nome");
+                String posicaoStr = rs.getString("posicao");
+                double preco = rs.getDouble("preco");
+                double overall = rs.getDouble("overall");
+                String clubeStr = rs.getString("clube");
+                int clubeid = rs.getInt("clubeid");
+
+                // Supondo que você tenha um enum ou algo assim para posição
+                Posicao posicao = Posicao.valueOf(posicaoStr); // cuidado com exceções aqui
+                Clube clube = getClubeById(conn, clubeid);
+
+                return new Jogador(jogadorId, nome, posicao, clube, preco, overall, null);
+            }
+
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+
+        return null;
+    }
+
+    public Clube getClubeById(Connection conn, int id){
+        String dataQuery = "SELECT * FROM clubes WHERE id = ?";
+        try(PreparedStatement dataStmt = conn.prepareStatement(dataQuery)){
+            dataStmt.setInt(1, id);
+            ResultSet rs = dataStmt.executeQuery();
+
+            if(rs.next()){
+                int clubeid = rs.getInt("id");
+                String nome = rs.getString("nome");
+                double overDefesa = rs.getDouble(("overDefesa"));
+                double overAtaque = rs.getDouble("overAtaque");
+                return new Clube(clubeid, nome, overDefesa, overAtaque);
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+
+        return null;
     }
 
     // Retorna dado dos jogadores(nota: quando tiver a implementação das classes, retornar lista de objetos do tipo Time())
