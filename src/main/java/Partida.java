@@ -65,11 +65,11 @@ public class Partida {
 
             // para cada posição, passa médias referentes à tal
             switch (jogador.getPosicao()) {
-                case ATACANTE -> simularStatusJogador(jogador, timeCasa, 0.8, 0.5, 0.5, 0.2, 2.5, 0, 0.005, 0.8, 0.2, 0.02 );
-                case MEIA -> simularStatusJogador(jogador, timeCasa, 1.5, 2.0, 0.1, 0.3, 1.5, 0, 0.01, 1.5, 0.25, 0.03);
-                case ZAGUEIRO -> simularStatusJogador(jogador, timeCasa,1.2, 2.5, 0.05, 0.05, 0.3, 0, 0.03, 1.2, 0.3, 0.05);
-                case GOLEIRO -> simularStatusJogador(jogador, timeCasa, 0.3, 1.0, 0.01, 0.01, 0.1, 3.0, 0.01, 0.3, 0.1, 0.01);
-            };
+                case ATACANTE -> simularStatusJogador(jogador, timeCasa , 0.5, 0.5, 0.2, 2.5, 0, 0.005, 0.8, 0.2, 0.02 );
+                case MEIA -> simularStatusJogador(jogador, timeCasa, 2.0, 0.1, 0.3, 1.5, 0, 0.01, 1.5, 0.25, 0.03);
+                case ZAGUEIRO -> simularStatusJogador(jogador, timeCasa,2.5, 0.05, 0.05, 0.3, 0, 0.03, 1.2, 0.3, 0.05);
+                case GOLEIRO -> simularStatusJogador(jogador, timeCasa, 1.0, 0.01, 0.01, 0.1, 3.0, 0.01, 0.3, 0.1, 0.01);
+            }
 
         }
 
@@ -151,7 +151,7 @@ public class Partida {
     }
 
     // calcula os status baseando-se na média de cada estatística da posição do jogador e o seu overall
-    public void simularStatusJogador(Jogador jogador, boolean timeCasa, double mediafalta, double mediaDesarme, double mediaGol, double mediaAssistencia, double mediaFinalizacao, double mediaDefesa, double mediaGolsContra, double mediaFaltasCometidas, double mediaCartaoAmarelo, double mediaCartaoVermelho){
+    public void simularStatusJogador(Jogador jogador, boolean timeCasa, double mediaDesarme, double mediaGol, double mediaAssistencia, double mediaFinalizacao, double mediaDefesa, double mediaGolsContra, double mediaFaltasCometidas, double mediaCartaoAmarelo, double mediaCartaoVermelho){
 
         Random random = new Random();
 
@@ -306,7 +306,7 @@ public class Partida {
     }
 
     // caso de ruim na conta, adicionar um gol/assitencia para algum jogador aleatório que já fez um gol ou assistência(fator hot streak)
-    public void corrigirGolsAssistencias(boolean timeCasa, jogador goleiroCasa, jogador goleiroFora){
+    public void corrigirGolsAssistencias(boolean timeCasa, Jogador goleiroCasa, Jogador goleiroFora){
 
         List<Jogador> jogadoresGol = timeCasa ? this.jogadoresGolCasa : this.jogadoresGolFora;
         List<Jogador> jogadoresAssistencia = timeCasa ? this.jogadoresAssistenciaCasa : this.jogadoresAssistenciaFora;
