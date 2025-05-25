@@ -80,32 +80,12 @@ public class Partida {
         Jogador atacanteMaiorOverallCasa = new Jogador();
         Jogador atacanteMaiorOverallFora = new Jogador();
 
-        // achar os goleiros e os atacantes de maior overall
-        // aproveitei o loop para lidar com sg
-
-        boolean sgCasa = true;
-        boolean sgFora = true;
-
-        if(this.golsClubeFora > 0){
-            sgCasa = false;
-        }
-
-        if(this.golsClubeCasa > 0){
-            sgFora = false;
-        }
-
-        // loop para tratar sg e achar goleiro e atacante de maor overall(time casa)
+        // loop para achar goleiro e atacante de maior overall(time casa)
         // sugestão: funções para retornar goleiros, atacantes, jogador de maior overall, ...
         for(Jogador jogador: todosJogadores){
 
             boolean timeCasa;
             timeCasa = jogador.getClube().equals(clubeCasa);
-
-            if(timeCasa){
-                jogador.getStatus().setSg(sgCasa);
-            } else {
-                jogador.getStatus().setSg(sgFora);
-            }
 
             if(jogador.getPosicao() == Posicao.GOLEIRO){
                 if(timeCasa) {
@@ -140,6 +120,33 @@ public class Partida {
         if ((this.golsClubeFora - this.golsPenaltiCasa) != this.assistClubeFora){
             corrigirGolsAssistencias(false, goleiroCasa, goleiroFora);
         }
+
+        // agora que já vi todas as lógicas de tratamento de gol, setar sg
+
+        boolean sgCasa = true;
+        boolean sgFora = true;
+
+        if(this.golsClubeFora > 0){
+            sgCasa = false;
+        }
+
+        if(this.golsClubeCasa > 0){
+            sgFora = false;
+        }
+
+        for(Jogador jogador: todosJogadores){
+
+            boolean timeCasa;
+            timeCasa = jogador.getClube().equals(clubeCasa);
+
+            if(timeCasa){
+                jogador.getStatus().setSg(sgCasa);
+            } else {
+                jogador.getStatus().setSg(sgFora);
+            }
+
+        }
+
 
     }
 
