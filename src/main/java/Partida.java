@@ -341,25 +341,32 @@ public class Partida {
         }
 
         if(golsSemPenalti < assistencias){ // adicionar gols!
-            Jogador jogadorSorteado = jogadoresGol.get(random.nextInt(jogadoresGol.size()));
-            jogadorSorteado.getStatus().setGols(jogadorSorteado.getGols() + 1);
-            if(timeCasa){
-                this.golsClubeCasa++;
-                goleiroFora.getStatus().setGolsSofridos(goleiroFora.getStatus().getGolsSofridos() + 1);
-            } else {
-                this.golsClubeFora++;
-                goleirocasa.getStatus().setGolsSofridos(goleiroCasa.getStatus().getGolsSofridos() + 1);
+
+            while(golsSemPenalti < assistencias) {
+                Jogador jogadorSorteado = jogadoresGol.get(random.nextInt(jogadoresGol.size()));
+                jogadorSorteado.getStatus().setGols(jogadorSorteado.getGols() + 1);
+                if (timeCasa) {
+                    this.golsClubeCasa++;
+                    goleiroFora.getStatus().setGolsSofridos(goleiroFora.getStatus().getGolsSofridos() + 1);
+                } else {
+                    this.golsClubeFora++;
+                    goleirocasa.getStatus().setGolsSofridos(goleiroCasa.getStatus().getGolsSofridos() + 1);
+                }
+                golsSemPenalti++;
             }
-            golsSemPenalti++;
+
         } else if(golsSemPenalti > assistencias){ // adicionar assitências!
-            Jogador jogadorSorteado = jogadoresAssistencia.get(random.nextInt(jogadoresAssistencia.size()));
-            jogadorSorteado.getStatus().setAssistencias(jogadorSorteado.getAssistencias() + 1);
-            if(timeCasa){
-                this.assistClubeCasa++;
-            } else {
-                this.assistClubeFora++;
+
+            while(golsSemPenalti > assistencias) {
+                Jogador jogadorSorteado = jogadoresAssistencia.get(random.nextInt(jogadoresAssistencia.size()));
+                jogadorSorteado.getStatus().setAssistencias(jogadorSorteado.getAssistencias() + 1);
+                if (timeCasa) {
+                    this.assistClubeCasa++;
+                } else {
+                    this.assistClubeFora++;
+                }
+                assistencias++;
             }
-            assistencias++;
         }
 
     }
