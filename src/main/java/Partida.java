@@ -1,5 +1,6 @@
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.Random;
@@ -153,8 +154,6 @@ public class Partida {
     // calcula os status baseando-se na média de cada estatística da posição do jogador e o seu overall
     public void simularStatusJogador(Jogador jogador, boolean timeCasa, double mediaDesarme, double mediaGol, double mediaAssistencia, double mediaFinalizacao, double mediaDefesa, double mediaGolsContra, double mediaFaltasCometidas, double mediaCartaoAmarelo, double mediaCartaoVermelho){
 
-        Random random = new Random();
-
         double fatorPositivoOverall = 1 + 0.3 * (jogador.getOverall() / 100) + calcularBonusClube(timeCasa);
         double fatorNegativoOverall = 2 - 0.9 * (jogador.getOverall() / 100) - calcularBonusClube(timeCasa);
 
@@ -227,17 +226,17 @@ public class Partida {
     // cálcula se rolou penalti, se o goleiro defendeu, etc
     public void simularPenalti(Jogador goleiroCasa, Jogador goleiroFora, Jogador atacanteMaiorOverallCasa, Jogador atacanteMaiorOverallFora, double mediaPenaltis){
 
-        int penaltis = possion(mediaPenaltis, this.random);
+        int penaltis = poisson(mediaPenaltis, this.random);
 
         // chance de cada equipe receber um penalti
-        penaltiCasa = 0.5 + calcularBonusClube(true);
-        penaltiFora = 0.5 + calcularBonusClube(false);
+        double penaltiCasa = 0.5 + calcularBonusClube(true);
+        double penaltiFora = 0.5 + calcularBonusClube(false);
 
         // media geral da defesa de penalti de um goleiro
-        mediaDefesaPenaltiCasa = 0.1 * (1 + 0.3 * (goleiroCasa.getOverall() / 100) + calcularBonusClube(timeCasa));
-        mediaDefesaPenaltiFora = 0.1 * (1 + 0.3 * (goleiroFora.getOverall() / 100) + calcularBonusClube(timeCasa));
-        defesasPenaltiCasa = poisson(mediaDefesaPenaltiCasa, this.random);
-        defesasPenaltiFora = poisson(mediaDefesaPenaltiFora, this.random);
+        double mediaDefesaPenaltiCasa = 0.1 * (1 + 0.3 * (goleiroCasa.getOverall() / 100) + calcularBonusClube(timeCasa));
+        double mediaDefesaPenaltiFora = 0.1 * (1 + 0.3 * (goleiroFora.getOverall() / 100) + calcularBonusClube(timeCasa));
+        int defesasPenaltiCasa = poisson(mediaDefesaPenaltiCasa, this.random);
+        int defesasPenaltiFora = poisson(mediaDefesaPenaltiFora, this.random);
 
         // total de defesas de penalti
         int totalDefesasPenaltiGoleiroCasa = 0;
