@@ -1,5 +1,5 @@
 import java.util.Set; // uso para declarar variavel da classe Set
-import java.util.HashSet; // uso para instanciar o objeto
+import java.util.HashSet; // uso para instanciar o objeto HashSet
 
 public class TimeUsuario {
     private Usuario usuario;     
