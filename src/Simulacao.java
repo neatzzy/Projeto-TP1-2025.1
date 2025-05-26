@@ -3,6 +3,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set; // uso para declarar variavel da classe Set
 import java.util.HashSet; // uso para instanciar o objeto
+// a ideia eh puxar os dados do db e colocar os clubes em uma lista, para gerar as partidas ou adiciona-las manualmente e depois simula-las
+// juntamente com a simulacao da liga
 
 public class Simulacao {
     private static boolean ocorreu = false;
