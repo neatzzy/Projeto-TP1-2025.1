@@ -1,5 +1,4 @@
 import database.DbFunctions;
-import io.github.cdimascio.dotenv.Dotenv;
 import java.sql.Connection;
 import java.sql.*;
 import java.util.Set; // uso para declarar variavel da classe Set
@@ -12,23 +11,23 @@ public class Clube {
     private double overDefesa;      // media aritmetica do overall dos jogadores de defesa
     private Set<Jogador> jogadores;
     private int jogA, jogD;         // nro de jogadores de ataque/defesa
-    //private boolean partida;      // diz se o clube esta ou nao em uma partida IDEIA: VOLTAR AQUI DEPOIS PORQUE QUANDO PUXAR DO BANCO DE DADOS PRA COLOCAR NA PARTIDA  TEM QUE SABER SE AQUELE CLUBE ESTA OU NAO EM UMA PARTIDA JA. ESSE ATRIBUTO PODE ESTAR NA CLASSE E NO BANCO DE DADOS. ESSE COMENTARIO EH DESNECESSARIAMENTE LONGO PARA QUE SEJA NOTADO
+    private boolean partida;
     private final DbFunctions db = new DbFunctions();
 
-    public Clube(Connection conn, String nome/*, boolean partida*/) throws SQLException {
+    public Clube(Connection conn, String nome) throws SQLException{
         this.nome = nome;                   
         overAtaque = 0;                
         overDefesa = 0;                
         jogadores = new HashSet<>();
         jogA = jogD = 0;
-        //this.partida = partida;
+        this.partida = false;
         
         // insere o clube no banco de dados 
-        this.id = db.insertClube(conn, nome, overAtaque, overDefesa/*, partida*/);
+        this.id = db.insertClube(conn, nome, overAtaque, overDefesa);
     }
     // adiciona jogador ao clube e retorna false se ele ja estiver no clube
     // como jogador nao existe sem clube, addJogador tambem cria um jogador e nao o recebe como parametro (pode ter as mesmas caracteristicas que outros, mas o id eh diferente)
-    public void addJogador(Connection conn, String nomeJogador, Posicao posicao, double preco, double overall){
+    public void addJogador(Connection conn, String nomeJogador, Posicao posicao, double preco, double overall) throws SQLException{
         int idJogador = db.insertJogador(conn, nomeJogador, posicao.name(), this.id, preco, overall);
         Jogador jogador = new Jogador(idJogador, nomeJogador, posicao, this, preco, overall);
         jogadores.add(jogador);
@@ -44,7 +43,7 @@ public class Clube {
     }
     // remove jogador do clube com parametro objeto e retorna falso se o jogador nao esta no clube
     // soh remove se a simulacao nao aconteceu e apaga o objeto jogador do programa e apaga jogador do BD
-    public boolean removeJogador(Connection conn, Jogador jogador){
+    public boolean removeJogador(Connection conn, Jogador jogador)throws SQLException{
         if(Simulacao.getOcorreu()) return false;
         if (!jogadores.remove(jogador)) return false;
         if (this.isAtaque(jogador.getPosicao())){
@@ -62,7 +61,7 @@ public class Clube {
     }
     // remove jogador do clube com parametro ID e retorna falso se o jogador nao esta no clube
     // soh remove se a simulacao nao aconteceu e apaga jogador do BD
-    public boolean removeJogadorById(Connection conn, int idJogador){
+    public boolean removeJogadorById(Connection conn, int idJogador)throws SQLException{
         if(Simulacao.getOcorreu()) return false;
         Jogador jogador = db.getPlayerById(conn, idJogador); // tenha certeza de que essa funcao esteja corretamente implementada (se o jogador com o id enviado nao existir, ela deve retornar um objeto jogador vazio ou erro)
         if (!jogadores.remove(jogador)) return false;
@@ -120,5 +119,13 @@ public class Clube {
 
     public Set<Jogador> getJogadores() {
         return jogadores;
+    }
+
+    public boolean getPartida() {
+        return partida;
+    }
+
+    public void setPartida(boolean partida) {
+        this.partida = partida;
     }
 }
