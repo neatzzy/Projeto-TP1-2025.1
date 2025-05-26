@@ -1,7 +1,6 @@
 import java.util.Set; // uso para declarar variavel da classe Set
 import java.util.HashSet; // uso para instanciar o objeto
-        
-// avaliar se a classe deve ser publica ou protected\package
+
 public class TimeUsuario {
     private Usuario usuario;     
     private Set<Jogador> jogadores; // jogadores que estao no time do usuario
