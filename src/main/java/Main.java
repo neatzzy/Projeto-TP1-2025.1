@@ -1,9 +1,11 @@
 import java.sql.Connection;
+import java.sql.SQLException;
+
 import database.DbFunctions;
 import io.github.cdimascio.dotenv.Dotenv;
 
 public class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws SQLException {
         System.out.println("Hello, World!");
 
         Dotenv dotenv = Dotenv.load();
