@@ -10,6 +10,11 @@ public class Partida {
     private Clube clubeCasa;
     private Clube clubeFora;
 
+    public Partida(Clube clubeCasa, Clube clubeFora) {
+        this.clubeCasa = clubeCasa;
+        this.clubeFora = clubeFora;
+    }
+
     // controle de gols da partida
     private int golsClubeCasa = 0;
     private int golsClubeFora = 0;
@@ -22,10 +27,10 @@ public class Partida {
     private int golsPenaltiFora = 0;
 
     // tambem e pra ajudar no controle (nota: jogador tem que ter override do equals e do hashcode)
-    Set<Jogador> jogadoresGolCasa = new HashSet<>();
-    Set<Jogador> jogadoresGolFora = new HashSet<>();
-    Set<Jogador> jogadoresAssistenciaCasa = new HashSet<>();
-    Set<Jogador> jogadoresAssistenciaFora = new HashSet<>();
+    List<Jogador> jogadoresGolCasa = new ArrayList<>();
+    List<Jogador> jogadoresGolFora = new ArrayList<>();
+    List<Jogador> jogadoresAssistenciaCasa = new ArrayList<>();
+    List<Jogador> jogadoresAssistenciaFora = new ArrayList<>();
 
     // controle de bonus
     private boolean cartaoVermelhoClubeCasa = false;
@@ -76,10 +81,10 @@ public class Partida {
 
         // lidar com lógica de penalti, defesapenalti
 
-        Jogador goleiroCasa = new Jogador();
-        Jogador goleiroFora = new Jogador();
-        Jogador atacanteMaiorOverallCasa = new Jogador();
-        Jogador atacanteMaiorOverallFora = new Jogador();
+        Jogador goleiroCasa = new Jogador(0, null, null, null, 0, 0);
+        Jogador goleiroFora = new Jogador(0, null, null, null, 0, 0);
+        Jogador atacanteMaiorOverallCasa = new Jogador(0, null, null, null, 0, 0);
+        Jogador atacanteMaiorOverallFora = new Jogador(0, null, null, null, 0, 0);
 
         // loop para achar goleiro e atacante de maior overall(time casa)
         // sugestão: funções para retornar goleiros, atacantes, jogador de maior overall, ...
@@ -106,8 +111,8 @@ public class Partida {
 
         }
 
-        goleiroCasa.getStatus().setGolsSofridos(this.golsClubeFora);
-        goleiroFora.getStatus().setGolsSofridos(this.golsClubeCasa);
+        goleiroCasa.getStats().setGolsSofridos(this.golsClubeFora);
+        goleiroFora.getStats().setGolsSofridos(this.golsClubeCasa);
 
         // simulação de penalti(lida com defesas de penalti e com gols sofridos)
         simularPenalti(goleiroCasa, goleiroFora, atacanteMaiorOverallCasa, atacanteMaiorOverallFora, 0.3);
@@ -141,9 +146,9 @@ public class Partida {
             timeCasa = jogador.getClube().equals(clubeCasa);
 
             if(timeCasa){
-                jogador.getStatus().setSg(sgCasa);
+                jogador.getStats().setSg(sgCasa);
             } else {
-                jogador.getStatus().setSg(sgFora);
+                jogador.getStats().setSg(sgFora);
             }
 
         }
@@ -158,14 +163,14 @@ public class Partida {
         double fatorNegativoOverall = 2 - 0.9 * (jogador.getOverall() / 100) - calcularBonusClube(timeCasa);
 
         // estatísticas independentes
-        jogador.getStatus().setDesarmes(poisson(mediaDesarme * fatorPositivoOverall, this.random));
-        jogador.getStatus().setFinalizacoes(poisson(mediaFinalizacao * fatorPositivoOverall, this.random));
-        jogador.getStatus().setDefesas(poisson(mediaDefesa * fatorPositivoOverall, this.random));
-        jogador.getStatus().setFaltasCometidas(poisson(mediaFaltasCometidas * fatorNegativoOverall, this.random));
+        jogador.getStats().setDesarmes(poisson(mediaDesarme * fatorPositivoOverall, this.random));
+        jogador.getStats().setFinalizacoes(poisson(mediaFinalizacao * fatorPositivoOverall, this.random));
+        jogador.getStats().setDefesas(poisson(mediaDefesa * fatorPositivoOverall, this.random));
+        jogador.getStats().setFaltasCometidas(poisson(mediaFaltasCometidas * fatorNegativoOverall, this.random));
 
         // estatísticas que variam resultado da partida
         int gols = poisson(mediaGol * fatorPositivoOverall, this.random);
-        jogador.getStatus().setGols(gols);
+        jogador.getStats().setGols(gols);
         if(timeCasa){
             this.golsClubeCasa += gols;
             this.jogadoresGolCasa.add(jogador);
@@ -175,7 +180,7 @@ public class Partida {
         }
 
         int assistencias = poisson(mediaAssistencia * fatorPositivoOverall, this.random);
-        jogador.getStatus().setAssistencias(assistencias);
+        jogador.getStats().setAssistencias(assistencias);
         if(timeCasa){
             this.assistClubeCasa += assistencias;
             this.jogadoresAssistenciaCasa.add(jogador);
@@ -185,7 +190,7 @@ public class Partida {
         }
 
         int gols_contra = poisson(mediaGolsContra * fatorNegativoOverall, this.random);
-        jogador.getStatus().setGolsContra(gols_contra);
+        jogador.getStats().setGolsContra(gols_contra);
         if(timeCasa){
             this.golsClubeFora += gols_contra;
         } else {
@@ -197,26 +202,26 @@ public class Partida {
         int total_cartoes_vermelhos = poisson(mediaCartaoVermelho * fatorNegativoOverall, this.random);
 
         if(total_cartoes_amarelos >= 2){
-            jogador.getStatus().setCartaoAmarelo(2);
-            jogador.getStatus().setCartaovermelho(true);
+            jogador.getStats().setCartaoAmarelo(2);
+            jogador.getStats().setCartaoVermelho(true);
             if(timeCasa){
                 this.cartaoVermelhoClubeCasa = true;
             } else {
                 this.cartaoVermelhoClubeFora = true;
             }
         } else {
-            jogador.getStatus().setCartaoAmarelo(total_cartoes_amarelos);
+            jogador.getStats().setCartaoAmarelo(total_cartoes_amarelos);
         }
 
         if(total_cartoes_vermelhos >= 1){
-            jogador.getStatus().setCartaovermelho(true);
+            jogador.getStats().setCartaoVermelho(true);
             if(timeCasa){
                 this.cartaoVermelhoClubeCasa = true;
             } else {
                 this.cartaoVermelhoClubeFora = true;
             }
         } else {
-            jogador.getStatus().setCartaovermelho(false);
+            jogador.getStats().setCartaoVermelho(false);
         }
 
         // estatísticas dependentes: gols sofridos, defesa pênalti e sg
@@ -224,7 +229,7 @@ public class Partida {
     }
 
     // cálcula se rolou penalti, se o goleiro defendeu, etc
-    public void simularPenalti(Jogador goleiroCasa, Jogador goleiroFora, Jogador atacanteMaiorOverallCasa, Jogador atacanteMaiorOverallFora, double mediaPenaltis){
+    public void simularPenalti( Jogador goleiroCasa, Jogador goleiroFora, Jogador atacanteMaiorOverallCasa, Jogador atacanteMaiorOverallFora, double mediaPenaltis){
 
         int penaltis = poisson(mediaPenaltis, this.random);
 
@@ -233,8 +238,8 @@ public class Partida {
         double penaltiFora = 0.5 + calcularBonusClube(false);
 
         // media geral da defesa de penalti de um goleiro
-        double mediaDefesaPenaltiCasa = 0.1 * (1 + 0.3 * (goleiroCasa.getOverall() / 100) + calcularBonusClube(timeCasa));
-        double mediaDefesaPenaltiFora = 0.1 * (1 + 0.3 * (goleiroFora.getOverall() / 100) + calcularBonusClube(timeCasa));
+        double mediaDefesaPenaltiCasa = 0.1 * (1 + 0.3 * (goleiroCasa.getOverall() / 100) + calcularBonusClube(true));
+        double mediaDefesaPenaltiFora = 0.1 * (1 + 0.3 * (goleiroFora.getOverall() / 100) + calcularBonusClube(false));
         int defesasPenaltiCasa = poisson(mediaDefesaPenaltiCasa, this.random);
         int defesasPenaltiFora = poisson(mediaDefesaPenaltiFora, this.random);
 
@@ -256,11 +261,11 @@ public class Partida {
                     defesasPenaltiFora--;
                     totalDefesasPenaltiGoleiroFora++;
                 } else {
-                    atacanteMaiorOverallCasa.adicionarGol(atacanteMaiorOverallCasa.getStatus().getGols() + 1);
+                    atacanteMaiorOverallCasa.getStats().setGols(atacanteMaiorOverallCasa.getStats().getGols() + 1);
                     this.golsPenaltiCasa++;
                     this.golsClubeCasa++;
-                    this.jogadoresGolCasa.add(jogador);
-                    goleiroFora.getStatus().setGolsSofridos(goleiroFora.getStatus().getGolsSofridos() + 1);
+                    this.jogadoresGolCasa.add(atacanteMaiorOverallCasa);
+                    goleiroFora.getStats().setGolsSofridos(goleiroFora.getStats().getGolsSofridos() + 1);
                 }
             } else {
                 if(defesasPenaltiCasa > 0){
@@ -268,18 +273,18 @@ public class Partida {
                     totalDefesasPenaltiGoleiroCasa++;
                 } else {
                     // porfavor
-                    atacanteMaiorOverallFora.getStatus().setGols(atacanteMaiorOverallFora.getStatus().getGols() + 1);
+                    atacanteMaiorOverallFora.getStats().setGols(atacanteMaiorOverallFora.getStats().getGols() + 1);
                     this.golsPenaltiFora++;
                     this.golsClubeFora++;
-                    this.jogadoresGolFora.add(jogador);
-                    goleiroCasa.getStatus().addGolsSofridos(goleiroCasa.getStatus().getGolsSofridos() + 1);
+                    this.jogadoresGolFora.add(atacanteMaiorOverallFora);
+                    goleiroCasa.getStats().setGolsSofridos(goleiroCasa.getStats().getGolsSofridos() + 1);
                 }
             }
             penaltis--;
         }
 
-        goleiroCasa.getStatus().setDefesasPenalti(totalDefesasPenaltiGoleiroCasa);
-        goleiroFora.getStatus().setDefesasPenalti(totalDefesasPenaltiGoleiroFora);
+        goleiroCasa.getStats().setDefesaPenalti(totalDefesasPenaltiGoleiroCasa);
+        goleiroFora.getStats().setDefesaPenalti(totalDefesasPenaltiGoleiroFora);
 
     }
 
@@ -313,23 +318,23 @@ public class Partida {
         int golsSemPenalti = timeCasa ? (this.golsClubeCasa - this.golsPenaltiCasa) : (this.golsClubeFora - this.golsPenaltiFora);
         int assistencias = timeCasa ? this.assistClubeCasa : this.assistClubeFora;
 
-        if((golsSemPenalti > assistencias) && (jogadoresAssistencia.empty())){ // se não teve nenhum jogador que fez assitência, não vai ter gol
+        if((golsSemPenalti > assistencias) && (jogadoresAssistencia.isEmpty())){ // se não teve nenhum jogador que fez assitência, não vai ter gol
             for(Jogador jogador: jogadoresGol){
-                jogador.getStatus().setGols(0);
+                jogador.getStats().setGols(0);
             }
 
             if(timeCasa){
                 this.golsClubeCasa = this.golsPenaltiCasa; // se teve gol foi só de penalti(sem assitência)
-                goleiroFora.getStatus().setGolsSofridos(this.golsPenaltiCasa);
+                goleiroFora.getStats().setGolsSofridos(this.golsPenaltiCasa);
             } else {
                 this.golsClubeFora = this.golsPenaltiFora; // se teve gol foi só de penalti(sem assitência)
-                goleiroFora.getStatus().setGolsSofridos(this.golsPenaltiFora);
+                goleiroFora.getStats().setGolsSofridos(this.golsPenaltiFora);
             }
         }
 
-        if((golsSemPenalti < assistencias) && (jogadoresGol.empty())){ // se não teve gol, não vai ter assistência
+        if((golsSemPenalti < assistencias) && (jogadoresGol.isEmpty())){ // se não teve gol, não vai ter assistência
             for(Jogador jogador: jogadoresAssistencia){
-                jogador.getStatus().setAssistencias(0);
+                jogador.getStats().setAssistencias(0);
             }
 
             if(timeCasa){
@@ -343,13 +348,13 @@ public class Partida {
 
             while(golsSemPenalti < assistencias) {
                 Jogador jogadorSorteado = jogadoresGol.get(random.nextInt(jogadoresGol.size()));
-                jogadorSorteado.getStatus().setGols(jogadorSorteado.getGols() + 1);
+                jogadorSorteado.getStats().setGols(jogadorSorteado.getStats().getGols() + 1);
                 if (timeCasa) {
                     this.golsClubeCasa++;
-                    goleiroFora.getStatus().setGolsSofridos(goleiroFora.getStatus().getGolsSofridos() + 1);
+                    goleiroFora.getStats().setGolsSofridos(goleiroFora.getStats().getGolsSofridos() + 1);
                 } else {
                     this.golsClubeFora++;
-                    goleirocasa.getStatus().setGolsSofridos(goleiroCasa.getStatus().getGolsSofridos() + 1);
+                    goleiroCasa.getStats().setGolsSofridos(goleiroCasa.getStats().getGolsSofridos() + 1);
                 }
                 golsSemPenalti++;
             }
@@ -358,7 +363,7 @@ public class Partida {
 
             while(golsSemPenalti > assistencias) {
                 Jogador jogadorSorteado = jogadoresAssistencia.get(random.nextInt(jogadoresAssistencia.size()));
-                jogadorSorteado.getStatus().setAssistencias(jogadorSorteado.getAssistencias() + 1);
+                jogadorSorteado.getStats().setAssistencias(jogadorSorteado.getStats().getAssistencias() + 1);
                 if (timeCasa) {
                     this.assistClubeCasa++;
                 } else {
@@ -368,6 +373,15 @@ public class Partida {
             }
         }
 
+    }
+
+    public void resetStats(){
+        for(Jogador jogador : clubeCasa.getJogadores()){
+            jogador.getStats().resetStats();
+        }
+        for(Jogador jogador : clubeFora.getJogadores()){
+            jogador.getStats().resetStats();
+        }
     }
 
     // contrutores e setters
@@ -436,36 +450,36 @@ public class Partida {
         this.golsPenaltiFora = golsPenaltiFora;
     }
 
-    public Set<Jogador> getJogadoresGolCasa() {
+    public List<Jogador> getJogadoresGolCasa() {
         return jogadoresGolCasa;
     }
 
-    public void setJogadoresGolCasa(Set<Jogador> jogadoresGolCasa) {
+    public void setJogadoresGolCasa(List<Jogador> jogadoresGolCasa) {
         this.jogadoresGolCasa = jogadoresGolCasa;
     }
 
-    public Set<Jogador> getJogadoresGolFora() {
+    public List<Jogador> getJogadoresGolFora() {
         return jogadoresGolFora;
     }
 
-    public void setJogadoresGolFora(Set<Jogador> jogadoresGolFora) {
+    public void setJogadoresGolFora(List<Jogador> jogadoresGolFora) {
         this.jogadoresGolFora = jogadoresGolFora;
     }
 
 
-    public Set<Jogador> getJogadoresAssistenciaCasa() {
+    public List<Jogador> getJogadoresAssistenciaCasa() {
         return jogadoresAssistenciaCasa;
     }
 
-    public void setJogadoresAssistenciaCasa(Set<Jogador> jogadoresAssistenciaCasa) {
+    public void setJogadoresAssistenciaCasa(List<Jogador> jogadoresAssistenciaCasa) {
         this.jogadoresAssistenciaCasa = jogadoresAssistenciaCasa;
     }
 
-    public Set<Jogador> getJogadoresAssistenciaFora() {
+    public List<Jogador> getJogadoresAssistenciaFora() {
         return jogadoresAssistenciaFora;
     }
 
-    public void setJogadoresAssistenciaFora(Set<Jogador> jogadoresAssistenciaFora) {
+    public void setJogadoresAssistenciaFora(List<Jogador> jogadoresAssistenciaFora) {
         this.jogadoresAssistenciaFora = jogadoresAssistenciaFora;
     }
 

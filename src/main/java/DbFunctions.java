@@ -1,4 +1,3 @@
-package database;
 import java.sql.*;
 
 public class DbFunctions {
@@ -137,17 +136,22 @@ public class DbFunctions {
 
     // Insere um jogador na database(nota: quando tiver a implementação das classes, mudar parâmetro para objeto)
     // caso de erro, retorna uma exceção do tipo SQL
-    public int insertJogador(Connection conn, String name, String posicao, String clube, double preco, double overall) throws SQLException{
+    public int insertJogador(Connection conn, String name, String posicao, int clubeid, double preco, double overall) throws SQLException{
         String insertQuery = "INSERT INTO jogadores (nome, posicao, preco, overall, clubeid) VALUES (?, ?, ?, ?, ?)";
         try(PreparedStatement insertStmt = conn.prepareStatement(insertQuery, Statement.RETURN_GENERATED_KEYS)){
 
             insertStmt.setString(1, name);
             insertStmt.setString(2, posicao);
-            insertStmt.setDouble(3, preco);
-            insertStmt.setDouble(4, overall);
+            insertStmt.setDouble(4, preco);
+            insertStmt.setDouble(5, overall);
+            insertStmt.setInt(3, clubeid);
 
-            int clubeId = getClubeIdByName(conn, clube);
-            insertStmt.setInt(5, clubeId);
+            try{
+                getClubeById(conn, clubeid);
+            } catch (Exception e) {
+                System.out.println(e);
+                throw new RuntimeException(e);
+            }
 
             int jogadoresInserted = insertStmt.executeUpdate();
 
@@ -208,7 +212,7 @@ public class DbFunctions {
                 Posicao posicao = Posicao.valueOf(posicaoStr); // cuidado com exceções aqui
                 Clube clube = getClubeById(conn, clubeid);
 
-                return new Jogador(jogadorId, nome, posicao, clube, preco, overall, null);
+                return new Jogador(jogadorId, nome, posicao, clube, preco, overall);
             }
 
         } catch (SQLException e) {
@@ -229,7 +233,7 @@ public class DbFunctions {
                 String nome = rs.getString("nome");
                 double overDefesa = rs.getDouble(("overDefesa"));
                 double overAtaque = rs.getDouble("overAtaque");
-                return new Clube(clubeid, nome, overDefesa, overAtaque);
+                return new Clube(conn, nome);
             }
         } catch (SQLException e) {
             System.out.println(e);

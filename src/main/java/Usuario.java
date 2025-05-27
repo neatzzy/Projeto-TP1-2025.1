@@ -12,7 +12,7 @@ public class Usuario {
         this.nome = nome;
         this.cartoletas = 110.0;
         this.senha = senha;
-        this.timeUsuario = new TimeUsuario;
+        this.timeUsuario = new TimeUsuario(this);
     }
 
     public static int getNroUsuarios() {

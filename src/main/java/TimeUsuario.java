@@ -25,7 +25,7 @@ public class TimeUsuario {
         if (!Simulacao.getOcorreu() || valido == false) return false; 
         pontuacao = 0;
         for (Jogador jogadori : jogadores){
-            pontuacao += jogadori.getPontuacao();
+            pontuacao += jogadori.calcularPontuacao();
         }
         pontuacao += capitao.getPontuacao(); // adiciona a pontuacao do capitao duplicadamente
         return true;

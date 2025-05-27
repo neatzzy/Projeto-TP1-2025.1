@@ -1,18 +1,15 @@
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.Set;
-import java.util.HashSet;
+import java.util.*;
 
 public class Liga {
 
     private int nroUsuarios = 0;
     private String nome;
-    private Set<Usuario> usuarios;
+    private List<Usuario> usuarios;
 
     public Liga(String nome){
         this.nome = nome;
-        usuarios = new HashSet<>();
+        usuarios = new ArrayList<>();
     }
 
     public void addUsuario(Usuario usuario){
@@ -34,7 +31,8 @@ public class Liga {
     public void exibirRanking(List <TimeUsuario> times){
         int ranking = 1;
         for (TimeUsuario time : times) {
-            System.out.println(posicao + ": "+ time);
+            System.out.println(ranking + ": "+ time.getUsuario().getNome() + " - " + time.getPontuacao() + " pontos");
+            ranking++;
         }
     }
 
@@ -43,7 +41,7 @@ public class Liga {
     }
 
     public void setNroUsuarios(int nroUsuarios) {
-        Liga.nroUsuarios = nroUsuarios;
+        this.nroUsuarios = nroUsuarios;
     }
 
     public String getNome() {
@@ -54,26 +52,11 @@ public class Liga {
         this.nome = nome;
     }
 
-    public List<Usuarios> getUsuarios(){
+    public List<Usuario> getUsuarios(){
         return usuarios;
     }
 
-    public void setUsuarios(List<Usuarios> usuarios){
+    public void setUsuarios(List<Usuario> usuarios) {
         this.usuarios = usuarios;
     }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Usuario usuario = (Usuario) o;
-        return id == usuario.id;
-    }
-
-    @Override
-    public int hashCode() {
-        return Integer.hashCode(id);
-    }
-
-
 }

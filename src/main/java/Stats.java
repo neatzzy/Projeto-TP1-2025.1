@@ -107,4 +107,19 @@ public class Stats {
     public void setFaltasCometidas(int faltasCometidas) {
         this.faltasCometidas = faltasCometidas;
     }
+
+    public void resetStats(){
+        this.desarmes = 0;
+        this.gols = 0;
+        this.assistencias = 0;
+        this.sg = false;
+        this.finalizacoes = 0;
+        this.defesas = 0;
+        this.defesaPenalti = 0;
+        this.golsContra = 0;
+        this.cartaoVermelho = false;
+        this.golsSofridos = 0;
+        this.cartaoAmarelo = 0;
+        this.faltasCometidas = 0;
+    }
 }

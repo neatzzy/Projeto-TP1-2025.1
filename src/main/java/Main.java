@@ -1,7 +1,6 @@
 import java.sql.Connection;
 import java.sql.SQLException;
 
-import database.DbFunctions;
 import io.github.cdimascio.dotenv.Dotenv;
 
 public class Main {
