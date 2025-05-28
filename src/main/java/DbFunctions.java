@@ -142,9 +142,9 @@ public class DbFunctions {
 
             insertStmt.setString(1, name);
             insertStmt.setString(2, posicao);
-            insertStmt.setDouble(4, preco);
-            insertStmt.setDouble(5, overall);
-            insertStmt.setInt(3, clubeid);
+            insertStmt.setDouble(3, preco);
+            insertStmt.setDouble(4, overall);
+            insertStmt.setInt(5, clubeid);
 
             try{
                 getClubeById(conn, clubeid);
