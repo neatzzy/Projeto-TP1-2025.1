@@ -11,6 +11,8 @@ public class Stats {
     private int golsSofridos;
     private int cartaoAmarelo;
     private int faltasCometidas;
+    
+    
 
     public int getDesarmes() {
         return desarmes;
