@@ -16,6 +16,7 @@ public class Jogador {
         this.clube = clube;
         this.preco = preco;
         this.overall = overall;
+        this.stats = new Stats();
     }
 
     public int getId() {
