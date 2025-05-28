@@ -37,7 +37,7 @@ public class Partida {
     private boolean cartaoVermelhoClubeFora = false;
 
     // seed(útil para ver se der um erro na simulação, o experimento será igual)
-    private final Random random = new Random(42);
+    private final Random random = new Random();
 
     // calcula a poisson
     public int poisson(double lambda, Random random) {
@@ -383,6 +383,50 @@ public class Partida {
             jogador.getStats().resetStats();
         }
     }
+    
+    public void mostrarResumoPartida() {
+    System.out.println("=== RESUMO DA PARTIDA ===");
+    System.out.println("Clube da Casa: " + clubeCasa.getNome());
+    System.out.println("Clube de Fora: " + clubeFora.getNome());
+    System.out.println("Placar: " + clubeCasa.getNome() + " " + golsClubeCasa + " x " + golsClubeFora + " " + clubeFora.getNome());
+    System.out.println();
+
+    System.out.println("Gols da Casa:");
+    for (Jogador j : jogadoresGolCasa) {
+        System.out.println("- " + j.getNome() + " (" + j.getStats().getGols() + " gols)");
+    }
+    System.out.println("Gols de Pênalti da Casa: " + golsPenaltiCasa);
+
+    System.out.println("Assistências da Casa:");
+    for (Jogador j : jogadoresAssistenciaCasa) {
+        System.out.println("- " + j.getNome() + " (" + j.getStats().getAssistencias() + " assistências)");
+    }
+
+    System.out.println();
+    System.out.println("Gols da Fora:");
+    for (Jogador j : jogadoresGolFora) {
+        System.out.println("- " + j.getNome() + " (" + j.getStats().getGols() + " gols)");
+        System.out.println("- " + j.getNome() + " (" + j.getStats().getFinalizacoes() + " fin)");
+        if (j.getPosicao() == Posicao.GOLEIRO) System.out.println("- " + j.getNome() + " (" + j.getStats().getDefesas() + " def)");
+    }
+    System.out.println("Gols de Pênalti da Fora: " + golsPenaltiFora);
+
+    System.out.println("Assistências da Fora:");
+    for (Jogador j : jogadoresAssistenciaFora) {
+        System.out.println("- " + j.getNome() + " (" + j.getStats().getAssistencias() + " assistências)");
+    }
+
+    System.out.println();
+    System.out.println("Cartões Vermelhos:");
+    if (cartaoVermelhoClubeCasa) {
+        System.out.println("- " + clubeCasa.getNome() + " teve pelo menos 1 cartão vermelho.");
+    }
+    if (cartaoVermelhoClubeFora) {
+        System.out.println("- " + clubeFora.getNome() + " teve pelo menos 1 cartão vermelho.");
+    }
+
+    System.out.println("\n=========================\n");
+}
 
     // contrutores e setters
 
