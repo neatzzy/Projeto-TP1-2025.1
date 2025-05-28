@@ -111,6 +111,19 @@ public class TimeUsuario {
         return true;
     }
     // OBS: ADICIONAR FUTURAMENTE UM toString E UM MODO DE VISUALIZAR O TIME
+    // teste
+    public void imprimirTime() {
+        System.out.println("=== Time do usuário: " + usuario.getNome() + " ===");
+        System.out.println("Preço total do time: " + preco);
+        System.out.println("Pontuação: " + pontuacao);
+        System.out.println("Capitão: " + (capitao != null ? capitao.getNome() : "Nenhum"));
+        System.out.println("Time válido para simulação: " + (valido ? "Sim" : "Não"));
+        System.out.println("Jogadores no time:");
+        for (Jogador jogador : jogadores) {
+            System.out.println(" - " + jogador.getNome() + " (" + jogador.getPosicao() + "), Preço: " + jogador.getPreco());
+        }
+        System.out.println();
+    }
     // getters
     public Usuario getUsuario() {
         return usuario;
