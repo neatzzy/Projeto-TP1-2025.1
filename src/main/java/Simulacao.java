@@ -11,7 +11,7 @@ public class Simulacao {
     private static Set<Partida> partidas = new HashSet<>();
     
     // recebe uma lista de clubes e os sorteia em partidas, retorna falso se a lista nao for par
-    public boolean gerarPartidasAleatorias(List<Clube> clubes){
+    public static boolean gerarPartidasAleatorias(List<Clube> clubes){
         if (clubes.size()%2 != 0) return false;
         
         // Embaralha a lista para garantir aleatoriedade
@@ -21,13 +21,13 @@ public class Simulacao {
             Clube clubeCasa = clubes.get(i);
             Clube clubeFora = clubes.get(i+1);
             
-            if(!this.addPartida(clubeCasa, clubeFora)) return false;
+            if(!Simulacao.addPartida(clubeCasa, clubeFora)) return false;
         }
         return true;
     }
     // adiciona partida entre 2 clubes na simulacao, retorna falso se os clubes ja estiverem em uma partida
     // TODO: dar override nos metodos equals/hash de Partida e talvez Clube, criar um construtor na classe Partida
-    public boolean addPartida(Clube clubeCasa, Clube clubeFora){
+    public static boolean addPartida(Clube clubeCasa, Clube clubeFora){
         if (clubeCasa.getPartida() || clubeFora.getPartida()) return false;
         Partida partida = new Partida(clubeCasa, clubeFora);
         partidas.add(partida);
@@ -36,12 +36,13 @@ public class Simulacao {
         return true;
     }
     // OBS: cuidar para que todos os clubes do campeonato estejam em alguma partida antes de simular
-    public boolean simular(Liga liga){
+    public static boolean simular(Liga liga){
         for (Usuario usuario : liga.getUsuarios()){
             if(!usuario.getTimeUsuario().isValido()) return false;
         }
         for (Partida partida : partidas){
             partida.simularPartida();
+            partida.mostrarResumoPartida();
         }
         
         ocorreu = true;
@@ -53,8 +54,8 @@ public class Simulacao {
         return true;
     }
     // so pode ser usado apos a simulacao
-    public void resetar(Liga liga){
-        this.resetPartidasStats(partidas);
+    public static void resetar(Liga liga){
+        Simulacao.resetPartidasStats(partidas);
         partidas.clear();
         
         for (Usuario usuario : liga.getUsuarios()){
@@ -64,7 +65,7 @@ public class Simulacao {
         ocorreu = false;
     }
     // TODO: implementar o metodo resetStats() que itera pelos jogadores e reseta seus stats
-    private void resetPartidasStats(Set<Partida> partidas){
+    private static void resetPartidasStats(Set<Partida> partidas){
         for(Partida partida : partidas){
             partida.resetStats();
         }
