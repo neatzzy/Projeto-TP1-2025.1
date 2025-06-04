@@ -71,10 +71,10 @@ public class Partida {
 
             // para cada posição, passa médias referentes à tal
             switch (jogador.getPosicao()) {
-                case ATACANTE -> simularStatusJogador(jogador, timeCasa , 0.5, 0.5, 0.2, 2.5, 0, 0.005, 0.8, 0.2, 0.02 );
-                case MEIA -> simularStatusJogador(jogador, timeCasa, 2.0, 0.1, 0.3, 1.5, 0, 0.01, 1.5, 0.25, 0.03);
-                case ZAGUEIRO -> simularStatusJogador(jogador, timeCasa,2.5, 0.05, 0.05, 0.3, 0, 0.03, 1.2, 0.3, 0.05);
-                case GOLEIRO -> simularStatusJogador(jogador, timeCasa, 1.0, 0.01, 0.01, 0.1, 3.0, 0.01, 0.3, 0.1, 0.01);
+                case ATACANTE -> simularStatusJogador(jogador, timeCasa , 0.5, 0.15, 0.2, 1.5, 0, 0.001, 1.5, 0.15, 0.01);
+                case MEIA -> simularStatusJogador(jogador, timeCasa, 1.5, 0.07, 0.35, 1.3, 0, 0.005, 1.5, 0.15, 0.01);
+                case ZAGUEIRO -> simularStatusJogador(jogador, timeCasa, 2.0, 0.002, 0.01, 0.2, 0, 0.005, 2, 0.2, 0.015);
+                case GOLEIRO -> simularStatusJogador(jogador, timeCasa, 0.1, 0.0001, 0.003, 0.001, 1.8, 0.007, 0.3, 0.15, 0.01);
             }
 
         }
@@ -161,15 +161,45 @@ public class Partida {
 
         double fatorPositivoOverall = 1 + 0.3 * (jogador.getOverall() / 100) + calcularBonusClube(timeCasa);
         double fatorNegativoOverall = 2 - 0.9 * (jogador.getOverall() / 100) - calcularBonusClube(timeCasa);
-
+        
+        // se o over medio do adversario eh igual que o do time, nao influencia em nada. se o over eh maior que o do time, gera um numero < 1 que reduz o lambda da poisson (ocorrencia media do evento). complementa a logica de dificuldade do confronto
+        double fatorAtaqueAdversario;
+        double fatorDefesaAdversario;
+        double solidezDefensiva;
+        double destaqueOfensivo = 1;
+        
+        if (timeCasa){
+            fatorAtaqueAdversario = 1 - (clubeFora.getOverAtaque() - clubeCasa.getOverDefesa())/40; // "o quao melhor eh o ataque deles em relacao a nossa defesa?" se > 1, o ataque deles nao tanka a nossa defesa
+            fatorDefesaAdversario = 1 - (clubeFora.getOverDefesa() - clubeCasa.getOverAtaque())/40;
+            
+            if (fatorAtaqueAdversario < 0.05) fatorAtaqueAdversario = 0.05;
+            if (fatorDefesaAdversario < 0.05) fatorDefesaAdversario = 0.05;
+            
+            solidezDefensiva = 1 - 0.8 * (clubeFora.getOverDefesa())/100;
+            
+            if(jogador.getPosicao() == Posicao.ATACANTE || jogador.getPosicao() == Posicao.MEIA) destaqueOfensivo = Math.pow(1 + (jogador.getOverall() - clubeCasa.getOverAtaque())/100, 5);
+            if(destaqueOfensivo < 1) destaqueOfensivo = 1;
+        }
+        else{
+            fatorAtaqueAdversario = 1 - (clubeCasa.getOverAtaque() - clubeFora.getOverDefesa())/40;
+            fatorDefesaAdversario = 1 - (clubeCasa.getOverDefesa() - clubeFora.getOverAtaque())/40;
+            
+            if (fatorAtaqueAdversario < 0.05) fatorAtaqueAdversario = 0.05;
+            if (fatorDefesaAdversario < 0.05) fatorDefesaAdversario = 0.05;
+            
+            solidezDefensiva = 1 - 0.8 * (clubeFora.getOverDefesa())/100;
+            
+            if(jogador.getPosicao() == Posicao.ATACANTE || jogador.getPosicao() == Posicao.MEIA) destaqueOfensivo = Math.pow(1 + (jogador.getOverall() - clubeFora.getOverAtaque())/100, 5);
+            if(destaqueOfensivo < 1) destaqueOfensivo = 1;
+        }
         // estatísticas independentes
-        jogador.getStats().setDesarmes(poisson(mediaDesarme * fatorPositivoOverall, this.random));
-        jogador.getStats().setFinalizacoes(poisson(mediaFinalizacao * fatorPositivoOverall, this.random));
-        jogador.getStats().setDefesas(poisson(mediaDefesa * fatorPositivoOverall, this.random));
+        jogador.getStats().setDesarmes(poisson((mediaDesarme * fatorPositivoOverall)/Math.sqrt(Math.sqrt(fatorAtaqueAdversario)), this.random)); // teste: quanto melhor o ataque, mais posse e mais chances de desarme
+        jogador.getStats().setFinalizacoes(poisson(mediaFinalizacao * fatorPositivoOverall * fatorDefesaAdversario * destaqueOfensivo, this.random));
+        jogador.getStats().setDefesas(poisson((mediaDefesa * fatorPositivoOverall)/fatorAtaqueAdversario, this.random));
         jogador.getStats().setFaltasCometidas(poisson(mediaFaltasCometidas * fatorNegativoOverall, this.random));
 
         // estatísticas que variam resultado da partida
-        int gols = poisson(mediaGol * fatorPositivoOverall, this.random);
+        int gols = poisson(mediaGol * fatorPositivoOverall * fatorDefesaAdversario * solidezDefensiva * destaqueOfensivo, this.random);
         jogador.getStats().setGols(gols);
         if(timeCasa){
             this.golsClubeCasa += gols;
@@ -179,7 +209,7 @@ public class Partida {
             this.jogadoresGolFora.add(jogador);
         }
 
-        int assistencias = poisson(mediaAssistencia * fatorPositivoOverall, this.random);
+        int assistencias = poisson(mediaAssistencia * fatorPositivoOverall * fatorDefesaAdversario * solidezDefensiva * destaqueOfensivo, this.random);
         jogador.getStats().setAssistencias(assistencias);
         if(timeCasa){
             this.assistClubeCasa += assistencias;
@@ -198,8 +228,8 @@ public class Partida {
         }
 
         // estatísticas limitadas!
-        int total_cartoes_amarelos = poisson(mediaCartaoAmarelo * fatorNegativoOverall, this.random);
-        int total_cartoes_vermelhos = poisson(mediaCartaoVermelho * fatorNegativoOverall, this.random);
+        int total_cartoes_amarelos = poisson(mediaCartaoAmarelo * fatorNegativoOverall * 0.6, this.random);
+        int total_cartoes_vermelhos = poisson(mediaCartaoVermelho * fatorNegativoOverall * 0.3, this.random);
 
         if(total_cartoes_amarelos >= 2){
             jogador.getStats().setCartaoAmarelo(2);
@@ -223,6 +253,8 @@ public class Partida {
         } else {
             jogador.getStats().setCartaoVermelho(false);
         }
+        
+        System.out.println("amarelos: " + total_cartoes_amarelos);
 
         // estatísticas dependentes: gols sofridos, defesa pênalti e sg
 
@@ -348,15 +380,18 @@ public class Partida {
 
             while(golsSemPenalti < assistencias) {
                 Jogador jogadorSorteado = jogadoresGol.get(random.nextInt(jogadoresGol.size()));
-                jogadorSorteado.getStats().setGols(jogadorSorteado.getStats().getGols() + 1);
-                if (timeCasa) {
-                    this.golsClubeCasa++;
-                    goleiroFora.getStats().setGolsSofridos(goleiroFora.getStats().getGolsSofridos() + 1);
-                } else {
-                    this.golsClubeFora++;
-                    goleiroCasa.getStats().setGolsSofridos(goleiroCasa.getStats().getGolsSofridos() + 1);
+
+                if (jogadorSorteado.getPosicao() != Posicao.GOLEIRO){
+                    jogadorSorteado.getStats().setGols(jogadorSorteado.getStats().getGols() + 1);
+                    if (timeCasa) {
+                        this.golsClubeCasa++;
+                        goleiroFora.getStats().setGolsSofridos(goleiroFora.getStats().getGolsSofridos() + 1);
+                    } else {
+                        this.golsClubeFora++;
+                        goleiroCasa.getStats().setGolsSofridos(goleiroCasa.getStats().getGolsSofridos() + 1);
+                    }
+                    golsSemPenalti++;
                 }
-                golsSemPenalti++;
             }
 
         } else if(golsSemPenalti > assistencias){ // adicionar assitências!
@@ -393,7 +428,7 @@ public class Partida {
 
     System.out.println("Gols da Casa:");
     for (Jogador j : jogadoresGolCasa) {
-        System.out.println("- " + j.getNome() + " (" + j.getStats().getGols() + " gols)");
+        System.out.println("- " + j.getNome() + " (" + j.getStats().getGols() + " gols)" + j.getPontuacao());
     }
     System.out.println("Gols de Pênalti da Casa: " + golsPenaltiCasa);
 
@@ -405,8 +440,9 @@ public class Partida {
     System.out.println();
     System.out.println("Gols da Fora:");
     for (Jogador j : jogadoresGolFora) {
-        System.out.println("- " + j.getNome() + " (" + j.getStats().getGols() + " gols)");
+        System.out.println("- " + j.getNome() + " (" + j.getStats().getGols() + " gols)" + j.getPontuacao());
         System.out.println("- " + j.getNome() + " (" + j.getStats().getFinalizacoes() + " fin)");
+        System.out.println("- " + j.getNome() + " (" + j.getStats().getDesarmes() + " des)");
         if (j.getPosicao() == Posicao.GOLEIRO) System.out.println("- " + j.getNome() + " (" + j.getStats().getDefesas() + " def)");
     }
     System.out.println("Gols de Pênalti da Fora: " + golsPenaltiFora);
