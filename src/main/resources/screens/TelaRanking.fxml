@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane prefHeight="337.0" prefWidth="650.0" style="-fx-background-color: #2E7D32;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ControllerTelaRanking">
+
+    <Label fx:id="menuLabel" layoutX="10" layoutY="10" onMouseClicked="#abrirMenu" style="-fx-font-size: 24px; -fx-text-fill: white;" text="≡" />
+    <Label layoutX="620.0" layoutY="13.0" style="-fx-font-size: 20px; -fx-text-fill: white;" text="⎋" />
+    <Label alignment="CENTER" layoutX="264.0" layoutY="42.0" style="-fx-font-size: 30px; -fx-text-fill: white; -fx-font-family: 'Poppins';" text="Ranking:" />
+
+    <VBox alignment="CENTER" layoutX="232.0" layoutY="97.0" spacing="10">
+
+        <Label fx:id="label1" style="-fx-text-fill: white; -fx-font-size: 16px;" text="1. Mauro Boss 120 pontos" />
+        <Label fx:id="label2" style="-fx-text-fill: white; -fx-font-size: 16px;" text="2. Mago Noni 42 pontos" />
+        <Label fx:id="label3" style="-fx-text-fill: white; -fx-font-size: 16px;" text="3. Elvis Presley 31 pontos" />
+
+    </VBox>
+
+</AnchorPane>
