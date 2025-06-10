@@ -1,6 +1,4 @@
 
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -11,7 +9,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
-import javafx.util.Duration;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -40,7 +37,7 @@ public class ControllerTelaSimulacao implements Initializable {
     @FXML
     private void abrirMenu(MouseEvent event) {
         try {
-            Parent root = FXMLLoader.load(getClass().getResource("/screens/TelaRanking.fxml")); // so pra testar, é pra redirecionar pro menu
+            Parent root = FXMLLoader.load(getClass().getResource("/screens/TelaRanking.fxml")); // so pra testar, é pra redirecionar pro menu/simulacao
             Stage stage = (Stage) menuLabel.getScene().getWindow();
             stage.setScene(new Scene(root));
             stage.show();
