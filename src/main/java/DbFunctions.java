@@ -283,7 +283,7 @@ public class DbFunctions {
     }
 
     // Retorna lista de todos os jogadores
-    public List<Jogador> getAllJogadores(Connection conn){
+    public List<Jogador> getAllJogadores(Connection conn, List<Clube> clubes){
         String dataQuery = "SELECT * FROM jogadores";
         List<Jogador> jogadores = new ArrayList<>();
 
@@ -300,10 +300,14 @@ public class DbFunctions {
                 System.out.println("Jogador encontrado:" + nome);
 
                 // verifica se tem clube
-                Clube clube = getClubeById(conn, clubeId);
+                Clube clube = clubes.stream()
+                        .filter(c -> c.getId() == clubeId)
+                        .findFirst()
+                        .orElse(null);
+
                 if (clube == null) {
                     System.out.println("Clube inválido para jogador id " + jogadorId + ", clubeId: " + clubeId);
-                    continue; // pula este jogador e segue para o próximo
+                    continue;
                 }
 
                 Posicao posicao = Posicao.valueOf(posicaoStr);
@@ -326,19 +330,17 @@ public class DbFunctions {
     }
 
     // Retorna lista do tipo Jogador de jogadores por clube
-    public List<Jogador> getJogadoresByTeamId(Connection conn, int id){
+    public List<Jogador> getJogadoresByClub(Connection conn, Clube clube){
         String dataQuery = "SELECT * FROM jogadores WHERE clubeid = ?";
         List<Jogador> jogadores = new ArrayList<>();
 
         try(PreparedStatement dataStmt = conn.prepareStatement(dataQuery)){
 
-            dataStmt.setInt(1, id);
-
-            Clube clube = getClubeById(conn, id);
             if(clube == null){
-                System.out.println("Jogadores atuando em tal time não encontrados: id inválido: " + id);
+                System.out.println("clube inválido");
                 return null;
             }
+            dataStmt.setInt(1, clube.getId());
 
             try (ResultSet rs = dataStmt.executeQuery()) {
                 while (rs.next()) {
@@ -355,9 +357,11 @@ public class DbFunctions {
                     Jogador jogador = new Jogador(jogadorId, nome, posicao, clube, preco, overall);
                     jogadores.add(jogador);
                     // adiciona ao objeto de clube definido em getClubeById com os jogadores
-                    clube.addJogador(conn, jogador);
+                    //clube.addJogador(conn, jogador);
                 }
             }
+            return jogadores;
+
         }
         catch(Exception e){
             System.out.println(e);
@@ -367,9 +371,10 @@ public class DbFunctions {
     }
 
     // Retorna lista do tipo Jogador de jogadores por posição
-    public List<Jogador> getJogadoresByPosition(Connection conn, String posicao){
+    public List<Jogador> getJogadoresByPosition(Connection conn, String posicao, List<Clube> clubes){
         String dataQuery = "SELECT * FROM jogadores WHERE posicao = ?";
         List<Jogador> jogadores = new ArrayList<>();
+        Posicao posicaoPos = Posicao.valueOf(posicao);
 
         try(PreparedStatement dataStmt = conn.prepareStatement(dataQuery)){
 
@@ -386,21 +391,26 @@ public class DbFunctions {
 
                     System.out.println("Jogador encontrado:" + nome);
 
-                    Clube clube = getClubeById(conn, clubeId);
-                    if (clube == null) {
-                        System.out.println("Clube não encontrado para o jogador: " + nome);
-                        continue; // pula esse jogador
-                    }
+                    // verifica se tem clube
+                    Clube clube = clubes.stream()
+                            .filter(c -> c.getId() == clubeId)
+                            .findFirst()
+                            .orElse(null);
 
-                    Posicao posicaoPos = Posicao.valueOf(posicao);
+                    if (clube == null) {
+                        System.out.println("Clube inválido para jogador id " + jogadorId + ", clubeId: " + clubeId);
+                        continue;
+                    }
 
                     Jogador jogador = new Jogador(jogadorId, nome, posicaoPos, clube, preco, overall);
                     jogadores.add(jogador);
 
                     // adiciona ao objeto de clube definido em getClubeById com os jogadores
-                    clube.addJogador(conn, jogador);
+                    //clube.addJogador(conn, jogador);
                 }
             }
+
+            return jogadores;
 
         }
         catch(Exception e){
