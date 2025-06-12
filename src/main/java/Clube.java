@@ -24,10 +24,22 @@ public class Clube {
         // insere o clube no banco de dados 
         this.id = db.insertClube(conn, nome, overAtaque, overDefesa);
     }
+
+    //construtor para retornar clube que já está no banco de dados
+    public Clube(Connection conn, int id, String nome, double overAtaque, double overDefesa) throws SQLException{
+        this.id = id;
+        this.nome = nome;
+        this.overAtaque = overAtaque;
+        this.overDefesa = overDefesa;
+        jogadores = new HashSet<>(); // vai ser att em addJogador
+        jogA = jogD = 0; // vai ser att em addJogador
+        this.partida = false;
+    }
+
     // adiciona jogador ao clube e retorna false se ele ja estiver no clube
     // como jogador nao existe sem clube, addJogador tambem cria um jogador e nao o recebe como parametro (pode ter as mesmas caracteristicas que outros, mas o id eh diferente)
     public void addJogador(Connection conn, String nomeJogador, Posicao posicao, double preco, double overall) throws SQLException{
-        int idJogador = db.insertJogador(conn, nomeJogador, posicao.name(), this.id, preco, overall);
+        int idJogador = db.insertJogador(conn, nomeJogador, posicao.name(), preco, overall, this.id);
         Jogador jogador = new Jogador(idJogador, nomeJogador, posicao, this, preco, overall);
         jogadores.add(jogador);
         if (this.isAtaque(posicao)){
@@ -40,6 +52,18 @@ public class Clube {
         }
         db.atualizarClubeById(conn, id, overAtaque, overDefesa);
     }
+
+    // para adicionar jogadores de um objeto clube retornado diretamente do banco de dados(ou seja, os jogadores já estão lá, não precisa inserir no banco)
+    public void addJogador(Connection conn, Jogador jogador) throws SQLException{
+        jogadores.add(jogador);
+        if (this.isAtaque(jogador.getPosicao())){
+            jogA++;
+        }
+        else if (this.isDefesa(jogador.getPosicao())){
+            jogD++;
+        }
+    }
+
     // remove jogador do clube com parametro objeto e retorna falso se o jogador nao esta no clube
     // soh remove se a simulacao nao aconteceu e apaga o objeto jogador do programa e apaga jogador do BD
     public boolean removeJogador(Connection conn, Jogador jogador)throws SQLException{
