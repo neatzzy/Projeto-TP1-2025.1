@@ -9,7 +9,7 @@ public class DbFunctions {
         Connection conn=null;
         try{
             Class.forName("org.postgresql.Driver");
-            conn= DriverManager.getConnection("jdbc:postgresql://maglev.proxy.rlwy.net:47087/"+dbname,user,pass);
+            conn= DriverManager.getConnection("jdbc:postgresql://dpg-d161kqmmcj7s73dtqs7g-a.oregon-postgres.render.com:5432/"+dbname,user,pass);
             if(conn!=null){
                 System.out.println("Connection Established");
             } else {
