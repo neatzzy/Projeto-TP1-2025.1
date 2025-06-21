@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="618.0" prefWidth="1056.0" style="-fx-background-color: #388e3c;" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ControllerTelaMercado">
+    <VBox alignment="TOP_CENTER" prefWidth="1000.0" spacing="24.0"
+          AnchorPane.topAnchor="0.0" AnchorPane.bottomAnchor="0.0"
+          AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+        <!-- Filtro e Título -->
+        <HBox alignment="CENTER_LEFT" spacing="40.0">
+            <ComboBox fx:id="comboBoxFiltro" prefHeight="40.0" prefWidth="240.0" promptText="Filtrar por:" style="-fx-font-size: 24px; -fx-font-family: 'Helvetica Rounded', 'Helvetica Rounded Bold', Arial, sans-serif; -fx-font-weight: bold; -fx-background-radius: 12px; -fx-background-color: #eaf7ee;" />
+            <Label style="-fx-font-size: 80px; -fx-text-fill: white; -fx-font-family: 'Helvetica Rounded', 'Helvetica Rounded Bold', Arial, sans-serif; -fx-font-weight: bold;" text="Mercado" />
+        </HBox>
+
+        <!-- Tabela -->
+        <TableView fx:id="tableView"
+                   style="-fx-font-size: 32px; -fx-font-family: 'Helvetica Rounded', 'Helvetica Rounded Bold', Arial, sans-serif; -fx-font-weight: bold;"
+                   VBox.vgrow="ALWAYS">
+            <columns>
+                <TableColumn fx:id="colTime" text="TIME" />
+                <TableColumn fx:id="colPosicao" text="POSIÇÃO" />
+                <TableColumn fx:id="colJogador" text="JOGADOR" />
+                <TableColumn fx:id="colPreco" text="PREÇO" />
+                <TableColumn fx:id="colComprar" text="COMPRAR?" />
+            </columns>
+            <columnResizePolicy>
+                <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
+            </columnResizePolicy>
+        </TableView>
+    </VBox>
+</AnchorPane>

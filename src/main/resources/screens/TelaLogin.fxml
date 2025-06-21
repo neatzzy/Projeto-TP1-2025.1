@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="618.0" prefWidth="1056.0" style="-fx-background-color: #2d8532;" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ControllerTelaLogin">
+    <VBox alignment="TOP_LEFT" layoutX="60.0" layoutY="40.0" spacing="30.0">
+        <Label style="-fx-font-size: 64px; -fx-text-fill: white; -fx-font-family: 'Helvetica Rounded', 'Helvetica Rounded Bold', Arial, sans-serif; -fx-font-weight: bold;" text="Login" />
+        <Label style="-fx-font-size: 48px; -fx-text-fill: white; -fx-font-family: 'Helvetica Rounded', 'Helvetica Rounded Bold', Arial, sans-serif; -fx-font-weight: bold;" text="Nome:" />
+        <TextField prefHeight="80.0" prefWidth="800.0" style="-fx-background-color: #eaf7ee; -fx-background-radius: 12px; -fx-font-size: 32px;" />
+        <Label style="-fx-font-size: 48px; -fx-text-fill: white; -fx-font-family: 'Helvetica Rounded', 'Helvetica Rounded Bold', Arial, sans-serif; -fx-font-weight: bold;" text="Senha:" />
+        <PasswordField prefHeight="80.0" prefWidth="800.0" style="-fx-background-color: #eaf7ee; -fx-background-radius: 12px; -fx-font-size: 32px;" />
+    </VBox>
+</AnchorPane>

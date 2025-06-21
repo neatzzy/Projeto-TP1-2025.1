@@ -1,8 +1,7 @@
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
+
 import io.github.cdimascio.dotenv.Dotenv;
 import javafx.application.Application;
 import javafx.scene.Parent;
@@ -16,9 +15,9 @@ public class Main extends Application {
     // código para testar tela!
     @Override
     public void start(Stage primaryStage) throws Exception {
-        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/screens/TelaSimulacao.fxml")));
+        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/screens/TelaMercado.fxml")));
 
-        primaryStage.setTitle("Tela de Simulacao");
+        primaryStage.setTitle("Tela de Mercado");
         primaryStage.setScene(new Scene(root));
         primaryStage.show();
     }
@@ -37,38 +36,19 @@ public class Main extends Application {
         DbFunctions db = new DbFunctions();
         Connection conn = db.connect_to_db(db_name, user, pass);
 
-        Clube clube = new Clube(conn, "BRASIL");
-        clube.addJogador(conn, "Pietro Collares", Posicao.ATACANTE, 1.50, 60);
-        clube.addJogador(conn, "Mário Sérgio Rei da América 2025", Posicao.ATACANTE, 3, 60);
-        clube.addJogador(conn, "Pedro Haul", Posicao.ATACANTE, 1.50, 60);
-        clube.addJogador(conn, "Odegar", Posicao.MEIA, 4, 60);
-        clube.addJogador(conn, "Rafael Carvalheira", Posicao.MEIA, 10, 60);
-        clube.addJogador(conn, "Maycon Baycon", Posicao.MEIA, 20, 60);
-        clube.addJogador(conn, "Reinaldo", Posicao.ZAGUEIRO, 20, 100000);
-        clube.addJogador(conn, "Péo Lelé", Posicao.ZAGUEIRO, 5, 100000);
-        clube.addJogador(conn, "Gunché", Posicao.ZAGUEIRO, 5, 100000);
-        clube.addJogador(conn, "Murilo Malnati Ismael", Posicao.ZAGUEIRO, 10, 100000);
-        clube.addJogador(conn, "Doudou Hikarty", Posicao.GOLEIRO, 10, 100000);
-        clube.addJogador(conn, "Vinícius Júnior", Posicao.ATACANTE, 8.98, 60);
+        List<Clube>clubs = new ArrayList<>();
+        clubs.add(db.getClubeById(conn, 5));
+        clubs.add(db.getClubeById(conn, 36));
+        db.getAllJogadores(conn, clubs);
 
-        Clube clube2 = new Clube(conn, "ARGENTINA");
-        clube2.addJogador(conn, "Meci Careca", Posicao.ATACANTE, 1.50, 60);
-        clube2.addJogador(conn, "Messi na Centroavância", Posicao.ATACANTE, 3, 60);
-        clube2.addJogador(conn, "Messi Normal", Posicao.ATACANTE, 1.50, 60);
-        clube2.addJogador(conn, "Arrascaeta (Naturalizado)", Posicao.MEIA, 4, 60);
-        clube2.addJogador(conn, "Enso Fernandes", Posicao.MEIA, 20, 60);
-        clube2.addJogador(conn, "MacAllister", Posicao.MEIA, 20, 60);
-        clube2.addJogador(conn, "Montiel", Posicao.ZAGUEIRO, 20, 100000);
-        clube2.addJogador(conn, "Britez", Posicao.ZAGUEIRO, 5, 100000);
-        clube2.addJogador(conn, "Garro (Saída de Bola)", Posicao.ZAGUEIRO, 5, 100000);
-        clube2.addJogador(conn, "Benito Benitez", Posicao.ZAGUEIRO, 10, 100000);
-        clube2.addJogador(conn, "Messi Gigante", Posicao.GOLEIRO, 10, 100000);
-        clube2.addJogador(conn, "Tieco Arbanto Baratona", Posicao.ATACANTE, 8.98, 60);
+
+        System.out.println(clubs.get(0).toString());
+        System.out.println(clubs.get(1).toString());
 
         Usuario pedro = new Usuario("pedro", "1234");
         TimeUsuario time = pedro.getTimeUsuario();
 
-        for(Jogador jogador : clube.getJogadores()){
+        for(Jogador jogador : clubs.get(0).getJogadores()){
             time.addJogador(jogador);
             time.setCapitao(jogador);
         }
@@ -76,12 +56,12 @@ public class Main extends Application {
         Usuario mauroPatrao = new Usuario("patrao", "1234");
         TimeUsuario time2 = mauroPatrao.getTimeUsuario();
 
-        for(Jogador jogador : clube.getJogadores()){
+        for(Jogador jogador : clubs.get(0).getJogadores()){
             time.addJogador(jogador);
             time.setCapitao(jogador);
         }
 
-        for(Jogador jogador : clube2.getJogadores()){
+        for(Jogador jogador : clubs.get(1).getJogadores()){
             time2.addJogador(jogador);
             time2.setCapitao(jogador);
         }
@@ -94,17 +74,14 @@ public class Main extends Application {
         liga.addUsuario(pedro);
         liga.addUsuario(mauroPatrao);
 
-        Simulacao.addPartida(clube, clube2);
+        Simulacao.addPartida(clubs.get(0), clubs.get(1));
 
-        List<Clube> clubes = new ArrayList<>();
-        clubes.add(clube);
-        clubes.add(clube2);
-        System.out.println("ataque over 1: " + clube.getOverAtaque());
-        System.out.println("defesa over 1: " + clube.getOverDefesa());
-        System.out.println("ataque over 2: " + clube2.getOverAtaque());
-        System.out.println("defesa over 2: " + clube2.getOverDefesa());
+        System.out.println("ataque over 1: " + clubs.get(0).getOverAtaque());
+        System.out.println("defesa over 1: " + clubs.get(0).getOverDefesa());
+        System.out.println("ataque over 2: " + clubs.get(1).getOverAtaque());
+        System.out.println("defesa over 2: " + clubs.get(1).getOverDefesa());
 
-        Simulacao.gerarPartidasAleatorias(clubes);
+        Simulacao.gerarPartidasAleatorias(clubs);
         Simulacao.simular(liga);
 
         liga.exibirRanking(liga.gerarRanking());

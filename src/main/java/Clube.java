@@ -1,5 +1,7 @@
 import java.sql.Connection;
 import java.sql.*;
+import java.util.Comparator;
+import java.util.List;
 import java.util.Set; // uso para declarar variavel da classe Set
 import java.util.HashSet; // uso para instanciar o objeto
 
@@ -150,5 +152,13 @@ public class Clube {
 
     public void setPartida(boolean partida) {
         this.partida = partida;
+    }
+
+    @Override
+    public String toString() {
+        return "Clube{" +
+                "nome='" + nome + '\'' +
+                ", id=" + id +
+                '}';
     }
 }

@@ -10,7 +10,7 @@ public class Usuario {
     public Usuario(String nome, String senha) {
         this.id = nroUsuarios++;
         this.nome = nome;
-        this.cartoletas = 110.0;
+        this.cartoletas = 350.0;
         this.senha = senha;
         this.timeUsuario = new TimeUsuario(this);
     }
