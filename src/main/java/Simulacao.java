@@ -41,7 +41,7 @@ public class Simulacao {
             if(!usuario.getTimeUsuario().isValido()) return false;
         }
         for (Partida partida : partidas){
-            partida.simularPartida();
+            partida.simular();
             partida.mostrarResumoPartida();
         }
         
