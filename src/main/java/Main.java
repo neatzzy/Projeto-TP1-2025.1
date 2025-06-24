@@ -37,34 +37,34 @@ public class Main extends Application {
         DbFunctions db = new DbFunctions();
         Connection conn = db.connect_to_db(db_name, user, pass);
 
-        Clube clube = new Clube(conn, "BRASIL");
-        clube.addJogador(conn, "Pietro Collares", Posicao.ATACANTE, 1.50, 60);
-        clube.addJogador(conn, "Mário Sérgio Rei da América 2025", Posicao.ATACANTE, 3, 60);
-        clube.addJogador(conn, "Pedro Haul", Posicao.ATACANTE, 1.50, 60);
-        clube.addJogador(conn, "Odegar", Posicao.MEIA, 4, 60);
-        clube.addJogador(conn, "Rafael Carvalheira", Posicao.MEIA, 10, 60);
-        clube.addJogador(conn, "Maycon Baycon", Posicao.MEIA, 20, 60);
-        clube.addJogador(conn, "Reinaldo", Posicao.ZAGUEIRO, 20, 100000);
-        clube.addJogador(conn, "Péo Lelé", Posicao.ZAGUEIRO, 5, 100000);
-        clube.addJogador(conn, "Gunché", Posicao.ZAGUEIRO, 5, 100000);
-        clube.addJogador(conn, "Murilo Malnati Ismael", Posicao.ZAGUEIRO, 10, 100000);
-        clube.addJogador(conn, "Doudou Hikarty", Posicao.GOLEIRO, 10, 100000);
-        clube.addJogador(conn, "Vinícius Júnior", Posicao.ATACANTE, 8.98, 60);
+        Clube clube = new Clube(conn, "Fluminense");
+        clube.addJogador(conn, "Everaldo", Posicao.ATACANTE, 7.0, 76);
+        clube.addJogador(conn, "Arias", Posicao.ATACANTE, 15.0, 80);
+        clube.addJogador(conn, "K. Serna", Posicao.ATACANTE, 6.0, 75);
+        clube.addJogador(conn, "Ganso", Posicao.MEIA, 13.0, 80);
+        clube.addJogador(conn, "Martinelli", Posicao.MEIA, 7.0,77);
+        clube.addJogador(conn, "Bernal", Posicao.MEIA, 7.0, 75);
+        clube.addJogador(conn, "G. Fuentes", Posicao.ZAGUEIRO, 9.0, 75);
+        clube.addJogador(conn, "Freytes", Posicao.ZAGUEIRO, 6.0, 72);
+        clube.addJogador(conn, "T. Silva", Posicao.ZAGUEIRO, 14.0, 80);
+        clube.addJogador(conn, "S. Xavier", Posicao.ZAGUEIRO, 11.0, 76);
+        clube.addJogador(conn, "Fábio", Posicao.GOLEIRO, 14.0, 79);
+        clube.addJogador(conn, "G. Cano", Posicao.ATACANTE, 13, 78);
 
-        Clube clube2 = new Clube(conn, "ARGENTINA");
-        clube2.addJogador(conn, "Meci Careca", Posicao.ATACANTE, 1.50, 60);
-        clube2.addJogador(conn, "Messi na Centroavância", Posicao.ATACANTE, 3, 60);
-        clube2.addJogador(conn, "Messi Normal", Posicao.ATACANTE, 1.50, 60);
-        clube2.addJogador(conn, "Arrascaeta (Naturalizado)", Posicao.MEIA, 4, 60);
-        clube2.addJogador(conn, "Enso Fernandes", Posicao.MEIA, 20, 60);
-        clube2.addJogador(conn, "MacAllister", Posicao.MEIA, 20, 60);
-        clube2.addJogador(conn, "Montiel", Posicao.ZAGUEIRO, 20, 100000);
-        clube2.addJogador(conn, "Britez", Posicao.ZAGUEIRO, 5, 100000);
-        clube2.addJogador(conn, "Garro (Saída de Bola)", Posicao.ZAGUEIRO, 5, 100000);
-        clube2.addJogador(conn, "Benito Benitez", Posicao.ZAGUEIRO, 10, 100000);
-        clube2.addJogador(conn, "Messi Gigante", Posicao.GOLEIRO, 10, 100000);
-        clube2.addJogador(conn, "Tieco Arbanto Baratona", Posicao.ATACANTE, 8.98, 60);
-
+        Clube clube2 = new Clube(conn, "Botafogo");
+        clube2.addJogador(conn, "Igor Jesus", Posicao.ATACANTE, 14.0, 78);
+        clube2.addJogador(conn, "J. Correa", Posicao.ATACANTE, 16.0, 78);
+        clube2.addJogador(conn, "Artur", Posicao.ATACANTE, 14.0, 78);
+        clube2.addJogador(conn, "Savarino", Posicao.MEIA, 16.0, 79);
+        clube2.addJogador(conn, "Gregore", Posicao.MEIA, 13.0, 77);
+        clube2.addJogador(conn, "Marlon Freitas", Posicao.MEIA, 15.0, 78);
+        clube2.addJogador(conn, "Alex Telles", Posicao.ZAGUEIRO, 16.0, 80);
+        clube2.addJogador(conn, "A. Barbosa", Posicao.ZAGUEIRO, 12.0, 78);
+        clube2.addJogador(conn, "Jair", Posicao.ZAGUEIRO, 9.0, 73);
+        clube2.addJogador(conn, "Cuiabano", Posicao.ZAGUEIRO, 12.0, 77);
+        clube2.addJogador(conn, "John", Posicao.GOLEIRO, 12.0, 78);
+        clube2.addJogador(conn, "Mastriani", Posicao.ATACANTE, 7.0, 76);
+        
         Usuario pedro = new Usuario("pedro", "1234");
         TimeUsuario time = pedro.getTimeUsuario();
 

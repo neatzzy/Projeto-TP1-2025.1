@@ -1,5 +1,5 @@
-import java.util.Set; // uso para declarar variavel da classe Set
-import java.util.HashSet; // uso para instanciar o objeto HashSet
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class TimeUsuario {
     private Usuario usuario;     
@@ -147,5 +147,56 @@ public class TimeUsuario {
 
     public double getPreco() {
         return preco;
+    }
+
+    // Retorna o nome do time do usuário
+    public String getNome() {
+        return "Time de " + usuario.getNome();
+    }
+
+    // Retorna o goleiro escalado (ou null)
+    public Jogador getGoleiro() {
+        return jogadores.stream()
+                .filter(j -> j.getPosicao() == Posicao.GOLEIRO)
+                .findFirst()
+                .orElse(null);
+    }
+
+    // Retorna uma lista de zagueiros em ordem de adição
+    public List<Jogador> getZagueiros() {
+        return jogadores.stream()
+                .filter(j -> j.getPosicao() == Posicao.ZAGUEIRO)
+                .sorted(Comparator.comparing(Jogador::getNome))
+                .limit(4)
+                .collect(Collectors.toList());
+    }
+
+    // Retorna uma lista de meias em ordem de adição
+    public List<Jogador> getMeias() {
+        return jogadores.stream()
+                .filter(j -> j.getPosicao() == Posicao.MEIA)
+                .sorted(Comparator.comparing(Jogador::getNome))
+                .limit(3)
+                .collect(Collectors.toList());
+    }
+
+    // Retorna uma lista de atacantes em ordem de adição
+    public List<Jogador> getAtacantes() {
+        return jogadores.stream()
+                .filter(j -> j.getPosicao() == Posicao.ATACANTE)
+                .sorted(Comparator.comparing(Jogador::getNome))
+                .limit(3)
+                .collect(Collectors.toList());
+    }
+
+    // Retorna todos os jogadores do time, ordenados por posição
+    public List<Jogador> getTodosOsEscalados() {
+        List<Jogador> todos = new ArrayList<>();
+        Jogador g = getGoleiro();
+        if (g != null) todos.add(g);
+        todos.addAll(getZagueiros());
+        todos.addAll(getMeias());
+        todos.addAll(getAtacantes());
+        return todos;
     }
 }
