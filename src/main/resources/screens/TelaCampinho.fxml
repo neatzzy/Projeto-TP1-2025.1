@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.shape.Line?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: linear-gradient(to bottom right, #1B5E20, #004D40);" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
+
+    <Button fx:id="menuMontagem" layoutX="20.0" layoutY="14.0" mnemonicParsing="false" onAction="#abrirMenu" style="-fx-background-color: rgba(255,255,255,0.12); -fx-background-radius: 10; -fx-text-fill: white; -fx-font-size: 20px; -fx-font-weight: bold; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.4), 3, 0, 0, 2);" text="☰" />
+
+    <Label fx:id="labelNomeClube" layoutX="89.0" layoutY="16.0" prefHeight="39.0" prefWidth="180.0" style="-fx-text-fill: white; -fx-font-size: 22px; -fx-font-weight: bold; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.6), 2, 0, 0, 1);" text="Nome do Clube" />
+
+    <Pane layoutX="30.0" layoutY="70.0" prefHeight="260.0" prefWidth="380.0" style="-fx-background-color: linear-gradient(to right, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.04) 10%, transparent 10%, transparent 20%, rgba(255,255,255,0.04) 20%, rgba(255,255,255,0.04) 30%, transparent 30%, transparent 40%, rgba(255,255,255,0.04) 40%, rgba(255,255,255,0.04) 50%, transparent 50%, transparent 60%, rgba(255,255,255,0.04) 60%, rgba(255,255,255,0.04) 70%, transparent 70%, transparent 80%, rgba(255,255,255,0.04) 80%, rgba(255,255,255,0.04) 90%, transparent 90%, transparent 100%); -fx-border-color: white; -fx-border-width: 2px; -fx-border-radius: 12;">
+        <children>
+            <Line endX="190.0" endY="260.0" startX="190.0" startY="0.0" stroke="white" strokeWidth="1.2" />
+            <Circle centerX="190.0" centerY="130.0" fill="transparent" radius="30.0" stroke="white" strokeWidth="1.2" />
+
+            <!-- Goleiro -->
+            <Button fx:id="goleiroButton" layoutX="14.0" layoutY="115.0" prefHeight="30.0" prefWidth="30.0" style="-fx-background-color: #43A047; -fx-background-radius: 50%; -fx-border-color: white; -fx-border-radius: 50%; -fx-border-width: 1.5; -fx-effect: dropshadow(gaussian, black, 4, 0, 0, 1);" />
+
+            <!-- Zagueiros -->
+            <Button fx:id="zagueiroButton4" layoutX="75.0" layoutY="10.0" prefHeight="30.0" prefWidth="30.0" style="-fx-background-color: #43A047; -fx-background-radius: 50%; -fx-border-color: white; -fx-border-radius: 50%; -fx-border-width: 1.5; -fx-effect: dropshadow(gaussian, black, 4, 0, 0, 1);" />
+            <Button fx:id="zagueiroButton3" layoutX="50.0" layoutY="69.0" prefHeight="30.0" prefWidth="30.0" style="-fx-background-color: #43A047; -fx-background-radius: 50%; -fx-border-color: white; -fx-border-radius: 50%; -fx-border-width: 1.5; -fx-effect: dropshadow(gaussian, black, 4, 0, 0, 1);" />
+            <Button fx:id="zagueiroButton2" layoutX="50.0" layoutY="161.0" prefHeight="30.0" prefWidth="30.0" style="-fx-background-color: #43A047; -fx-background-radius: 50%; -fx-border-color: white; -fx-border-radius: 50%; -fx-border-width: 1.5; -fx-effect: dropshadow(gaussian, black, 4, 0, 0, 1);" />
+            <Button fx:id="zagueiroButton1" layoutX="75.0" layoutY="215.0" prefHeight="30.0" prefWidth="30.0" style="-fx-background-color: #43A047; -fx-background-radius: 50%; -fx-border-color: white; -fx-border-radius: 50%; -fx-border-width: 1.5; -fx-effect: dropshadow(gaussian, black, 4, 0, 0, 1);" />
+
+            <!-- Meio-campo -->
+            <Button fx:id="meioButton3" layoutX="205.0" layoutY="69.0" prefHeight="30.0" prefWidth="30.0" style="-fx-background-color: #43A047; -fx-background-radius: 50%; -fx-border-color: white; -fx-border-radius: 50%; -fx-border-width: 1.5; -fx-effect: dropshadow(gaussian, black, 4, 0, 0, 1);" />
+            <Button fx:id="meioButton2" layoutX="144.0" layoutY="115.0" prefHeight="30.0" prefWidth="30.0" style="-fx-background-color: #43A047; -fx-background-radius: 50%; -fx-border-color: white; -fx-border-radius: 50%; -fx-border-width: 1.5; -fx-effect: dropshadow(gaussian, black, 4, 0, 0, 1);" />
+            <Button fx:id="meioButton1" layoutX="205.0" layoutY="161.0" prefHeight="30.0" prefWidth="30.0" style="-fx-background-color: #43A047; -fx-background-radius: 50%; -fx-border-color: white; -fx-border-radius: 50%; -fx-border-width: 1.5; -fx-effect: dropshadow(gaussian, black, 4, 0, 0, 1);" />
+
+            <!-- Atacantes -->
+            <Button fx:id="atacanteButton3" layoutX="290.0" layoutY="10.0" prefHeight="30.0" prefWidth="30.0" style="-fx-background-color: #43A047; -fx-background-radius: 50%; -fx-border-color: white; -fx-border-radius: 50%; -fx-border-width: 1.5; -fx-effect: dropshadow(gaussian, black, 4, 0, 0, 1);" />
+            <Button fx:id="atacanteButton2" layoutX="311.0" layoutY="115.0" prefHeight="30.0" prefWidth="30.0" style="-fx-background-color: #43A047; -fx-background-radius: 50%; -fx-border-color: white; -fx-border-radius: 50%; -fx-border-width: 1.5; -fx-effect: dropshadow(gaussian, black, 4, 0, 0, 1);" />
+            <Button fx:id="atacanteButton1" layoutX="290.0" layoutY="215.0" prefHeight="30.0" prefWidth="30.0" style="-fx-background-color: #43A047; -fx-background-radius: 50%; -fx-border-color: white; -fx-border-radius: 50%; -fx-border-width: 1.5; -fx-effect: dropshadow(gaussian, black, 4, 0, 0, 1);" />
+        </children>
+    </Pane>
+
+    <Pane layoutX="430.0" layoutY="70.0" prefHeight="268.0" prefWidth="147.0" style="-fx-background-color: rgba(255,255,255,0.10); -fx-background-radius: 12; -fx-border-color: white; -fx-border-width: 1.5; -fx-border-radius: 12;">
+        <children>
+            <VBox layoutX="10.0" layoutY="10.0" prefHeight="273.0" prefWidth="127.0" spacing="4.0">
+                <Label fx:id="labelGoleiro" style="-fx-text-fill: #FAFAFA; -fx-font-size: 13px;" text="GOL: ?" />
+                <Label fx:id="labelZagueiro1" style="-fx-text-fill: #FAFAFA; -fx-font-size: 13px;" text="ZAG: ?" />
+                <Label fx:id="labelZagueiro2" style="-fx-text-fill: #FAFAFA; -fx-font-size: 13px;" text="ZAG: ?" />
+                <Label fx:id="labelZagueiro3" style="-fx-text-fill: #FAFAFA; -fx-font-size: 13px;" text="ZAG: ?" />
+                <Label fx:id="labelZagueiro4" style="-fx-text-fill: #FAFAFA; -fx-font-size: 13px;" text="ZAG: ?" />
+                <Label fx:id="labelMeio1" style="-fx-text-fill: #FAFAFA; -fx-font-size: 13px;" text="MEI: ?" />
+                <Label fx:id="labelMeio2" style="-fx-text-fill: #FAFAFA; -fx-font-size: 13px;" text="MEI: ?" />
+                <Label fx:id="labelMeio3" style="-fx-text-fill: #FAFAFA; -fx-font-size: 13px;" text="MEI: ?" />
+                <Label fx:id="labelAtaque1" style="-fx-text-fill: #FAFAFA; -fx-font-size: 13px;" text="ATA: ?" />
+                <Label fx:id="labelAtaque2" style="-fx-text-fill: #FAFAFA; -fx-font-size: 13px;" text="ATA: ?" />
+                <Label fx:id="labelAtaque3" style="-fx-text-fill: #FAFAFA; -fx-font-size: 13px;" text="ATA: ?" />
+            </VBox>
+        </children>
+    </Pane>
+
+    <Label fx:id="labelSaldo" layoutX="30.0" layoutY="360.0" style="-fx-text-fill: white; -fx-font-size: 12px; -fx-font-weight: bold;" text="Saldo restante: 100.00$" />
+    <Button fx:id="mercadoButton" layoutX="431.0" layoutY="14.0" mnemonicParsing="false" prefHeight="44.0" prefWidth="147.0" style="-fx-background-color: rgba(255,255,255,0.12); -fx-background-radius: 10; -fx-text-fill: white; -fx-font-size: 20px; -fx-font-weight: bold; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.4), 3, 0, 0, 2);" text="Mercado" />
+    <ComboBox fx:id="selectCapitao" layoutX="431.0" layoutY="356.0" prefHeight="25.0" prefWidth="147.0" style="-fx-background-color: rgba(255,255,255,0.12); -fx-background-radius: 10; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.4), 3, 0, 0, 2);" />
+   <Circle fill="#eead2d" layoutX="404.0" layoutY="369.0" radius="13.0" stroke="#eead2d" strokeType="INSIDE" />
+   <Label layoutX="398.0" layoutY="356.0" prefWidth="12.0" text="C">
+      <font>
+         <Font name="System Bold" size="18.0" />
+      </font>
+   </Label>
+
+
+</AnchorPane>
