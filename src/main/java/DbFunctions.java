@@ -60,6 +60,7 @@ public class DbFunctions {
     public void createTableUsuarios(Connection conn){
         String createQuery = "CREATE TABLE usuarios" +
                 "(usuarioid SERIAL, nome VARCHAR(200), " +
+                "email VARCHAR(255) UNIQUE," +
                 "tipo VARCHAR(200)," +
                 "senha VARCHAR(200)," +
                 "ligaid INT)";
@@ -188,9 +189,9 @@ public class DbFunctions {
     }
 
     // adiciona usuário no banco de dados
-    public int insertUsuario(Connection conn, String name, String tipo, String senha, int ligaid) throws SQLException{
+    public int insertUsuario(Connection conn, String name, String email, String tipo, String senha, int ligaid) throws SQLException{
 
-        String insertQuery = "INSERT INTO usuarios (nome, tipo, senha, ligaid) VALUES (?, ?, ?, ?) RETURNING usuarioid";
+        String insertQuery = "INSERT INTO usuarios (nome, email, tipo, senha, ligaid) VALUES (?, ?, ?, ?, ?) RETURNING usuarioid";
 
         try(PreparedStatement insertStmt = conn.prepareStatement(insertQuery)){
 
@@ -198,9 +199,10 @@ public class DbFunctions {
             String senhaHash = encoder.encode(senha);
 
             insertStmt.setString(1, name);
-            insertStmt.setString(2, tipo);
-            insertStmt.setString(3, senhaHash);
-            insertStmt.setInt(4, ligaid);
+            insertStmt.setString(2, email);
+            insertStmt.setString(3, tipo);
+            insertStmt.setString(4, senhaHash);
+            insertStmt.setInt(5, ligaid);
 
             try(ResultSet rs = insertStmt.executeQuery()){
                 if(rs.next()) {
@@ -272,6 +274,75 @@ public class DbFunctions {
 
         return null;
     }
+
+    public Pessoa getUsuarioById(Connection conn, int id) throws SQLException {
+        String dataQuery = "SELECT * FROM usuarios WHERE usuarioid = ?";
+
+        try (PreparedStatement dataStmt = conn.prepareStatement(dataQuery)) {
+            dataStmt.setInt(1, id);  // seta o parâmetro do PreparedStatement
+
+            try (ResultSet rs = dataStmt.executeQuery()) {
+                if (rs.next()) {
+                    int usuarioId = rs.getInt("usuarioid");
+                    String nome = rs.getString("nome");
+                    String tipo = rs.getString("tipo");
+                    String senha = rs.getString("senha");
+                    int ligaid = rs.getInt("ligaid");
+
+                    Pessoa usuario;
+
+                    if ("user".equalsIgnoreCase(tipo)) {
+                        usuario = new Usuario(nome, senha);
+                    } else if ("adminLiga".equalsIgnoreCase(tipo)) {
+                        usuario = new AdmLiga(nome, senha);
+                    } else if ("admin".equalsIgnoreCase(tipo)) {
+                        usuario = new Admin(nome, senha, null); // lidar com a lógica da liga!
+                    } else {
+                        throw new IllegalArgumentException("Tipo inválido de usuário.");
+                    }
+
+                    return usuario;
+                } else {
+                    return null;  // usuário não encontrado
+                }
+            }
+        }
+    }
+
+    public Pessoa getUsuarioByEmail(Connection conn, String email) throws SQLException {
+        String dataQuery = "SELECT * FROM usuarios WHERE email = ?";
+
+        try (PreparedStatement dataStmt = conn.prepareStatement(dataQuery)) {
+            dataStmt.setString(1, email);  // seta o parâmetro do PreparedStatement
+
+            try (ResultSet rs = dataStmt.executeQuery()) {
+                if (rs.next()) {
+                    int usuarioId = rs.getInt("usuarioid");
+                    String nome = rs.getString("nome");
+                    String tipo = rs.getString("tipo");
+                    String senha = rs.getString("senha");
+                    int ligaid = rs.getInt("ligaid");
+
+                    Pessoa usuario;
+
+                    if ("user".equalsIgnoreCase(tipo)) {
+                        usuario = new Usuario(nome, senha);
+                    } else if ("adminLiga".equalsIgnoreCase(tipo)) {
+                        usuario = new AdmLiga(nome, senha);
+                    } else if ("admin".equalsIgnoreCase(tipo)) {
+                        usuario = new Admin(nome, senha, null); // lidar com a lógica da liga!
+                    } else {
+                        throw new IllegalArgumentException("Tipo inválido de usuário.");
+                    }
+
+                    return usuario;
+                } else {
+                    return null;  // usuário não encontrado
+                }
+            }
+        }
+    }
+
 
     // retorna se existe tal jogador a partir do id
     public boolean existsJogadorById(Connection conn, int id){
@@ -482,6 +553,7 @@ public class DbFunctions {
 
                 int id = rs.getInt("usuarioid");
                 String nome = rs.getString("nome");
+                String email = rs.getString("email");
                 String tipo = rs.getString("tipo");
                 String senha = rs.getString("senha");
                 int ligaid = rs.getInt("ligaid");
@@ -525,6 +597,7 @@ public class DbFunctions {
 
                     int id = rs.getInt("usuarioid");
                     String nome = rs.getString("nome");
+                    String email = rs.getString("email");
                     String tipo = rs.getString("tipo");
                     String senha = rs.getString("senha");
                     int ligaIdDoBanco = rs.getInt("ligaid");
