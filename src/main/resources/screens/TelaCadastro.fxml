@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane xmlns:fx="http://javafx.com/fxml" prefWidth="1200" prefHeight="800"
+            style="-fx-background-color: #2E7D32;" fx:controller="ControllerTelaCadastro">
+
+    <VBox spacing="10" layoutX="40" layoutY="20">
+
+        <Label text="Cadastro">
+            <font>
+                <Font name="Poppins ExtraLight" size="36" />
+            </font>
+            <textFill>white</textFill>
+        </Label>
+
+        <Label text="Nome:" textFill="white">
+            <font>
+                <Font name="Poppins" size="20" />
+            </font>
+        </Label>
+        <TextField fx:id="campoNome" promptText="Digite seu nome"
+                   style="-fx-background-color: #F1FFF1; -fx-background-radius: 8;" />
+
+        <Label text="Email:" textFill="white">
+            <font>
+                <Font name="Poppins" size="20" />
+            </font>
+        </Label>
+        <TextField fx:id="campoEmail" promptText="Digite seu email"
+                   style="-fx-background-color: #F1FFF1; -fx-background-radius: 8;" />
+
+        <Label text="Senha:" textFill="white">
+            <font>
+                <Font name="Poppins" size="20" />
+            </font>
+        </Label>
+        <PasswordField fx:id="campoSenha" promptText="Digite sua senha"
+                       style="-fx-background-color: #F1FFF1; -fx-background-radius: 8;" />
+
+        <Label text="Confirmar senha:" textFill="white">
+            <font>
+                <Font name="Poppins" size="20" />
+            </font>
+        </Label>
+        <PasswordField fx:id="campoConfirmarSenha" promptText="Confirme sua senha"
+                       style="-fx-background-color: #F1FFF1; -fx-background-radius: 8;" />
+
+        <Button text="Confirmar Cadastro" onAction="#cadastrarUsuario"
+                style="-fx-background-color: white; -fx-text-fill: #2E7D32; -fx-font-size: 16; -fx-font-family: 'Poppins'; -fx-background-radius: 10;" />
+
+    </VBox>
+</AnchorPane>
