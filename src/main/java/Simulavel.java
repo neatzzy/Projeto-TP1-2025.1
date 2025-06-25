@@ -1,11 +1,13 @@
-
 import java.util.ArrayList;
 import java.util.List;
-import java.util.HashSet;
-import java.util.Set;
 import java.util.Random;
+import java.util.Set;
 
-public class Partida {
+public interface Simulavel {
+    void simular();
+}
+
+class Partida implements Simulavel{
 
     private Clube clubeCasa;
     private Clube clubeFora;
@@ -51,8 +53,8 @@ public class Partida {
         return k - 1;
     }
 
-    // simual a partida
-    public void simularPartida(){
+    // simula a partida
+    public void simular(){
 
         Set<Jogador> jogadoresCasa = clubeCasa.getJogadores();
         Set<Jogador> jogadoresFora = clubeFora.getJogadores();
@@ -161,34 +163,34 @@ public class Partida {
 
         double fatorPositivoOverall = 1 + 0.3 * (jogador.getOverall() / 100) + calcularBonusClube(timeCasa);
         double fatorNegativoOverall = 2 - 0.9 * (jogador.getOverall() / 100) - calcularBonusClube(timeCasa);
-        
+
         // se o over medio do adversario eh igual que o do time, nao influencia em nada. se o over eh maior que o do time, gera um numero < 1 que reduz o lambda da poisson (ocorrencia media do evento). complementa a logica de dificuldade do confronto
         double fatorAtaqueAdversario;
         double fatorDefesaAdversario;
         double solidezDefensiva;
         double destaqueOfensivo = 1;
-        
+
         if (timeCasa){
             fatorAtaqueAdversario = 1 - (clubeFora.getOverAtaque() - clubeCasa.getOverDefesa())/40; // "o quao melhor eh o ataque deles em relacao a nossa defesa?" se > 1, o ataque deles nao tanka a nossa defesa
             fatorDefesaAdversario = 1 - (clubeFora.getOverDefesa() - clubeCasa.getOverAtaque())/40;
-            
+
             if (fatorAtaqueAdversario < 0.05) fatorAtaqueAdversario = 0.05;
             if (fatorDefesaAdversario < 0.05) fatorDefesaAdversario = 0.05;
-            
+
             solidezDefensiva = 1 - 0.8 * (clubeFora.getOverDefesa())/100;
-            
+
             if(jogador.getPosicao() == Posicao.ATACANTE || jogador.getPosicao() == Posicao.MEIA) destaqueOfensivo = Math.pow(1 + (jogador.getOverall() - clubeCasa.getOverAtaque())/100, 5);
             if(destaqueOfensivo < 1) destaqueOfensivo = 1;
         }
         else{
             fatorAtaqueAdversario = 1 - (clubeCasa.getOverAtaque() - clubeFora.getOverDefesa())/40;
             fatorDefesaAdversario = 1 - (clubeCasa.getOverDefesa() - clubeFora.getOverAtaque())/40;
-            
+
             if (fatorAtaqueAdversario < 0.05) fatorAtaqueAdversario = 0.05;
             if (fatorDefesaAdversario < 0.05) fatorDefesaAdversario = 0.05;
-            
+
             solidezDefensiva = 1 - 0.8 * (clubeFora.getOverDefesa())/100;
-            
+
             if(jogador.getPosicao() == Posicao.ATACANTE || jogador.getPosicao() == Posicao.MEIA) destaqueOfensivo = Math.pow(1 + (jogador.getOverall() - clubeFora.getOverAtaque())/100, 5);
             if(destaqueOfensivo < 1) destaqueOfensivo = 1;
         }
@@ -253,7 +255,7 @@ public class Partida {
         } else {
             jogador.getStats().setCartaoVermelho(false);
         }
-        
+
         System.out.println("amarelos: " + total_cartoes_amarelos);
 
         // estatísticas dependentes: gols sofridos, defesa pênalti e sg
@@ -418,51 +420,51 @@ public class Partida {
             jogador.getStats().resetStats();
         }
     }
-    
+
     public void mostrarResumoPartida() {
-    System.out.println("=== RESUMO DA PARTIDA ===");
-    System.out.println("Clube da Casa: " + clubeCasa.getNome());
-    System.out.println("Clube de Fora: " + clubeFora.getNome());
-    System.out.println("Placar: " + clubeCasa.getNome() + " " + golsClubeCasa + " x " + golsClubeFora + " " + clubeFora.getNome());
-    System.out.println();
+        System.out.println("=== RESUMO DA PARTIDA ===");
+        System.out.println("Clube da Casa: " + clubeCasa.getNome());
+        System.out.println("Clube de Fora: " + clubeFora.getNome());
+        System.out.println("Placar: " + clubeCasa.getNome() + " " + golsClubeCasa + " x " + golsClubeFora + " " + clubeFora.getNome());
+        System.out.println();
 
-    System.out.println("Gols da Casa:");
-    for (Jogador j : jogadoresGolCasa) {
-        System.out.println("- " + j.getNome() + " (" + j.getStats().getGols() + " gols)" + j.getPontuacao());
-    }
-    System.out.println("Gols de Pênalti da Casa: " + golsPenaltiCasa);
+        System.out.println("Gols da Casa:");
+        for (Jogador j : jogadoresGolCasa) {
+            System.out.println("- " + j.getNome() + " (" + j.getStats().getGols() + " gols)" + j.getPontuacao());
+        }
+        System.out.println("Gols de Pênalti da Casa: " + golsPenaltiCasa);
 
-    System.out.println("Assistências da Casa:");
-    for (Jogador j : jogadoresAssistenciaCasa) {
-        System.out.println("- " + j.getNome() + " (" + j.getStats().getAssistencias() + " assistências)");
-    }
+        System.out.println("Assistências da Casa:");
+        for (Jogador j : jogadoresAssistenciaCasa) {
+            System.out.println("- " + j.getNome() + " (" + j.getStats().getAssistencias() + " assistências)");
+        }
 
-    System.out.println();
-    System.out.println("Gols da Fora:");
-    for (Jogador j : jogadoresGolFora) {
-        System.out.println("- " + j.getNome() + " (" + j.getStats().getGols() + " gols)" + j.getPontuacao());
-        System.out.println("- " + j.getNome() + " (" + j.getStats().getFinalizacoes() + " fin)");
-        System.out.println("- " + j.getNome() + " (" + j.getStats().getDesarmes() + " des)");
-        if (j.getPosicao() == Posicao.GOLEIRO) System.out.println("- " + j.getNome() + " (" + j.getStats().getDefesas() + " def)");
-    }
-    System.out.println("Gols de Pênalti da Fora: " + golsPenaltiFora);
+        System.out.println();
+        System.out.println("Gols da Fora:");
+        for (Jogador j : jogadoresGolFora) {
+            System.out.println("- " + j.getNome() + " (" + j.getStats().getGols() + " gols)" + j.getPontuacao());
+            System.out.println("- " + j.getNome() + " (" + j.getStats().getFinalizacoes() + " fin)");
+            System.out.println("- " + j.getNome() + " (" + j.getStats().getDesarmes() + " des)");
+            if (j.getPosicao() == Posicao.GOLEIRO) System.out.println("- " + j.getNome() + " (" + j.getStats().getDefesas() + " def)");
+        }
+        System.out.println("Gols de Pênalti da Fora: " + golsPenaltiFora);
 
-    System.out.println("Assistências da Fora:");
-    for (Jogador j : jogadoresAssistenciaFora) {
-        System.out.println("- " + j.getNome() + " (" + j.getStats().getAssistencias() + " assistências)");
-    }
+        System.out.println("Assistências da Fora:");
+        for (Jogador j : jogadoresAssistenciaFora) {
+            System.out.println("- " + j.getNome() + " (" + j.getStats().getAssistencias() + " assistências)");
+        }
 
-    System.out.println();
-    System.out.println("Cartões Vermelhos:");
-    if (cartaoVermelhoClubeCasa) {
-        System.out.println("- " + clubeCasa.getNome() + " teve pelo menos 1 cartão vermelho.");
-    }
-    if (cartaoVermelhoClubeFora) {
-        System.out.println("- " + clubeFora.getNome() + " teve pelo menos 1 cartão vermelho.");
-    }
+        System.out.println();
+        System.out.println("Cartões Vermelhos:");
+        if (cartaoVermelhoClubeCasa) {
+            System.out.println("- " + clubeCasa.getNome() + " teve pelo menos 1 cartão vermelho.");
+        }
+        if (cartaoVermelhoClubeFora) {
+            System.out.println("- " + clubeFora.getNome() + " teve pelo menos 1 cartão vermelho.");
+        }
 
-    System.out.println("\n=========================\n");
-}
+        System.out.println("\n=========================\n");
+    }
 
     // contrutores e setters
 

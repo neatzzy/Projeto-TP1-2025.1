@@ -1,6 +1,7 @@
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 public class DbFunctions {
 
@@ -53,6 +54,22 @@ public class DbFunctions {
         }catch(Exception e){
             System.out.println(e);
         }
+    }
+
+    // Cria tabela de usuários( usuarioid, nome, tipo, senha, nomeliga)
+    public void createTableUsuarios(Connection conn){
+        String createQuery = "CREATE TABLE usuarios" +
+                "(usuarioid SERIAL, nome VARCHAR(200), " +
+                "tipo VARCHAR(200)," +
+                "senha VARCHAR(200)," +
+                "ligaid INT)";
+        try(PreparedStatement createStmt = conn.prepareStatement(createQuery)){
+            createStmt.executeUpdate();
+            System.out.println("Table usuarios created");
+        } catch(Exception e) {
+            System.out.println(e);
+        }
+
     }
 
     // retorna o ID de um time pelo nome
@@ -168,6 +185,37 @@ public class DbFunctions {
             throw e;
         }
 
+    }
+
+    // adiciona usuário no banco de dados
+    public int insertUsuario(Connection conn, String name, String tipo, String senha, int ligaid) throws SQLException{
+
+        String insertQuery = "INSERT INTO usuarios (nome, tipo, senha, ligaid) VALUES (?, ?, ?, ?) RETURNING usuarioid";
+
+        try(PreparedStatement insertStmt = conn.prepareStatement(insertQuery)){
+
+            BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+            String senhaHash = encoder.encode(senha);
+
+            insertStmt.setString(1, name);
+            insertStmt.setString(2, tipo);
+            insertStmt.setString(3, senhaHash);
+            insertStmt.setInt(4, ligaid);
+
+            try(ResultSet rs = insertStmt.executeQuery()){
+                if(rs.next()) {
+                    int newId = rs.getInt("usuarioid");
+                    System.out.println("Usuario '" + name + "' inserido com ID: " + newId);
+                    return newId;
+                } else {
+                    throw new SQLException("Falha ao obter ID do usuario.");
+                }
+            }
+
+        } catch ( SQLException e ) {
+            System.out.println(e);
+            throw e;
+        }
     }
 
 
@@ -420,6 +468,91 @@ public class DbFunctions {
         return null;
     }
 
+    // Retorna uma lista com todos os usuários usando o programa
+    public List<Pessoa> getAllUsuarios(Connection conn) {
+
+        List<Pessoa> usuarios = new ArrayList<>();
+        String query = "SELECT * FROM usuarios";
+
+        try (PreparedStatement dataStmt = conn.prepareStatement(query);
+
+             ResultSet rs = dataStmt.executeQuery()) {
+
+            while (rs.next()) {
+
+                int id = rs.getInt("usuarioid");
+                String nome = rs.getString("nome");
+                String tipo = rs.getString("tipo");
+                String senha = rs.getString("senha");
+                int ligaid = rs.getInt("ligaid");
+
+                Pessoa usuario;
+
+                // Instancia a subclasse certa com base no tipo
+                if ("user".equalsIgnoreCase(tipo)) {
+                    usuario = new Usuario(nome, senha);
+                } else if ("adminLiga".equalsIgnoreCase(tipo)) {
+                    usuario = new AdmLiga(nome, senha);
+                } else if ("admin".equalsIgnoreCase(tipo)) {
+                    usuario = new Admin(nome, senha, null); // lidar com a lógica da liga!
+                } else {
+                    throw new IllegalArgumentException("Tipo inválido de usuário.");
+                }
+
+                usuarios.add(usuario);
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Erro ao buscar usuários: " + e.getMessage());
+        }
+
+        return usuarios;
+    }
+
+    // Retorna uma lista com todos os usuários de uma certa liga
+    public List<Pessoa> getAllUsuariosLiga(Connection conn, int ligaid) {
+
+        List<Pessoa> usuarios = new ArrayList<>();
+        String query = "SELECT * FROM usuarios WHERE ligaid = ?";
+
+        try (PreparedStatement dataStmt = conn.prepareStatement(query)) {
+
+            dataStmt.setInt(1, ligaid);
+
+            try (ResultSet rs = dataStmt.executeQuery()) {
+
+                while (rs.next()) {
+
+                    int id = rs.getInt("usuarioid");
+                    String nome = rs.getString("nome");
+                    String tipo = rs.getString("tipo");
+                    String senha = rs.getString("senha");
+                    int ligaIdDoBanco = rs.getInt("ligaid");
+
+                    Pessoa usuario;
+
+                    if ("user".equalsIgnoreCase(tipo)) {
+                        usuario = new Usuario(nome, senha);
+                    } else if ("adminLiga".equalsIgnoreCase(tipo)) {
+                        usuario = new AdmLiga(nome, senha);
+                    } else if ("admin".equalsIgnoreCase(tipo)) {
+                        usuario = new Admin(nome, senha, null); // lidar com a lógica da liga!
+                    } else {
+                        throw new IllegalArgumentException("Tipo inválido de usuário.");
+                    }
+
+                    usuarios.add(usuario);
+                }
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Erro ao buscar usuários: " + e.getMessage());
+        }
+
+        return usuarios;
+    }
+
+
     // Remove clube por id(também remove os jogadores associados)
     public void deleteClubeById(Connection conn, int id){
 
@@ -466,6 +599,22 @@ public class DbFunctions {
         }
     }
 
+    //Remove usuário por id
+    public void deleteUsuarioById(Connection conn, int id){
+        String deleteQuery = "DELETE FROM usuarios WHERE usuarioid = ?";
+        try(PreparedStatement deleteStmt = conn.prepareStatement(deleteQuery)){
+            deleteStmt.setInt(1, id);
+            int usuarioDeletado = deleteStmt.executeUpdate();
+            if (usuarioDeletado > 0) {
+                System.out.println("Usuario com ID " + id + " foi deletado com sucesso.");
+            } else {
+                System.out.println("Nenhum usuario encontrado com ID " + id + ".");
+            }
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+    }
+
     // deleta tabela de times(também deleta a de jogadores)
     public void deleteClubesTable(Connection conn) {
         String deleteQuery = "DROP TABLE IF EXISTS jogadores, clubes CASCADE;";
@@ -483,6 +632,17 @@ public class DbFunctions {
         try (Statement stmt = conn.createStatement()) {
             stmt.executeUpdate(deleteQuery);
             System.out.println("Player table deleted");
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+    }
+
+    // deleta tabela de usuarios
+    public void deleteUsuariosTable(Connection conn) {
+        String deleteQuery = "DROP TABLE IF EXISTS usuarios";
+        try (Statement stmt = conn.createStatement()) {
+            stmt.executeUpdate(deleteQuery);
+            System.out.println("User table deleted");
         } catch (Exception e) {
             System.out.println(e);
         }
