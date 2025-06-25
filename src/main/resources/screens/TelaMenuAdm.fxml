@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0"
+            xmlns="http://javafx.com/javafx/23.0.1"
+            xmlns:fx="http://javafx.com/fxml/1"
+            style="-fx-background-color: linear-gradient(to bottom right, #1B5E20, #004D40);">
+
+    <children>
+        <!-- Título -->
+        <Label fx:id="labelTitulo" layoutX="170.0" layoutY="20.0" prefHeight="41.0" prefWidth="260.0"
+               alignment="CENTER" text="Cartolitos FC - ADMIN"
+               style="-fx-text-fill: white; -fx-font-size: 22px; -fx-font-weight: bold;
+                      -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.6), 2, 0, 0, 1);">
+            <font>
+                <Font size="22.0" />
+            </font>
+        </Label>
+
+        <!-- VBox para botões -->
+        <VBox layoutX="215.0" layoutY="75.0" spacing="6.0" prefWidth="170.0">
+            <children>
+                <Button fx:id="simulacaoButton" text="Simulação"
+                        prefWidth="170.0" prefHeight="34.0"
+                        style="-fx-background-color: rgba(255,255,255,0.12); -fx-background-radius: 10;
+                               -fx-text-fill: white; -fx-font-size: 15px; -fx-font-weight: bold;
+                               -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.4), 3, 0, 0, 2);" />
+
+                <Button fx:id="ligasButton" text="Ligas"
+                        prefWidth="170.0" prefHeight="34.0"
+                        style="-fx-background-color: rgba(255,255,255,0.12); -fx-background-radius: 10;
+                               -fx-text-fill: white; -fx-font-size: 15px; -fx-font-weight: bold;
+                               -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.4), 3, 0, 0, 2);" />
+
+                <Button fx:id="usuariosButton" text="Usuários"
+                        prefWidth="170.0" prefHeight="34.0"
+                        style="-fx-background-color: rgba(255,255,255,0.12); -fx-background-radius: 10;
+                               -fx-text-fill: white; -fx-font-size: 15px; -fx-font-weight: bold;
+                               -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.4), 3, 0, 0, 2);" />
+
+                <Button fx:id="clubesButton" text="Clubes"
+                        prefWidth="170.0" prefHeight="34.0"
+                        style="-fx-background-color: rgba(255,255,255,0.12); -fx-background-radius: 10;
+                               -fx-text-fill: white; -fx-font-size: 14.5px; -fx-font-weight: bold;
+                               -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.4), 3, 0, 0, 2);" />
+
+                <Button fx:id="jogadoresButton" text="Jogadores"
+                        prefWidth="170.0" prefHeight="34.0"
+                        style="-fx-background-color: rgba(255,255,255,0.12); -fx-background-radius: 10;
+                               -fx-text-fill: white; -fx-font-size: 15px; -fx-font-weight: bold;
+                               -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.4), 3, 0, 0, 2);" />
+
+                <Button fx:id="partidasButton" text="Partidas"
+                        prefWidth="170.0" prefHeight="34.0"
+                        style="-fx-background-color: rgba(255,255,255,0.12); -fx-background-radius: 10;
+                               -fx-text-fill: white; -fx-font-size: 15px; -fx-font-weight: bold;
+                               -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.4), 3, 0, 0, 2);" />
+
+                <Button fx:id="sairButton" text="Sair"
+                        prefWidth="170.0" prefHeight="34.0"
+                        style="-fx-background-color: rgba(255,255,255,0.12); -fx-background-radius: 10;
+                               -fx-text-fill: white; -fx-font-size: 15px; -fx-font-weight: bold;
+                               -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.4), 3, 0, 0, 2);" />
+            </children>
+        </VBox>
+    </children>
+</AnchorPane>
