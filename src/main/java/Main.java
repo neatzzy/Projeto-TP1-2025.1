@@ -105,7 +105,6 @@ public class Main extends Application {
         System.out.println("defesa over 2: " + clube2.getOverDefesa());
 
         Simulacao.gerarPartidasAleatorias(clubes);
-        Simulacao.simular(liga);
 
         liga.exibirRanking(liga.gerarRanking());
     }

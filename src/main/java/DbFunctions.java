@@ -494,7 +494,7 @@ public class DbFunctions {
                 } else if ("adminLiga".equalsIgnoreCase(tipo)) {
                     usuario = new AdmLiga(nome, senha);
                 } else if ("admin".equalsIgnoreCase(tipo)) {
-                    usuario = new Admin(nome, senha, null); // lidar com a lógica da liga!
+                    usuario = new Admin(nome, senha); // lidar com a lógica da liga!
                 } else {
                     throw new IllegalArgumentException("Tipo inválido de usuário.");
                 }
@@ -536,7 +536,7 @@ public class DbFunctions {
                     } else if ("adminLiga".equalsIgnoreCase(tipo)) {
                         usuario = new AdmLiga(nome, senha);
                     } else if ("admin".equalsIgnoreCase(tipo)) {
-                        usuario = new Admin(nome, senha, null); // lidar com a lógica da liga!
+                        usuario = new Admin(nome, senha); // lidar com a lógica da liga!
                     } else {
                         throw new IllegalArgumentException("Tipo inválido de usuário.");
                     }

@@ -36,30 +36,38 @@ public class Simulacao {
         return true;
     }
     // OBS: cuidar para que todos os clubes do campeonato estejam em alguma partida antes de simular
-    public static boolean simular(Liga liga){
-        for (Usuario usuario : liga.getUsuarios()){
-            if(!usuario.getTimeUsuario().isValido()) return false;
+    public static boolean simular(List<Liga> ligas){
+
+        for (Liga liga : ligas) {
+            for (Usuario usuario : liga.getUsuarios()){
+                if(!usuario.getTimeUsuario().isValido()) return false;
+            }
         }
+
         for (Partida partida : partidas){
             partida.simular();
             partida.mostrarResumoPartida();
         }
         
         ocorreu = true;
-        
-        for (Usuario usuario : liga.getUsuarios()){
-            usuario.getTimeUsuario().calcularPontuacao();
+
+        for (Liga liga : ligas) {
+            for (Usuario usuario : liga.getUsuarios()){
+                usuario.getTimeUsuario().calcularPontuacao();
+            }
         }
         
         return true;
     }
     // so pode ser usado apos a simulacao
-    public static void resetar(Liga liga){
+    public static void resetar(List<Liga > ligas){
         Simulacao.resetPartidasStats(partidas);
         partidas.clear();
-        
-        for (Usuario usuario : liga.getUsuarios()){
-            usuario.getTimeUsuario().calcularPontuacao(); // vai zerar a pontuacao pois os stats estao zerados
+
+        for (Liga liga : ligas) {
+            for (Usuario usuario : liga.getUsuarios()){
+                usuario.getTimeUsuario().calcularPontuacao(); // vai zerar a pontuacao pois os stats estao zerados
+            }
         }
         
         ocorreu = false;

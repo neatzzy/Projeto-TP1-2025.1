@@ -149,6 +149,8 @@ public class TimeUsuario {
         return preco;
     }
 
+    public void setUsuario(Usuario usuario) { this.usuario = usuario; }
+
     // Retorna o nome do time do usuário
     public String getNome() {
         return "Time de " + usuario.getNome();
