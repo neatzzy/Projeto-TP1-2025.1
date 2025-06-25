@@ -1,10 +1,10 @@
 package dao;
 
-import model.AdmLiga;
-import model.Admin;
 import model.Pessoa;
-
+import model.UserType;
 import model.Usuario;
+import model.Admin;
+
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.sql.*;
@@ -86,11 +86,11 @@ public class UsuarioDAO {
                     Pessoa usuario;
 
                     if ("user".equalsIgnoreCase(tipo)) {
-                        usuario = new Usuario(nome, senha);
+                        usuario = new Usuario(usuarioId, nome, senha, UserType.USUARIO);
                     } else if ("adminLiga".equalsIgnoreCase(tipo)) {
-                        usuario = new AdmLiga(nome, senha);
+                        usuario = new Usuario(usuarioId, nome, senha, UserType.ADMLIGA);
                     } else if ("admin".equalsIgnoreCase(tipo)) {
-                        usuario = new Admin(nome, senha, null); // lidar com a lógica da liga!
+                        usuario = new Admin(usuarioId, nome, senha, conn); // lidar com a lógica da liga!
                     } else {
                         throw new IllegalArgumentException("Tipo inválido de usuário.");
                     }
@@ -121,11 +121,11 @@ public class UsuarioDAO {
                     Pessoa usuario;
 
                     if ("user".equalsIgnoreCase(tipo)) {
-                        usuario = new Usuario(nome, senha);
+                        usuario = new Usuario(usuarioId, nome, senha, UserType.USUARIO);
                     } else if ("adminLiga".equalsIgnoreCase(tipo)) {
-                        usuario = new AdmLiga(nome, senha);
+                        usuario = new Usuario(usuarioId, nome, senha, UserType.ADMLIGA);
                     } else if ("admin".equalsIgnoreCase(tipo)) {
-                        usuario = new Admin(nome, senha, null); // lidar com a lógica da liga!
+                        usuario = new Admin(usuarioId, nome, senha, conn); // lidar com a lógica da liga!
                     } else {
                         throw new IllegalArgumentException("Tipo inválido de usuário.");
                     }
@@ -161,11 +161,11 @@ public class UsuarioDAO {
 
                 // Instancia a subclasse certa com base no tipo
                 if ("user".equalsIgnoreCase(tipo)) {
-                    usuario = new Usuario(nome, senha);
+                    usuario = new Usuario(id, nome, senha, UserType.USUARIO);
                 } else if ("adminLiga".equalsIgnoreCase(tipo)) {
-                    usuario = new AdmLiga(nome, senha);
+                    usuario = new Usuario(id, nome, senha, UserType.ADMLIGA);
                 } else if ("admin".equalsIgnoreCase(tipo)) {
-                    usuario = new Admin(nome, senha, null); // lidar com a lógica da liga!
+                    usuario = new Admin(id, nome, senha, conn); // lidar com a lógica da liga!
                 } else {
                     throw new IllegalArgumentException("Tipo inválido de usuário.");
                 }
@@ -204,11 +204,11 @@ public class UsuarioDAO {
                     Pessoa usuario;
 
                     if ("user".equalsIgnoreCase(tipo)) {
-                        usuario = new Usuario(nome, senha);
+                        usuario = new Usuario(id, nome, senha, UserType.USUARIO);
                     } else if ("adminLiga".equalsIgnoreCase(tipo)) {
-                        usuario = new AdmLiga(nome, senha);
+                        usuario = new Usuario(id, nome, senha, UserType.ADMLIGA);
                     } else if ("admin".equalsIgnoreCase(tipo)) {
-                        usuario = new Admin(nome, senha, null); // lidar com a lógica da liga!
+                        usuario = new Admin(id, nome, senha, conn); // lidar com a lógica da liga!
                     } else {
                         throw new IllegalArgumentException("Tipo inválido de usuário.");
                     }

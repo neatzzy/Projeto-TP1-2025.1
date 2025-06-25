@@ -4,15 +4,15 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class TimeUsuario {
-    private Usuario usuario;     
+    private Usuario usuario;
     private Set<Jogador> jogadores; // jogadores que estao no time do usuario
-    private double pontuacao;    
+    private double pontuacao;
     private double preco;           // preco total do time
     private Jogador capitao;        // jogador, pertencente ao time, que pontua dobrado
     private boolean valido;        // diz se a escalacao eh valida para simulacao (time cheio e capitao definido)
     private int contG, contZ, contM, contA; // contam a qtd de jogadores de cada posicao no time (1 4 3 3)
     private static final int MAX_G = 1, MAX_Z = 4, MAX_M = 3, MAX_A = 3, MAX_TEAMSIZE = 11;
-    
+
     public TimeUsuario(Usuario usuario){
         this.usuario = usuario;
         jogadores = new HashSet<>();
@@ -24,7 +24,7 @@ public class TimeUsuario {
     }
     // calcula a pontuacao ou retorna falso se a escalacao eh invalida ou se a simulacao nao ocorreu
     public boolean calcularPontuacao(){
-        if (!Simulacao.getOcorreu() || valido == false) return false; 
+        if (!Simulacao.getOcorreu() || valido == false) return false;
         pontuacao = 0;
         for (Jogador jogadori : jogadores){
             pontuacao += jogadori.calcularPontuacao();
@@ -150,6 +150,8 @@ public class TimeUsuario {
     public double getPreco() {
         return preco;
     }
+
+    public void setUsuario(Usuario usuario) { this.usuario = usuario; }
 
     // Retorna o nome do time do usuário
     public String getNome() {
