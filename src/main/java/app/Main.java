@@ -3,7 +3,8 @@ package app;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-import controller.ControllerTelaCadastro;
+import controller.ControllerTelaInicio;
+
 import io.github.cdimascio.dotenv.Dotenv;
 import javafx.application.Application;
 import javafx.scene.Parent;
@@ -19,35 +20,33 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
 
-        // conexão com banco de dados
+        // Conexão com banco de dados
         Dotenv dotenv = Dotenv.load();
         String db_name = dotenv.get("DB_NAME");
         String user = dotenv.get("DB_USER");
         String pass = dotenv.get("DB_PASSWORD");
 
-        // funções do banco de dados
+        // Funções do banco de dados
         Database db = new Database();
         Connection conn = db.connectToDb(db_name, user, pass);
 
-        // carrega FXML
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/screens/TelaCadastro.fxml"));
+        // Carrega FXML
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/screens/TelaInicio.fxml"));
         Parent root = loader.load();
 
-        // injeta a conexão no controller
-        ControllerTelaCadastro controller = loader.getController();
+        // Injeta a conexão no controller da tela inicial
+        ControllerTelaInicio controller = loader.getController();
         controller.setConnection(conn);
 
-        // mostra a tela
+        // Mostra a tela
         primaryStage.setTitle("Tela de cadastro");
         primaryStage.setScene(new Scene(root));
         primaryStage.show();
     }
 
     public static void main(String[] args) throws SQLException {
+
         launch(args); // roda as telas
-
-
-
         /*
 
         model.Clube clube = new model.Clube(conn, "Fluminense");
