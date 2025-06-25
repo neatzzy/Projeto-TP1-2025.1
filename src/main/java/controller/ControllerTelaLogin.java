@@ -1,7 +1,13 @@
+package controller;
+
+import dao.UsuarioDAO;
+import model.Pessoa;
+
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.sql.Connection;
@@ -11,13 +17,14 @@ public class ControllerTelaLogin {
 
     private Connection conn;
 
-    private final DbFunctions db = new DbFunctions();
+    private UsuarioDAO db = new UsuarioDAO(conn);
 
     @FXML private TextField campoEmail;
     @FXML private PasswordField campoSenha;
 
     public void setConnection(Connection conn) {
         this.conn = conn;
+        this.db = new UsuarioDAO(conn);
     }
 
     @FXML
@@ -34,7 +41,7 @@ public class ControllerTelaLogin {
         Pessoa usuario;
 
         try {
-            usuario = db.getUsuarioByEmail(conn, email);
+            usuario = db.getUsuarioByEmail(email);
         } catch (SQLException e) {
             mostrarAlerta("Erro", "Erro ao cadastrar: " + e.getMessage());
             throw new RuntimeException(e);

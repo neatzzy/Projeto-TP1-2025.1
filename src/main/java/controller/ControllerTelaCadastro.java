@@ -1,6 +1,9 @@
+package controller;
+
+import dao.UsuarioDAO;
+
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -11,13 +14,12 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.EventObject;
 
 public class ControllerTelaCadastro {
 
-    private Connection conn; // 👈 conexão vinda da main
+    private Connection conn;
 
-    private final DbFunctions db = new DbFunctions();
+    private UsuarioDAO db = new UsuarioDAO(conn);
 
     @FXML private TextField campoNome;
     @FXML private TextField campoEmail;
@@ -26,6 +28,7 @@ public class ControllerTelaCadastro {
 
     public void setConnection(Connection conn) {
         this.conn = conn;
+        this.db = new UsuarioDAO(conn);
     }
 
     @FXML
@@ -47,7 +50,7 @@ public class ControllerTelaCadastro {
         }
 
         try {
-            int usuarioId = db.insertUsuario(conn, nome, email, "user", senha, -1);
+            int usuarioId = db.insertUsuario(nome, email, "user", senha, -1);
             mostrarAlerta("Sucesso", "Usuário cadastrado com ID: " + usuarioId);
             limparCampos();
 
