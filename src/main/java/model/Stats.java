@@ -1,3 +1,5 @@
+package model;
+
 public class Stats {
     private int desarmes;
     private int gols;
