@@ -79,7 +79,10 @@ public class LigaDAO {
                     return null;  // Liga não encontrada
                 }
             }
+        } catch ( SQLException e ) {
+            System.out.println(e);
         }
+    return null;
     }
 
     // Retorna dados de todas as ligas

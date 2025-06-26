@@ -4,6 +4,12 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import model.Clube;
+import model.Jogador;
+import database.Database;
+import dao.ClubeDAO;
+import dao.JogadorDAO;
+
 import java.sql.Connection;
 import java.sql.SQLException;
 
@@ -45,12 +51,14 @@ public class ControllerTelaMercado {
         String user = dotenv.get("DB_USER");
         String pass = dotenv.get("DB_PASSWORD");
 
-        DbFunctions db = new DbFunctions();
-        Connection conn = db.connect_to_db(db_name, user, pass);
+        Database db = new Database();
+        Connection conn = db.connectToDb(db_name, user, pass);
+        ClubeDAO clubeDAO = new ClubeDAO(conn);
+        JogadorDAO jogadorDAO = new JogadorDAO(conn);
 
         // Busca clubes e jogadores
-        List<Clube> clubes = db.getAllCLubes(conn);
-        db.getAllJogadores(conn, clubes);
+        List<Clube> clubes = clubeDAO.getAllClubes();
+        jogadorDAO.getAllJogadores(clubes);
 
         // Preenche a lista observável com todos os jogadores dos clubes
         for (Clube clube : clubes) {

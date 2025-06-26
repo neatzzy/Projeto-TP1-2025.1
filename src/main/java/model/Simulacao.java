@@ -1,6 +1,10 @@
 package model;
 
 import dao.LigaDAO;
+import dao.UsuarioDAO;
+import database.Database;
+
+import java.sql.Connection;
 import java.util.Random;
 import java.util.Collections;
 import java.util.List;
@@ -12,7 +16,13 @@ import java.util.HashSet; // uso para instanciar o objeto
 public class Simulacao {
     private static boolean ocorreu = false;
     private static Set<Partida> partidas = new HashSet<>();
-    private static final LigaDAO ligaDAO = new LigaDAO();
+    private static LigaDAO ligaDAO;
+    private static UsuarioDAO usuarioDAO;
+
+    public void InicializarConexoes(Connection conn){
+        ligaDAO = new LigaDAO(conn);
+        usuarioDAO = new UsuarioDAO(conn);
+    }
 
     // recebe uma lista de clubes e os sorteia em partidas, retorna falso se a lista nao for par
     public static boolean gerarPartidasAleatorias(List<Clube> clubes){
@@ -42,7 +52,7 @@ public class Simulacao {
     // OBS: cuidar para que todos os clubes do campeonato estejam em alguma partida antes de simular
     public static boolean simular(){
 
-        ligas = ligaDAO.getAllLigas();
+        List<Liga> ligas = ligaDAO.getAllLigas();
 
         for (Liga liga : ligas) {
             for (Usuario usuario : liga.getUsuarios()){
@@ -68,7 +78,7 @@ public class Simulacao {
     // so pode ser usado apos a simulacao
     public static void resetar(){
 
-        ligas = ligaDAO.getAllLigas();
+        List<Liga> ligas = ligaDAO.getAllLigas();
 
         Simulacao.resetPartidasStats(partidas);
         partidas.clear();
