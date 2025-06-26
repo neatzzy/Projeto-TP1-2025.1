@@ -48,7 +48,7 @@ class Admin extends Pessoa {
 }
 
 class Usuario extends Pessoa {
-    private double cartoletas = 150.0;
+    private double cartoletas = 350.0;
     private TimeUsuario timeUsuario;
     private Liga liga;
 
