@@ -2,39 +2,47 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.text.*?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.layout.HBox?>
 
-<AnchorPane xmlns:fx="http://javafx.com/fxml" prefWidth="1200" prefHeight="800"
-            style="-fx-background-color: #2E7D32;" fx:controller="controller.ControllerTelaLogin">
+<AnchorPane prefHeight="400.0" prefWidth="600.0"
+            xmlns="http://javafx.com/javafx/23.0.1"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="controller.ControllerTelaLogin"
+            style="-fx-background-color: linear-gradient(to bottom right, #1B5E20, #004D40);">
 
-    <VBox spacing="10" layoutX="40" layoutY="20">
+    <!-- Título -->
+    <Label alignment="CENTER" layoutX="200" layoutY="20" prefWidth="200"
+           style="-fx-text-fill: white; -fx-font-size: 24px; -fx-font-weight: bold;
+                  -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.7), 2, 0, 0, 1);"
+           text="Login">
+        <font>
+            <Font name="Poppins ExtraLight" size="24" />
+        </font>
+    </Label>
 
-        <Label text="Login">
-            <font>
-                <Font name="Poppins ExtraLight" size="36" />
-            </font>
-            <textFill>white</textFill>
-        </Label>
+    <!-- Formulário -->
+    <VBox layoutX="120.0" layoutY="65.0" prefWidth="360" spacing="10">
 
-        <Label text="Nome:" textFill="white">
-            <font>
-                <Font name="Poppins" size="20" />
-            </font>
-        </Label>
-        <TextField fx:id="campoEmail" promptText="Digite seu email"
-                   style="-fx-background-color: #F1FFF1; -fx-background-radius: 8;" />
+        <Label text="Email:"
+               style="-fx-text-fill: white; -fx-font-size: 15px; -fx-font-weight: 600;" />
+        <TextField fx:id="campoEmail" prefHeight="30" promptText="Digite seu email"
+                   style="-fx-background-radius: 12; -fx-background-color: rgba(255,255,255,0.85);
+                          -fx-text-fill: #222; -fx-font-size: 14px; -fx-padding: 6 10 6 10;" />
 
-        <Label text="Senha:" textFill="white">
-            <font>
-                <Font name="Poppins" size="20" />
-            </font>
-        </Label>
-        <PasswordField fx:id="campoSenha" promptText="Digite sua senha"
-                       style="-fx-background-color: #F1FFF1; -fx-background-radius: 8;" />
+        <Label text="Senha:"
+               style="-fx-text-fill: white; -fx-font-size: 15px; -fx-font-weight: 600;" />
+        <PasswordField fx:id="campoSenha" prefHeight="30" promptText="Digite sua senha"
+                       style="-fx-background-radius: 12; -fx-background-color: rgba(255,255,255,0.85);
+                              -fx-text-fill: #222; -fx-font-size: 14px; -fx-padding: 6 10 6 10;" />
 
-        <Button text="Confirmar Login" onAction="#loginUsuario"
-                style="-fx-background-color: white; -fx-text-fill: #2E7D32; -fx-font-size: 16; -fx-font-family: 'Poppins'; -fx-background-radius: 10;" />
-
+        <!-- Botão centralizado -->
+        <HBox alignment="CENTER">
+            <Button fx:id="btnLogin" text="Confirmar Login" onAction="#loginUsuario"
+                    prefHeight="36" prefWidth="200"
+                    style="-fx-background-color: rgba(255,255,255,0.25); -fx-background-radius: 14;
+                           -fx-text-fill: white; -fx-font-size: 16px; -fx-font-weight: bold;
+                           -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.45), 4, 0, 0, 3);" />
+        </HBox>
     </VBox>
 </AnchorPane>
