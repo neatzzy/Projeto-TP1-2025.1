@@ -1,3 +1,5 @@
+package model;
+
 public class Jogador {
     private int id;
     private String nome;
@@ -7,7 +9,7 @@ public class Jogador {
     private double overall;
     private double pontuacao = 0;
     private Stats stats;
-    private final DbFunctions db = new DbFunctions();
+    //private final DbFunctions db = new DbFunctions(); sem uso?
 
     public Jogador(int id, String nome, Posicao posicao, Clube clube, double preco, double overall) {
         this.id = id;
@@ -55,7 +57,6 @@ public class Jogador {
             case GOLEIRO -> "GOLEIRO";
         };
     }
-
 
     public Stats getStats() {
         return stats;

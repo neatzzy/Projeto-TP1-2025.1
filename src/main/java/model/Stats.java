@@ -1,3 +1,5 @@
+package model;
+
 public class Stats {
     private int desarmes;
     private int gols;
@@ -11,8 +13,6 @@ public class Stats {
     private int golsSofridos;
     private int cartaoAmarelo;
     private int faltasCometidas;
-    
-    
 
     public int getDesarmes() {
         return desarmes;

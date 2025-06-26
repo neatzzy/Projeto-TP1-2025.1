@@ -4,7 +4,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane prefHeight="337.0" prefWidth="650.0" style="-fx-background-color: #2E7D32;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ControllerTelaRanking">
+<AnchorPane prefHeight="337.0" prefWidth="650.0" style="-fx-background-color: #2E7D32;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ControllerTelaRanking">
 
     <Label fx:id="menuLabel" layoutX="10" layoutY="10" onMouseClicked="#abrirMenu" style="-fx-font-size: 24px; -fx-text-fill: white;" text="≡" />
     <Label layoutX="620.0" layoutY="13.0" style="-fx-font-size: 20px; -fx-text-fill: white;" text="⎋" />

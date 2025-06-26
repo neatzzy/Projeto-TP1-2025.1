@@ -2,13 +2,39 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.text.*?>
 
-<AnchorPane prefHeight="618.0" prefWidth="1056.0" style="-fx-background-color: #2d8532;" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ControllerTelaLogin">
-    <VBox alignment="TOP_LEFT" layoutX="60.0" layoutY="40.0" spacing="30.0">
-        <Label style="-fx-font-size: 64px; -fx-text-fill: white; -fx-font-family: 'Helvetica Rounded', 'Helvetica Rounded Bold', Arial, sans-serif; -fx-font-weight: bold;" text="Login" />
-        <Label style="-fx-font-size: 48px; -fx-text-fill: white; -fx-font-family: 'Helvetica Rounded', 'Helvetica Rounded Bold', Arial, sans-serif; -fx-font-weight: bold;" text="Nome:" />
-        <TextField prefHeight="80.0" prefWidth="800.0" style="-fx-background-color: #eaf7ee; -fx-background-radius: 12px; -fx-font-size: 32px;" />
-        <Label style="-fx-font-size: 48px; -fx-text-fill: white; -fx-font-family: 'Helvetica Rounded', 'Helvetica Rounded Bold', Arial, sans-serif; -fx-font-weight: bold;" text="Senha:" />
-        <PasswordField prefHeight="80.0" prefWidth="800.0" style="-fx-background-color: #eaf7ee; -fx-background-radius: 12px; -fx-font-size: 32px;" />
+<AnchorPane xmlns:fx="http://javafx.com/fxml" prefWidth="1200" prefHeight="800"
+            style="-fx-background-color: #2E7D32;" fx:controller="controller.ControllerTelaLogin">
+
+    <VBox spacing="10" layoutX="40" layoutY="20">
+
+        <Label text="Login">
+            <font>
+                <Font name="Poppins ExtraLight" size="36" />
+            </font>
+            <textFill>white</textFill>
+        </Label>
+
+        <Label text="Nome:" textFill="white">
+            <font>
+                <Font name="Poppins" size="20" />
+            </font>
+        </Label>
+        <TextField fx:id="campoEmail" promptText="Digite seu email"
+                   style="-fx-background-color: #F1FFF1; -fx-background-radius: 8;" />
+
+        <Label text="Senha:" textFill="white">
+            <font>
+                <Font name="Poppins" size="20" />
+            </font>
+        </Label>
+        <PasswordField fx:id="campoSenha" promptText="Digite sua senha"
+                       style="-fx-background-color: #F1FFF1; -fx-background-radius: 8;" />
+
+        <Button text="Confirmar Login" onAction="#loginUsuario"
+                style="-fx-background-color: white; -fx-text-fill: #2E7D32; -fx-font-size: 16; -fx-font-family: 'Poppins'; -fx-background-radius: 10;" />
+
     </VBox>
 </AnchorPane>

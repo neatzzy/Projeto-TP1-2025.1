@@ -1,3 +1,4 @@
+package model;
 
 import java.util.*;
 
@@ -12,9 +13,20 @@ public class Liga {
         usuarios = new ArrayList<>();
     }
 
+    public void removeAll(){
+        for (Usuario u : usuarios){
+            u.sairLiga(this);
+        }
+    }
+
     public void addUsuario(Usuario usuario){
         usuarios.add(usuario);
         this.nroUsuarios++;
+    }
+
+    public void removeUsuario(Usuario usuario){
+        usuarios.remove(usuario);
+        this.nroUsuarios--;
     }
 
     public List<TimeUsuario> gerarRanking(){

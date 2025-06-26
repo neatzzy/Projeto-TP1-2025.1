@@ -1,3 +1,5 @@
+package model;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -423,8 +425,8 @@ class Partida implements Simulavel{
 
     public void mostrarResumoPartida() {
         System.out.println("=== RESUMO DA PARTIDA ===");
-        System.out.println("Clube da Casa: " + clubeCasa.getNome());
-        System.out.println("Clube de Fora: " + clubeFora.getNome());
+        System.out.println("model.Clube da Casa: " + clubeCasa.getNome());
+        System.out.println("model.Clube de Fora: " + clubeFora.getNome());
         System.out.println("Placar: " + clubeCasa.getNome() + " " + golsClubeCasa + " x " + golsClubeFora + " " + clubeFora.getNome());
         System.out.println();
 
