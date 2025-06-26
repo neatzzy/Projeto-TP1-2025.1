@@ -4,12 +4,16 @@ import java.util.*;
 
 public class Liga {
 
+    private int id;
     private int nroUsuarios = 0;
     private String nome;
+    private String senha;
     private List<Usuario> usuarios;
 
-    public Liga(String nome){
+    public Liga(int id, String nome, String senha){
+        this.id = id;
         this.nome = nome;
+        this.senha = senha;
         usuarios = new ArrayList<>();
     }
 
@@ -62,6 +66,14 @@ public class Liga {
 
     public void setNome(String nome) {
         this.nome = nome;
+    }
+
+    public String getSenha() {
+        return senha;
+    }
+
+    public void setSenha(String senha) {
+        this.senha = senha;
     }
 
     public List<Usuario> getUsuarios(){

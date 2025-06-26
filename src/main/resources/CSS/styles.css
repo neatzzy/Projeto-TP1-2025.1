@@ -1,0 +1,22 @@
+/* estilo.css */
+.botao-menu {
+    -fx-background-color: rgba(255,255,255,0.12);
+    -fx-background-radius: 10;
+    -fx-text-fill: white;
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.4), 3, 0, 0, 2);
+    -fx-cursor: hand;
+    -fx-padding: 6 12 6 12;
+    -fx-translate-y: 0;
+}
+
+.botao-menu:hover {
+    -fx-background-color: rgba(255,255,255,0.25);
+    -fx-translate-y: -2;
+}
+
+.botao-menu:pressed {
+    -fx-background-color: rgba(255,255,255,0.15);
+    -fx-translate-y: 1;
+}

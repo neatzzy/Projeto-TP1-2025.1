@@ -11,6 +11,9 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+// nota: mudar para passar objetos como parâmetros? facilitaria visualização do programa
+// adicionar funções: adicionar e remover liga
+
 public class UsuarioDAO {
 
     private final Connection conn;
@@ -20,14 +23,14 @@ public class UsuarioDAO {
         this.conn = conn;
     }
 
-    // Cria tabela de usuários( usuarioid, nome, tipo, senha, nomeliga)
+    // Cria tabela de Usuários( usuarioid, nome, tipo, senha, nomeliga)
     public void createTableUsuarios(){
         String createQuery = "CREATE TABLE usuarios" +
                 "(usuarioid SERIAL, nome VARCHAR(200), " +
                 "email VARCHAR(255) UNIQUE," +
                 "tipo VARCHAR(200)," +
                 "senha VARCHAR(200)," +
-                "ligaid INT)";
+                "FOREIGN KEY (ligaid) REFERENCES ligas(id) ON DELETE SET NULL";
         try(PreparedStatement createStmt = conn.prepareStatement(createQuery)){
             createStmt.executeUpdate();
             System.out.println("Table usuarios created");
@@ -37,7 +40,7 @@ public class UsuarioDAO {
 
     }
 
-    // Adiciona usuário no banco de dados
+    // Adiciona Usuário no banco de dados
     public int insertUsuario(String name, String email, String tipo, String senha, int ligaid) throws SQLException {
 
         String insertQuery = "INSERT INTO usuarios (nome, email, tipo, senha, ligaid) VALUES (?, ?, ?, ?, ?) RETURNING usuarioid";
@@ -73,7 +76,7 @@ public class UsuarioDAO {
         String dataQuery = "SELECT * FROM usuarios WHERE usuarioid = ?";
 
         try (PreparedStatement dataStmt = conn.prepareStatement(dataQuery)) {
-            dataStmt.setInt(1, id);  // seta o parâmetro do PreparedStatement
+            dataStmt.setInt(1, id);
 
             try (ResultSet rs = dataStmt.executeQuery()) {
                 if (rs.next()) {
@@ -97,7 +100,7 @@ public class UsuarioDAO {
 
                     return usuario;
                 } else {
-                    return null;  // usuário não encontrado
+                    return null;  // Usuário não encontrado
                 }
             }
         }
@@ -181,7 +184,7 @@ public class UsuarioDAO {
     }
 
     // Retorna uma lista com todos os usuários de uma certa liga
-    public List<Pessoa> getAllUsuariosLiga(int ligaid) {
+    public List<Pessoa> getAllUsuariosByLigaId(int ligaid) {
 
         List<Pessoa> usuarios = new ArrayList<>();
         String query = "SELECT * FROM usuarios WHERE ligaid = ?";
@@ -240,7 +243,7 @@ public class UsuarioDAO {
         }
     }
 
-    // deleta tabela de usuarios
+    // deleta tabela de Usuarios
     public void deleteUsuariosTable() {
         String deleteQuery = "DROP TABLE IF EXISTS usuarios";
         try (Statement stmt = conn.createStatement()) {
