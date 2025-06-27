@@ -100,7 +100,7 @@ public class ControllerTelaVisualizarClube {
     }
 
     private void abrirDetalhesJogador(Jogador jogador) {
-        // Abre a tela de detalhes do jogador
+        // Carrega a tela de detalhes do jogador
     }
 
     @FXML

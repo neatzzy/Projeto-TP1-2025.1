@@ -124,4 +124,24 @@ public class Stats {
         this.cartaoAmarelo = 0;
         this.faltasCometidas = 0;
     }
+
+    public void forEach(java.util.function.Consumer<? super java.util.Map.Entry<String, Integer>> action) {
+        java.util.Map<String, Integer> statsMap = new java.util.LinkedHashMap<>();
+        statsMap.put("Desarmes - " + desarmes + " (+ " + (desarmes * 1.5) + " pts)", desarmes);
+        statsMap.put("Gols - " + gols + " (+ " + (gols * 8) + " pts)", gols);
+        statsMap.put("Assistências - " + assistencias + " (+ " + (assistencias * 5) + " pts)", assistencias);
+        statsMap.put("SG - " + (sg ? 1 : 0) + " (+5 pts)", sg ? 1 : 0);
+        statsMap.put("Finalizações - " + finalizacoes + " (+ " + (finalizacoes * 0.8) + " pts)", finalizacoes);
+        statsMap.put("Defesas - " + defesas + " (+ " + (defesas * 1.5) + " pts)", defesas);
+        statsMap.put("Defesa de Pênalti - " + defesaPenalti + " (+ " + (defesaPenalti * 7) + " pts)", defesaPenalti);
+        statsMap.put("Gols Contra - " + golsContra + " (- " + (golsContra * 5) + " pts)", golsContra);
+        statsMap.put("Cartão Vermelho - " + (cartaoVermelho ? 1 : 0) + " (-3 pts)", cartaoVermelho ? 1 : 0);
+        statsMap.put("Gols Sofridos - " + golsSofridos + " (- " + golsSofridos + " pts)", golsSofridos);
+        statsMap.put("Cartão Amarelo - " + cartaoAmarelo + " (- " + cartaoAmarelo + " pts)", cartaoAmarelo);
+        statsMap.put("Faltas Cometidas - " + faltasCometidas + " (- " + (faltasCometidas * 0.5) + " pts)", faltasCometidas);
+
+        for (java.util.Map.Entry<String, Integer> entry : statsMap.entrySet()) {
+            action.accept(entry);
+        }
+    }
 }
