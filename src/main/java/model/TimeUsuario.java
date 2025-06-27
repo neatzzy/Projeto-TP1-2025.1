@@ -4,6 +4,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class TimeUsuario {
+
     private Usuario usuario;
     private Set<Jogador> jogadores; // jogadores que estao no time do usuario
     private double pontuacao;
@@ -22,6 +23,19 @@ public class TimeUsuario {
         valido = false;
         contG = contZ = contM = contA = 0;
     }
+
+    // Construtor para retornar dados do banco de dados, já incluindo os jogadores do time
+    public TimeUsuario(Usuario usuario, Set<Jogador> jogadores, Jogador jogcapitao){
+        this.usuario = usuario;
+        this.jogadores = jogadores;
+        this.pontuacao = 0;
+        this.preco = 0;
+        this.capitao = jogcapitao;
+        valido = false;
+        contG = contZ = contM = contA = 0;
+    }
+
+
     // calcula a pontuacao ou retorna falso se a escalacao eh invalida ou se a simulacao nao ocorreu
     public boolean calcularPontuacao(){
         if (!Simulacao.getOcorreu() || valido == false) return false;
