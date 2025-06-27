@@ -1,5 +1,6 @@
 package controller;
 
+import dao.LigaDAO;
 import dao.UsuarioDAO;
 import model.Pessoa;
 
@@ -17,14 +18,14 @@ public class ControllerTelaLogin {
 
     private Connection conn;
 
-    private UsuarioDAO db = new UsuarioDAO(conn);
+    private UsuarioDAO db = new UsuarioDAO(conn, new LigaDAO(conn));
 
     @FXML private TextField campoEmail;
     @FXML private PasswordField campoSenha;
 
     public void setConnection(Connection conn) {
         this.conn = conn;
-        this.db = new UsuarioDAO(conn);
+        this.db = new UsuarioDAO(conn, new LigaDAO(conn));
     }
 
     @FXML

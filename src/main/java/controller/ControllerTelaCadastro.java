@@ -1,5 +1,6 @@
 package controller;
 
+import dao.LigaDAO;
 import dao.UsuarioDAO;
 
 import javafx.fxml.FXML;
@@ -19,7 +20,7 @@ public class ControllerTelaCadastro {
 
     private Connection conn;
 
-    private UsuarioDAO db = new UsuarioDAO(conn);
+    private UsuarioDAO db = new UsuarioDAO(conn, new LigaDAO(conn));
 
     @FXML private TextField campoNome;
     @FXML private TextField campoEmail;
@@ -28,7 +29,7 @@ public class ControllerTelaCadastro {
 
     public void setConnection(Connection conn) {
         this.conn = conn;
-        this.db = new UsuarioDAO(conn);
+        this.db = new UsuarioDAO(conn, new LigaDAO(conn));
     }
 
     @FXML

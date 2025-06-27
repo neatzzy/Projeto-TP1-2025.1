@@ -5,6 +5,7 @@ import dao.UsuarioDAO;
 import database.Database;
 
 import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.Random;
 import java.util.Collections;
 import java.util.List;
@@ -21,7 +22,7 @@ public class Simulacao {
 
     public void InicializarConexoes(Connection conn){
         ligaDAO = new LigaDAO(conn);
-        usuarioDAO = new UsuarioDAO(conn);
+        usuarioDAO = new UsuarioDAO(conn, new LigaDAO(conn));
     }
 
     // recebe uma lista de clubes e os sorteia em partidas, retorna falso se a lista nao for par
@@ -50,7 +51,7 @@ public class Simulacao {
         return true;
     }
     // OBS: cuidar para que todos os clubes do campeonato estejam em alguma partida antes de simular
-    public static boolean simular(){
+    public static boolean simular() throws SQLException {
 
         List<Liga> ligas = ligaDAO.getAllLigas();
 
@@ -76,7 +77,7 @@ public class Simulacao {
         return true;
     }
     // so pode ser usado apos a simulacao
-    public static void resetar(){
+    public static void resetar() throws SQLException {
 
         List<Liga> ligas = ligaDAO.getAllLigas();
 

@@ -1,9 +1,11 @@
 package model;
 
 import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.List;
 
 import dao.JogadorDAO;
+import dao.LigaDAO;
 import dao.UsuarioDAO;
 
 public class Admin extends Pessoa {
@@ -12,14 +14,14 @@ public class Admin extends Pessoa {
 
     public Admin(int id, String nome, String senha, Connection conn) {
         super(id, nome, senha);
-        usuarioDAO = new UsuarioDAO(conn);
+        usuarioDAO = new UsuarioDAO(conn, new LigaDAO(conn));
     }
 
-    public boolean simular(){
+    public boolean simular() throws SQLException {
         return Simulacao.simular();
     }
 
-    public void resetarSimulacao(){
+    public void resetarSimulacao() throws SQLException {
         Simulacao.resetar();
     }
 
