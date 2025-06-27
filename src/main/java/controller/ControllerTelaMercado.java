@@ -18,6 +18,7 @@ import javafx.scene.Parent;
 
 import java.io.IOException;
 import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.List;
 
 public class ControllerTelaMercado {
@@ -55,7 +56,7 @@ public class ControllerTelaMercado {
     private ObservableList<Jogador> listaJogadores = FXCollections.observableArrayList();
 
     @FXML
-    public void initialize() {
+    public void initialize() throws SQLException {
         comboBoxFiltro.setItems(FXCollections.observableArrayList("Todos", "ATACANTE", "MEIA", "ZAGUEIRO", "GOLEIRO"));
         comboBoxFiltro.setValue("Todos");
 
@@ -67,7 +68,7 @@ public class ControllerTelaMercado {
         Database db = new Database();
         Connection conn = db.connectToDb(db_name, user, pass);
         ClubeDAO clubeDAO = new ClubeDAO(conn);
-        JogadorDAO jogadorDAO = new JogadorDAO(conn);
+        JogadorDAO jogadorDAO = new JogadorDAO(conn, clubeDAO);
 
         List<Clube> clubes = clubeDAO.getAllClubes();
         jogadorDAO.getAllJogadores(clubes);
