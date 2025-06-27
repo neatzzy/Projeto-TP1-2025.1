@@ -5,6 +5,8 @@ import java.sql.SQLException;
 
 import controller.ControllerTelaInicio;
 
+import dao.LigaDAO;
+import dao.UsuarioDAO;
 import io.github.cdimascio.dotenv.Dotenv;
 import javafx.application.Application;
 import javafx.scene.Parent;
