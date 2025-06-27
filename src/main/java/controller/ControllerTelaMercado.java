@@ -1,18 +1,23 @@
+package controller;
+
 import io.github.cdimascio.dotenv.Dotenv;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Stage;
 import model.Clube;
 import model.Jogador;
 import database.Database;
 import dao.ClubeDAO;
 import dao.JogadorDAO;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 
-import java.sql.Connection;
-import java.sql.SQLException;
-
+import java.io.IOException;
 import java.sql.Connection;
 import java.util.List;
 
@@ -20,6 +25,15 @@ public class ControllerTelaMercado {
 
     @FXML
     private ComboBox<String> comboBoxFiltro;
+
+    @FXML
+    private TextField campoPesquisa;
+
+    @FXML
+    private Button botaoPesquisar;
+
+    @FXML
+    private Button botaoVoltar;
 
     @FXML
     private TableView<Jogador> tableView;
@@ -56,18 +70,15 @@ public class ControllerTelaMercado {
         ClubeDAO clubeDAO = new ClubeDAO(conn);
         JogadorDAO jogadorDAO = new JogadorDAO(conn);
 
-        // Busca clubes e jogadores
         List<Clube> clubes = clubeDAO.getAllClubes();
         jogadorDAO.getAllJogadores(clubes);
 
-        // Preenche a lista observável com todos os jogadores dos clubes
         for (Clube clube : clubes) {
             listaJogadores.addAll(clube.getJogadores());
         }
 
         tableView.setItems(listaJogadores);
 
-        // Configura as colunas
         colTime.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getClube().getNome()));
         colPosicao.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getStringPosicao()));
         colJogador.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getNome()));
@@ -92,38 +103,43 @@ public class ControllerTelaMercado {
                 } else {
                     setGraphic(btn);
                     setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
-                    setStyle("-fx-alignment: CENTER; -fx-padding: 0;"); // Centraliza e remove padding
+                    setStyle("-fx-alignment: CENTER; -fx-padding: 0;");
                 }
             }
         });
 
         comboBoxFiltro.setOnAction(e -> filtrar());
-
-        listaJogadores.sort((j1, j2) -> {
-            int cmp = j1.getClube().getNome().compareToIgnoreCase(j2.getClube().getNome());
-            if (cmp != 0) return cmp;
-            cmp = compararPosicao(j1.getStringPosicao(), j2.getStringPosicao());
-            if (cmp != 0) return cmp;
-            cmp = Double.compare(j2.getPreco(), j1.getPreco()); // Maior preço primeiro
-            if (cmp != 0) return cmp;
-            return j1.getNome().compareToIgnoreCase(j2.getNome());
-        });
+        botaoPesquisar.setOnAction(e -> pesquisarJogador());
     }
 
     private void filtrar() {
         String filtro = comboBoxFiltro.getValue();
-        if (filtro.equals("Todos")) {
-            tableView.setItems(listaJogadores);
-        } else {
-            ObservableList<Jogador> filtrados = listaJogadores.filtered(j -> j.getPosicao().equals(filtro));
-            tableView.setItems(filtrados);
-        }
+        String pesquisa = campoPesquisa.getText() != null ? campoPesquisa.getText().trim().toLowerCase() : "";
+
+        ObservableList<Jogador> filtrados = listaJogadores.filtered(j -> {
+            boolean posicaoOk = filtro.equals("Todos") || j.getPosicao().equals(filtro);
+            boolean nomeOk = pesquisa.isEmpty() || j.getNome().toLowerCase().contains(pesquisa);
+            return posicaoOk && nomeOk;
+        });
+        tableView.setItems(filtrados);
     }
 
-    private int compararPosicao(String pos1, String pos2) {
-        List<String> ordem = List.of("ATACANTE", "MEIA", "ZAGUEIRO", "GOLEIRO");
-        int i1 = ordem.indexOf(pos1);
-        int i2 = ordem.indexOf(pos2);
-        return Integer.compare(i1, i2);
+    @FXML
+    private void pesquisarJogador() {
+        filtrar();
+    }
+
+    @FXML
+    private void voltarMenu() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/screens/TelaInicio.fxml"));
+            Parent root = loader.load();
+            Stage stage = (Stage) botaoVoltar.getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.setTitle("Cartola FC");
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
