@@ -71,7 +71,17 @@ public class UsuarioDAO {
         }
     }
 
-    // Retorna objeto pessoa a partir de um id
+    // Insere Usuário em uma Liga
+    /*
+    public void insertUsuarioLiga(Pessoa p, Liga l) throws SQLException {
+
+        int ligaid = l.
+
+    }
+    */
+
+
+    // Retorna objeto Pessoa a partir de um id
     public Pessoa getUsuarioById(int id) throws SQLException {
         String dataQuery = "SELECT * FROM usuarios WHERE usuarioid = ?";
 

@@ -13,9 +13,9 @@ public class JogadorDAO {
     private final Connection conn;
     private final ClubeDAO clubeDAO;
 
-    public JogadorDAO(Connection conn) {
+    public JogadorDAO(Connection conn, ClubeDAO clubeDAO) {
         this.conn = conn;
-        this.clubeDAO = new ClubeDAO(conn);
+        this.clubeDAO = clubeDAO;
     }
 
     // Cria tabela dos Jogadores(jogadorid, nome, posicao, preco, overall, clubeid)
