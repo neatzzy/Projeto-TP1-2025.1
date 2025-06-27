@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 // nota: mudar para passar objetos como parâmetros? facilitaria visualização do programa
-// adicionar funções: adicionar e remover liga
 
 public class UsuarioDAO {
 
@@ -113,6 +112,24 @@ public class UsuarioDAO {
                 System.out.println("Falha ao associar usuário à liga.");
                 return false;
             }
+        } catch ( SQLException e ) {
+            System.out.println(e);
+            throw e;
+        }
+    }
+
+    // Insere vários Usuários em uma Liga
+    public void insertUsuariosLiga(List<Usuario> usuarios, Liga liga) throws SQLException {
+        String updateQuery = "UPDATE usuarios SET ligaid = ? WHERE usuarioid = ?";
+
+        try (PreparedStatement stmt = conn.prepareStatement(updateQuery)) {
+            for (Usuario usuario : usuarios) {
+                stmt.setInt(1, liga.getId());
+                stmt.setInt(2, usuario.getId());
+                stmt.addBatch();  // adiciona ao batch
+                liga.getUsuarios().add(usuario); // adiciona o usuário à lista da liga
+            }
+            stmt.executeBatch(); // executa tudo de uma vez
         } catch ( SQLException e ) {
             System.out.println(e);
             throw e;
@@ -242,6 +259,23 @@ public class UsuarioDAO {
             }
         } catch (Exception e) {
             System.out.println(e);
+        }
+    }
+
+    // Transforma usuário em admin liga após ele criar liga
+    public boolean transformarUsuarioEmAdminLiga(int id) throws SQLException {
+
+        String updateQuery = "UPDATE usuarios SET tipo = ? WHERE usuarioid = ?";
+
+        try (PreparedStatement stmt = conn.prepareStatement(updateQuery)) {
+            stmt.setString(1, "adminLiga");
+            stmt.setInt(2, id);
+
+            int rowsAffected = stmt.executeUpdate();
+            return rowsAffected > 0;
+        } catch (SQLException e) {
+            System.out.println("Erro ao buscar usuários: " + e.getMessage());
+            throw e;
         }
     }
 
