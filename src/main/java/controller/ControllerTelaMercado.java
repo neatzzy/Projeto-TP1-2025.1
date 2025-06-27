@@ -7,7 +7,6 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import model.Clube;
 import model.Jogador;
@@ -117,7 +116,7 @@ public class ControllerTelaMercado {
         String pesquisa = campoPesquisa.getText() != null ? campoPesquisa.getText().trim().toLowerCase() : "";
 
         ObservableList<Jogador> filtrados = listaJogadores.filtered(j -> {
-            boolean posicaoOk = filtro.equals("Todos") || j.getPosicao().equals(filtro);
+            boolean posicaoOk = filtro.equals("Todos") || j.getStringPosicao().equals(filtro);
             boolean nomeOk = pesquisa.isEmpty() || j.getNome().toLowerCase().contains(pesquisa);
             return posicaoOk && nomeOk;
         });
@@ -132,7 +131,7 @@ public class ControllerTelaMercado {
     @FXML
     private void voltarMenu() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/screens/TelaInicio.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/screens/InicialScreens/TelaInicio.fxml"));
             Parent root = loader.load();
             Stage stage = (Stage) botaoVoltar.getScene().getWindow();
             stage.setScene(new Scene(root));

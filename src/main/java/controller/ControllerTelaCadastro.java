@@ -54,7 +54,7 @@ public class ControllerTelaCadastro {
             mostrarAlerta("Sucesso", "Usuário cadastrado com ID: " + usuarioId);
             limparCampos();
 
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/screens/TelaLogin.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/screens/InicialScreens/TelaLogin.fxml"));
             Parent root = loader.load();
 
             ControllerTelaLogin controllerLogin = loader.getController();

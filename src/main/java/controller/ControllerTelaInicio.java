@@ -27,7 +27,7 @@ public class ControllerTelaInicio {
     @FXML
     private void abrirTelaCadastro() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/screens/TelaCadastro.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/screens/InicialScreens/TelaCadastro.fxml"));
             Parent root = loader.load();
 
             ControllerTelaCadastro controllerCadastro = loader.getController();
@@ -45,7 +45,7 @@ public class ControllerTelaInicio {
     @FXML
     private void abrirTelaLogin() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/screens/TelaLogin.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/screens/InicialScreens/TelaLogin.fxml"));
             Parent root = loader.load();
 
             ControllerTelaLogin controllerLogin = loader.getController();

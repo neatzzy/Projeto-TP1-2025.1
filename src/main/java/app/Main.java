@@ -31,7 +31,7 @@ public class Main extends Application {
         Connection conn = db.connectToDb(db_name, user, pass);
 
         // Carrega FXML
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/screens/TelaInicio.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/screens/InicialScreens/TelaInicio.fxml"));
         Parent root = loader.load();
 
         // Injeta a conexão no controller da tela inicial
@@ -39,7 +39,7 @@ public class Main extends Application {
         controller.setConnection(conn);
 
         // Mostra a tela
-        primaryStage.setTitle("Tela de cadastro");
+        primaryStage.setTitle("Tela de Início");
         primaryStage.setScene(new Scene(root));
         primaryStage.show();
     }

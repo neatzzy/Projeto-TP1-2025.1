@@ -14,7 +14,7 @@
           layoutX="150" layoutY="80" prefWidth="300"
           AnchorPane.topAnchor="80" AnchorPane.leftAnchor="150">
 
-        <Label text="Cartola FC"
+        <Label text="Cartolitos CF"
                style="-fx-text-fill: white;
                       -fx-font-size: 40px;
                       -fx-font-weight: bold;
@@ -24,7 +24,7 @@
             </font>
         </Label>
 
-        <Button fx:id="botaoCriar" text="criar usuário" prefWidth="300" prefHeight="45"
+        <Button fx:id="botaoCriar" text="Criar Usuário" prefWidth="300" prefHeight="45"
                 style="-fx-background-color: rgba(255,255,255,0.12);
                        -fx-background-radius: 10;
                        -fx-text-fill: white;
@@ -33,7 +33,7 @@
                        -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.4), 3, 0, 0, 2);"
                 onAction="#abrirTelaCadastro"/>
 
-        <Button fx:id="botaoLogin" text="login" prefWidth="300" prefHeight="45"
+        <Button fx:id="botaoLogin" text="Login" prefWidth="300" prefHeight="45"
                 style="-fx-background-color: rgba(255,255,255,0.12);
                        -fx-background-radius: 10;
                        -fx-text-fill: white;

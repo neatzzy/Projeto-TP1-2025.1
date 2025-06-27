@@ -38,7 +38,7 @@ public class ControllerTelaSimulacao implements Initializable {
     @FXML
     private void abrirMenu(MouseEvent event) {
         try {
-            Parent root = FXMLLoader.load(getClass().getResource("/screens/TelaRanking.fxml")); // so pra testar, é pra redirecionar pro menu/simulacao
+            Parent root = FXMLLoader.load(getClass().getResource("/screens/UsrLigaScreens/TelaRanking.fxml")); // so pra testar, é pra redirecionar pro menu/simulacao
             Stage stage = (Stage) menuLabel.getScene().getWindow();
             stage.setScene(new Scene(root));
             stage.show();
