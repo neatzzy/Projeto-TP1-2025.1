@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
 <AnchorPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
-            fx:controller="ControllerTelaVisualizacaoPartidas"
+            fx:controller="screens.AdmPartidaScreens.TelaEditPartidas"
             prefHeight="600.0" prefWidth="900.0"
             style="-fx-background-color: linear-gradient(to bottom right, #1B5E20, #004D40);">
     <VBox alignment="TOP_CENTER" spacing="24.0"
@@ -15,15 +18,23 @@
             <Button fx:id="btnVoltar"
                     text="⟵ Voltar"
                     style="-fx-font-size: 22px; -fx-background-color: rgba(255,255,255,0.12); -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 10; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.4), 3, 0, 0, 2);"/>
+            <Button fx:id="btnSalvar"
+                    text="Salvar"
+                    onAction="#salvarEdicao"
+                    style="-fx-font-size: 22px; -fx-background-color: #009688; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 10; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 2, 0, 0, 1);"/>
+            <Button fx:id="btnCancelar"
+                    text="Cancelar"
+                    onAction="#cancelarEdicao"
+                    style="-fx-font-size: 22px; -fx-background-color: #d32f2f; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 10; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 2, 0, 0, 1);"/>
         </HBox>
-        <Label text="Confrontos da Rodada"
+        <Label text="Editar Confrontos da Rodada"
                style="-fx-font-size: 40px; -fx-text-fill: white; -fx-font-family: 'Helvetica Rounded', Arial, sans-serif; -fx-font-weight: bold; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.6), 2, 0, 0, 1);" />
         <TableView fx:id="tableConfrontos"
                    style="-fx-font-size: 24px; -fx-font-family: 'Helvetica Rounded', Arial, sans-serif; -fx-font-weight: bold; -fx-background-color: rgba(255,255,255,0.08); -fx-border-color: white; -fx-border-radius: 8; -fx-background-radius: 8;"
-                   VBox.vgrow="ALWAYS">
+                   VBox.vgrow="ALWAYS"
+                   editable="true">
             <columns>
                 <TableColumn fx:id="colMandante" text="Mandante" />
-                <TableColumn fx:id="colDetalhes" text="" minWidth="140" maxWidth="160" />
                 <TableColumn fx:id="colVisitante" text="Visitante" />
             </columns>
             <columnResizePolicy>
