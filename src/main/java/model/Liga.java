@@ -52,6 +52,11 @@ public class Liga {
         }
     }
 
+    @Override
+    public String toString() {
+        return "Liga: " + this.nome;
+    }
+
     public int getId() {
         return id;
     }
