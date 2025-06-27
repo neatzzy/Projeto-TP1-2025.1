@@ -76,7 +76,20 @@ public class Usuario extends Pessoa {
         return true;
     }
 
+    @Override
+    public String toString() {
+        return "ID: " + this.id + " Nome: " + this.nome;
+    }
+
     /////////////////////////
+
+    public UserType getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(UserType tipo) {
+        this.tipo = tipo;
+    }
 
     public double getCartoletas() {
         return cartoletas;

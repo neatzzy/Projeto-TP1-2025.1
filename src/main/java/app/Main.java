@@ -3,11 +3,10 @@ package app;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-import controller.ControllerTelaClubesUsuario;
 import controller.ControllerTelaInicio;
 
-import controller.ControllerTelaVisualizarClube;
-import dao.ClubeDAO;
+import dao.LigaDAO;
+import dao.UsuarioDAO;
 import io.github.cdimascio.dotenv.Dotenv;
 import javafx.application.Application;
 import javafx.scene.Parent;
@@ -15,7 +14,6 @@ import javafx.stage.Stage;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import database.Database;
-import model.Clube;
 
 
 public class Main extends Application {
@@ -34,20 +32,16 @@ public class Main extends Application {
         Database db = new Database();
         Connection conn = db.connectToDb(db_name, user, pass);
 
-        ClubeDAO clubeDAO = new ClubeDAO(conn);
-
-        Clube clube = clubeDAO.getClubeById(5); // Obtém o clube pelo ID, por exemplo, 5
-
         // Carrega FXML
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/screens/UsrClubeScreens/TelaVisualizarClube.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/screens/InicialScreens/TelaInicio.fxml"));
         Parent root = loader.load();
 
         // Injeta a conexão no controller da tela inicial
-        ControllerTelaVisualizarClube controller = loader.getController();
-        controller.abrirTelaVisualizarClube(conn, clube);
+        ControllerTelaInicio controller = loader.getController();
+        controller.setConnection(conn);
 
         // Mostra a tela
-        primaryStage.setTitle("Tela de Clubes");
+        primaryStage.setTitle("Tela de Início");
         primaryStage.setScene(new Scene(root));
         primaryStage.show();
     }

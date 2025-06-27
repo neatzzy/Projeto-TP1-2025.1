@@ -9,6 +9,7 @@
 <AnchorPane prefHeight="400.0" prefWidth="600.0"
             xmlns="http://javafx.com/javafx/23.0.1"
             xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="controller.ControllerTelaMenuAdm"
             style="-fx-background-color: linear-gradient(to bottom right, #1B5E20, #004D40);">
 
     <children>
@@ -61,7 +62,7 @@
                                -fx-text-fill: white; -fx-font-size: 15px; -fx-font-weight: bold;
                                -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.4), 3, 0, 0, 2);" />
 
-                <Button fx:id="sairButton" text="Sair"
+                <Button fx:id="sairButton" text="Sair" onAction="#voltar"
                         prefWidth="170.0" prefHeight="34.0"
                         style="-fx-background-color: rgba(255,255,255,0.12); -fx-background-radius: 10;
                                -fx-text-fill: white; -fx-font-size: 15px; -fx-font-weight: bold;

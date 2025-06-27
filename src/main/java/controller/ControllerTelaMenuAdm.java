@@ -7,19 +7,18 @@ import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
 import model.Admin;
-import model.Usuario;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
+import model.Usuario;
 
-public class ControllerTelaMenuUsuario {
-
-    private Usuario usuario;
+public class ControllerTelaMenuAdm {
+    private Admin adm;
     private Connection conn;
 
     @FXML private Label labelTitulo;
 
-    public void setUsuarioLogado(Usuario usuario) { this.usuario = usuario; }
+    public void setUsuarioLogado(Admin adm) { this.adm = adm; }
     public void setConnection(Connection conn) { this.conn = conn; }
 
     @FXML
@@ -43,3 +42,5 @@ public class ControllerTelaMenuUsuario {
         }
     }
 }
+
+

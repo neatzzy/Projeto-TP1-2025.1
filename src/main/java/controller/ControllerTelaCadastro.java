@@ -8,6 +8,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
@@ -26,6 +27,15 @@ public class ControllerTelaCadastro {
     @FXML private TextField campoEmail;
     @FXML private PasswordField campoSenha;
     @FXML private PasswordField campoConfirmarSenha;
+
+    @FXML
+    public void voltar(){
+        Scene previous = NavigationManager.pop();
+        if (previous != null) {
+            Stage stage = (Stage) campoEmail.getScene().getWindow();
+            stage.setScene(previous);
+        }
+    }
 
     public void setConnection(Connection conn) {
         this.conn = conn;
@@ -54,6 +64,8 @@ public class ControllerTelaCadastro {
             int usuarioId = db.insertUsuario(nome, email, "user", senha, -1);
             mostrarAlerta("Sucesso", "Usuário cadastrado com ID: " + usuarioId);
             limparCampos();
+
+            NavigationManager.push(campoNome.getScene());
 
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/screens/InicialScreens/TelaLogin.fxml"));
             Parent root = loader.load();

@@ -27,6 +27,9 @@ public class ControllerTelaInicio {
     @FXML
     private void abrirTelaCadastro() {
         try {
+
+            NavigationManager.push(botaoLogin.getScene());
+
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/screens/InicialScreens/TelaCadastro.fxml"));
             Parent root = loader.load();
 
@@ -45,6 +48,8 @@ public class ControllerTelaInicio {
     @FXML
     private void abrirTelaLogin() {
         try {
+            NavigationManager.push(botaoLogin.getScene());
+
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/screens/InicialScreens/TelaLogin.fxml"));
             Parent root = loader.load();
 
