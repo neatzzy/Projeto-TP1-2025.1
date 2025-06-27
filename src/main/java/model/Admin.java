@@ -34,6 +34,11 @@ public class Admin extends Pessoa {
         usuarioDAO.deleteUsuarioById(id);
     }
 
+    @Override
+    public boolean isAdmin() {
+        return true; // Admin sempre é admin
+    }
+
     /* FALTA IMPLEMENTAR:
 
     deleteLigas getRelatorioLigas

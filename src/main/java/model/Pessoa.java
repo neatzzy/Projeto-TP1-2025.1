@@ -21,5 +21,9 @@ public abstract class Pessoa {
     public String getSenha() { return senha; }
 
     public void setSenha(String senha) { this.senha = senha; }
+
+    public boolean isAdmin() {
+        return false; // Método padrão, pode ser sobrescrito em subclasses
+    }
 }
 
