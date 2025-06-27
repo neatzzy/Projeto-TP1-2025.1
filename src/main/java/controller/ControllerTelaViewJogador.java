@@ -3,8 +3,7 @@ package controller;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
-import model.Jogador;
-import model.Simulacao;
+import model.*;
 
 import java.util.concurrent.atomic.AtomicReference;
 

@@ -6,11 +6,10 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
-import model.Admin;
+import model.*;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
-import model.Usuario;
 
 public class ControllerTelaMenuAdm {
     private Admin adm;

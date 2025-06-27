@@ -15,6 +15,7 @@ import dao.ClubeDAO;
 import dao.JogadorDAO;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import model.*;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -22,6 +23,9 @@ import java.sql.SQLException;
 import java.util.List;
 
 public class ControllerTelaMercado {
+
+    private Connection conn;
+    private Usuario usuario;
 
     @FXML
     private ComboBox<String> comboBoxFiltro;
@@ -58,13 +62,6 @@ public class ControllerTelaMercado {
     @FXML
     public void initialize() {
         try {
-            Dotenv dotenv = Dotenv.load();
-            String db_name = dotenv.get("DB_NAME");
-            String user = dotenv.get("DB_USER");
-            String pass = dotenv.get("DB_PASSWORD");
-
-            Database db = new Database();
-            Connection conn = db.connectToDb(db_name, user, pass);
             ClubeDAO clubeDAO = new ClubeDAO(conn);
             JogadorDAO jogadorDAO = new JogadorDAO(conn, clubeDAO);
 
@@ -115,6 +112,9 @@ public class ControllerTelaMercado {
         }
     }
 
+    public void setConnection(Connection conn) {
+        this.conn = conn;
+    }
 
     private void filtrar() {
         String filtro = comboBoxFiltro.getValue();
@@ -128,22 +128,19 @@ public class ControllerTelaMercado {
         tableView.setItems(filtrados);
     }
 
+
+    @FXML
+    public void abrirTelaMercado() {
+        // Implementa a lógica para abrir a tela de mercado
+    }
+
     @FXML
     private void pesquisarJogador() {
         filtrar();
     }
 
     @FXML
-    private void voltarMenu() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/screens/InicialScreens/TelaInicio.fxml"));
-            Parent root = loader.load();
-            Stage stage = (Stage) botaoVoltar.getScene().getWindow();
-            stage.setScene(new Scene(root));
-            stage.setTitle("Cartola FC");
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    private void voltar() {
+        // Implementa a lógica para voltar à tela anterior
     }
 }
