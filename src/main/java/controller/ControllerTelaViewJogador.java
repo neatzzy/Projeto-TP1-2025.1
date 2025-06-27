@@ -4,6 +4,9 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import model.Jogador;
+import model.Simulacao;
+
+import java.util.concurrent.atomic.AtomicReference;
 
 public class ControllerTelaViewJogador {
     @FXML
@@ -19,12 +22,22 @@ public class ControllerTelaViewJogador {
     @FXML
     private VBox statsBox;
 
-    public void AbrirTelaViewJogador(Jogador jogador) {
+    public void AbrirTelaViewJogador(Jogador target) {
+        AtomicReference<Jogador> jogadorRef = new AtomicReference<>();
+
+        Simulacao.getPartidas().forEach(partida -> {
+            if (partida.getAllJogadores().contains(target)) {
+                jogadorRef.set(partida.getAllJogadores().get(partida.getAllJogadores().indexOf(target)));
+            }
+        });
+
+        Jogador jogador = jogadorRef.get();
+
         if (labelTitulo != null) {
             setDadosJogador(jogador.getNome(), jogador.getPosicao().toString(),
-                            jogador.getClube().getNome(),
-                            String.format("%.2f", jogador.getPreco()),
-                            String.format("%.0f", jogador.getOverall()));
+                    jogador.getClube().getNome(),
+                    String.format("%.2f", jogador.getPreco()),
+                    String.format("%.0f", jogador.getOverall()));
 
         }
         if (statsBox != null) {
@@ -52,11 +65,8 @@ public class ControllerTelaViewJogador {
         return statsBox;
     }
 
-    // Exemplo de método para abrir o menu, se necessário
     @FXML
-    private void abrirMenu() {
+    private void voltar() {
         // Lógica para abrir o menu lateral ou voltar
     }
-
-
 }

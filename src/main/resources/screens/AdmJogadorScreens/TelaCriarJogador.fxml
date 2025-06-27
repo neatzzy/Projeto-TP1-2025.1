@@ -13,7 +13,7 @@
             style="-fx-background-color: linear-gradient(to bottom right, #1B5E20, #004D40);">
     <children>
         <!-- Botão de menu -->
-        <Button fx:id="menuMontagem" layoutX="20.0" layoutY="14.0" mnemonicParsing="false" onAction="#abrirMenu" style="-fx-background-color: rgba(255,255,255,0.12); -fx-background-radius: 10; -fx-text-fill: white; -fx-font-size: 20px; -fx-font-weight: bold; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.4), 3, 0, 0, 2);" text="☰" />
+        <Button fx:id="menuMontagem" layoutX="20.0" layoutY="14.0" mnemonicParsing="false" onAction="#voltar" style="-fx-background-color: rgba(255,255,255,0.12); -fx-background-radius: 10; -fx-text-fill: white; -fx-font-size: 20px; -fx-font-weight: bold; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.4), 3, 0, 0, 2);" text="☰" />
         <Button fx:id="btnSalvar" layoutX="418.0" layoutY="14.0" mnemonicParsing="false" onAction="#salvarJogador" style="-fx-background-color: #009688; -fx-text-fill: white; -fx-font-size: 16px; -fx-font-weight: bold; -fx-background-radius: 10; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 2, 0, 0, 1);" text="Salvar" />
         <!-- Cabeçalho com campos editáveis -->
         <Pane layoutX="19.0" layoutY="60.0" prefHeight="50.0" prefWidth="560.0" style="-fx-background-color: transparent;">
