@@ -37,15 +37,11 @@ public class ControllerTelaVisualizarClube {
     private Button btnVoltar;
 
     private Clube clube;
-    private ClubeDAO clubeDAO;
-    private JogadorDAO jogadorDAO;
-    private Connection conn;
 
     public void abrirTelaVisualizarClube(Connection conn, Clube clube) {
-        this.conn = conn;
         this.clube = clube;
-        this.clubeDAO = new ClubeDAO(conn);
-        this.jogadorDAO = new JogadorDAO(conn, clubeDAO);
+        ClubeDAO clubeDAO = new ClubeDAO(conn);
+        JogadorDAO jogadorDAO = new JogadorDAO(conn, clubeDAO);
         if (lblNomeClube != null) {
             lblNomeClube.setText(getNomeClube());
         }
