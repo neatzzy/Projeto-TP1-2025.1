@@ -1,9 +1,6 @@
 package dao;
 
-import model.Pessoa;
-import model.UserType;
-import model.Usuario;
-import model.Admin;
+import model.*;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
@@ -17,10 +14,37 @@ import java.util.List;
 public class UsuarioDAO {
 
     private final Connection conn;
+    private final LigaDAO ligaDAO;
     private final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
-    public UsuarioDAO(Connection conn) {
+    // Construtor
+    public UsuarioDAO(Connection conn, LigaDAO ligaDAO) {
         this.conn = conn;
+        this.ligaDAO = ligaDAO;
+    }
+
+    // Função auxiliar para ajudar na construção do Usuário(cria junto com a liga, mas a liga está vazia de usuários)
+    private Pessoa construirUsuario(ResultSet rs) throws SQLException {
+        int id = rs.getInt("usuarioid");
+        String nome = rs.getString("nome");
+        String senha = rs.getString("senha");
+        String tipo = rs.getString("tipo");
+        int ligaid = rs.getInt("ligaid");
+
+        Liga liga = null;
+        if (ligaid > 0) {
+            liga = ligaDAO.getLigaByID(ligaid); // não carrega usuários!
+        }
+
+        if ("user".equalsIgnoreCase(tipo)) {
+            return new Usuario(id, nome, senha, UserType.USUARIO, liga);
+        } else if ("adminLiga".equalsIgnoreCase(tipo)) {
+            return new Usuario(id, nome, senha, UserType.ADMLIGA, liga);
+        } else if ("admin".equalsIgnoreCase(tipo)) {
+            return new Admin(id, nome, senha, conn);
+        } else {
+            throw new IllegalArgumentException("Tipo inválido de usuário.");
+        }
     }
 
     // Cria tabela de Usuários( usuarioid, nome, tipo, senha, nomeliga)
@@ -30,7 +54,8 @@ public class UsuarioDAO {
                 "email VARCHAR(255) UNIQUE," +
                 "tipo VARCHAR(200)," +
                 "senha VARCHAR(200)," +
-                "FOREIGN KEY (ligaid) REFERENCES ligas(id) ON DELETE SET NULL";
+                "ligaid INTEGER, " +
+                "FOREIGN KEY (ligaid) REFERENCES ligas(id) ON DELETE SET NULL)";
         try(PreparedStatement createStmt = conn.prepareStatement(createQuery)){
             createStmt.executeUpdate();
             System.out.println("Table usuarios created");
@@ -72,13 +97,47 @@ public class UsuarioDAO {
     }
 
     // Insere Usuário em uma Liga
-    /*
-    public void insertUsuarioLiga(Pessoa p, Liga l) throws SQLException {
+    public boolean insertUsuarioLiga(Usuario usuario, Liga liga) throws SQLException {
+        String updateQuery = "UPDATE usuarios SET ligaid = ? WHERE usuarioid = ?";
 
-        int ligaid = l.
+        try (PreparedStatement stmt = conn.prepareStatement(updateQuery)) {
+            stmt.setInt(1, liga.getId());
+            stmt.setInt(2, usuario.getId());
 
+            int linhasAfetadas = stmt.executeUpdate();
+
+            if (linhasAfetadas > 0) {
+                liga.getUsuarios().add(usuario); // adiciona o usuário à lista da liga
+                return true;
+            } else {
+                System.out.println("Falha ao associar usuário à liga.");
+                return false;
+            }
+        } catch ( SQLException e ) {
+            System.out.println(e);
+            throw e;
+        }
     }
-    */
+
+
+    // Remove usuário de uma Liga
+    public boolean removerUsuarioDaLiga(Usuario usuario, Liga liga) throws SQLException {
+        // Atualiza no banco: ligaid do usuário fica NULL
+        String updateQuery = "UPDATE usuarios SET ligaid = NULL WHERE usuarioid = ?";
+
+        try (PreparedStatement stmt = conn.prepareStatement(updateQuery)) {
+            stmt.setInt(1, usuario.getId());
+            int linhasAfetadas = stmt.executeUpdate();
+
+            if (linhasAfetadas > 0) {
+                // Remove da lista/Set de usuários da liga em memória
+                liga.getUsuarios().remove(usuario);
+                return true;
+            } else {
+                return false; // usuário não encontrado/no banco nenhuma linha afetada
+            }
+        }
+    }
 
 
     // Retorna objeto Pessoa a partir de um id
@@ -90,29 +149,14 @@ public class UsuarioDAO {
 
             try (ResultSet rs = dataStmt.executeQuery()) {
                 if (rs.next()) {
-                    int usuarioId = rs.getInt("usuarioid");
-                    String nome = rs.getString("nome");
-                    String tipo = rs.getString("tipo");
-                    String senha = rs.getString("senha");
-                    int ligaid = rs.getInt("ligaid");
-
-                    Pessoa usuario;
-
-                    if ("user".equalsIgnoreCase(tipo)) {
-                        usuario = new Usuario(usuarioId, nome, senha, UserType.USUARIO);
-                    } else if ("adminLiga".equalsIgnoreCase(tipo)) {
-                        usuario = new Usuario(usuarioId, nome, senha, UserType.ADMLIGA);
-                    } else if ("admin".equalsIgnoreCase(tipo)) {
-                        usuario = new Admin(usuarioId, nome, senha, conn); // lidar com a lógica da liga!
-                    } else {
-                        throw new IllegalArgumentException("Tipo inválido de usuário.");
-                    }
-
-                    return usuario;
+                    return construirUsuario(rs);
                 } else {
                     return null;  // Usuário não encontrado
                 }
             }
+        } catch ( SQLException e ) {
+            System.out.println(e);
+            throw e;
         }
     }
 
@@ -125,34 +169,19 @@ public class UsuarioDAO {
 
             try (ResultSet rs = dataStmt.executeQuery()) {
                 if (rs.next()) {
-                    int usuarioId = rs.getInt("usuarioid");
-                    String nome = rs.getString("nome");
-                    String tipo = rs.getString("tipo");
-                    String senha = rs.getString("senha");
-                    int ligaid = rs.getInt("ligaid");
-
-                    Pessoa usuario;
-
-                    if ("user".equalsIgnoreCase(tipo)) {
-                        usuario = new Usuario(usuarioId, nome, senha, UserType.USUARIO);
-                    } else if ("adminLiga".equalsIgnoreCase(tipo)) {
-                        usuario = new Usuario(usuarioId, nome, senha, UserType.ADMLIGA);
-                    } else if ("admin".equalsIgnoreCase(tipo)) {
-                        usuario = new Admin(usuarioId, nome, senha, conn); // lidar com a lógica da liga!
-                    } else {
-                        throw new IllegalArgumentException("Tipo inválido de usuário.");
-                    }
-
-                    return usuario;
+                    return construirUsuario(rs);
                 } else {
-                    return null;  // usuário não encontrado
+                    return null;  // Usuário não encontrado
                 }
             }
+        } catch ( SQLException e ) {
+            System.out.println(e);
+            throw e;
         }
     }
 
     // Retorna uma lista com todos os usuários usando o programa
-    public List<Pessoa> getAllUsuarios() {
+    public List<Pessoa> getAllUsuarios() throws SQLException {
 
         List<Pessoa> usuarios = new ArrayList<>();
         String query = "SELECT * FROM usuarios";
@@ -162,39 +191,20 @@ public class UsuarioDAO {
              ResultSet rs = dataStmt.executeQuery()) {
 
             while (rs.next()) {
-
-                int id = rs.getInt("usuarioid");
-                String nome = rs.getString("nome");
-                String email = rs.getString("email");
-                String tipo = rs.getString("tipo");
-                String senha = rs.getString("senha");
-                int ligaid = rs.getInt("ligaid");
-
-                Pessoa usuario;
-
-                // Instancia a subclasse certa com base no tipo
-                if ("user".equalsIgnoreCase(tipo)) {
-                    usuario = new Usuario(id, nome, senha, UserType.USUARIO);
-                } else if ("adminLiga".equalsIgnoreCase(tipo)) {
-                    usuario = new Usuario(id, nome, senha, UserType.ADMLIGA);
-                } else if ("admin".equalsIgnoreCase(tipo)) {
-                    usuario = new Admin(id, nome, senha, conn); // lidar com a lógica da liga!
-                } else {
-                    throw new IllegalArgumentException("Tipo inválido de usuário.");
-                }
-
-                usuarios.add(usuario);
+                usuarios.add(construirUsuario(rs));
             }
 
-        } catch (SQLException e) {
-            System.out.println("Erro ao buscar usuários: " + e.getMessage());
+            return usuarios;
+
+        } catch ( SQLException e ) {
+            System.out.println(e);
+            throw e;
         }
 
-        return usuarios;
     }
 
     // Retorna uma lista com todos os usuários de uma certa liga
-    public List<Pessoa> getAllUsuariosByLigaId(int ligaid) {
+    public List<Pessoa> getAllUsuariosByLigaId(int ligaid) throws SQLException {
 
         List<Pessoa> usuarios = new ArrayList<>();
         String query = "SELECT * FROM usuarios WHERE ligaid = ?";
@@ -206,35 +216,17 @@ public class UsuarioDAO {
             try (ResultSet rs = dataStmt.executeQuery()) {
 
                 while (rs.next()) {
-
-                    int id = rs.getInt("usuarioid");
-                    String nome = rs.getString("nome");
-                    String email = rs.getString("email");
-                    String tipo = rs.getString("tipo");
-                    String senha = rs.getString("senha");
-                    int ligaIdDoBanco = rs.getInt("ligaid");
-
-                    Pessoa usuario;
-
-                    if ("user".equalsIgnoreCase(tipo)) {
-                        usuario = new Usuario(id, nome, senha, UserType.USUARIO);
-                    } else if ("adminLiga".equalsIgnoreCase(tipo)) {
-                        usuario = new Usuario(id, nome, senha, UserType.ADMLIGA);
-                    } else if ("admin".equalsIgnoreCase(tipo)) {
-                        usuario = new Admin(id, nome, senha, conn); // lidar com a lógica da liga!
-                    } else {
-                        throw new IllegalArgumentException("Tipo inválido de usuário.");
-                    }
-
-                    usuarios.add(usuario);
+                    usuarios.add(construirUsuario(rs));
                 }
             }
 
+            return usuarios;
+
         } catch (SQLException e) {
             System.out.println("Erro ao buscar usuários: " + e.getMessage());
+            throw e;
         }
 
-        return usuarios;
     }
 
     //Remove usuário por id

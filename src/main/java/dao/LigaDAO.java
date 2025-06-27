@@ -6,6 +6,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 // nota: mudar para passar objetos como parâmetros? facilitaria visualização do programa
@@ -15,12 +16,22 @@ public class LigaDAO {
     private final Connection conn;
     private final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
-
+    // Construtor
     public LigaDAO(Connection conn) {
         this.conn = conn;
     }
 
-    // Cria tabela das Ligas (ligaid , nome)
+    // Função auxiliar para ajudar na construção da Liga
+    private Liga construirLiga(ResultSet rs) throws SQLException {
+        int id = rs.getInt("ligaid");
+        String nome = rs.getString("nome");
+        String senha = rs.getString("senha");
+
+        // Constrói sem usuários
+        return new Liga(id, nome, senha);
+    }
+
+    // Cria tabela das Ligas (ligaid , nome, senha)
     public void createTableLigas(){
         String createQuery= "CREATE TABLE ligas"+
                 "(ligaid SERIAL PRIMARY KEY, nome VARCHAR(200)," +
@@ -62,7 +73,7 @@ public class LigaDAO {
     }
 
     // Retorna objeto Liga pelo id
-    public Liga getLigaByID(int id){
+    public Liga getLigaByID(int id) throws SQLException {
         String dataQuery = "SELECT * FROM ligas WHERE ligaid = ?";
 
         try (PreparedStatement dataStmt = conn.prepareStatement(dataQuery)) {
@@ -70,23 +81,20 @@ public class LigaDAO {
 
             try (ResultSet rs = dataStmt.executeQuery()) {
                 if (rs.next()) {
-                    int ligaid = rs.getInt("ligaid");
-                    String nome = rs.getString("nome");
-                    String senha = rs.getString("senha");
-
-                    return new Liga(ligaid, nome, senha);
+                    return construirLiga(rs);
                 } else {
                     return null;  // Liga não encontrada
                 }
             }
         } catch ( SQLException e ) {
             System.out.println(e);
+            throw e;
         }
-    return null;
+
     }
 
     // Retorna dados de todas as ligas
-    public List<Liga> getAllLigas(){
+    public List<Liga> getAllLigas() throws SQLException {
         List<Liga> ligas = new ArrayList<>();
         String query = "SELECT * FROM ligas";
 
@@ -95,21 +103,16 @@ public class LigaDAO {
              ResultSet rs = dataStmt.executeQuery()) {
 
             while (rs.next()) {
-
-                int id = rs.getInt("ligaid");
-                String nome = rs.getString("nome");
-                String senha = rs.getString("senha");
-
-                Liga liga = new Liga(id, nome, senha);
-
-                ligas.add(liga);
+                ligas.add(construirLiga(rs));
             }
+
+            return ligas;
 
         } catch (SQLException e) {
             System.out.println("Erro ao buscar ligas: " + e.getMessage());
+            throw e;
         }
 
-        return ligas;
     }
 
     // Remove uma Liga do banco de dados(usuários daquela liga recebem null no ligaid)
@@ -127,6 +130,7 @@ public class LigaDAO {
             System.out.println(e);
         }
     }
+
     // Deleta tabela de Ligas
     public void deleteLigasTable() {
         String deleteQuery = "DROP TABLE IF EXISTS ligas";

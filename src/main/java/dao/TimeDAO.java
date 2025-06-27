@@ -17,18 +17,41 @@ public class TimeDAO {
     private final JogadorDAO jogadorDAO;
     private final UsuarioDAO usuarioDAO;
 
+    // Construtor
     public TimeDAO(Connection conn, UsuarioDAO usuarioDAO, JogadorDAO jogadorDAO) {
         this.conn = conn;
         this.jogadorDAO = jogadorDAO;
         this.usuarioDAO = usuarioDAO;
     }
 
-    // Cria tabela de Times( timeid = usuarioid, nome, jogadores, ligaid )
+    // Função auxiliar para ajudar na construção do Time
+    private TimeUsuario construirTime(ResultSet rs) throws SQLException {
+        Set<Jogador> jogadoresSet = new HashSet<>();
+        int timeId = rs.getInt("timeid");
+        Usuario usuario = (Usuario) usuarioDAO.getUsuarioById(rs.getInt("timeid"));
+        String nome = rs.getString("nome");
+        Array array = rs.getArray("jogadoresids");
+
+        if (array != null) {
+            Integer[] jogadoresIds = (Integer[]) array.getArray();
+            for (Integer jogadorId : jogadoresIds) {
+                Jogador jogador = jogadorDAO.getPlayerById(jogadorId);
+                if (jogador != null) jogadoresSet.add(jogador);
+            }
+        }
+
+        int capitaoid = rs.getInt("capitaoid");
+        Jogador jogadorcap = capitaoid > 0 ? jogadorDAO.getPlayerById(capitaoid) : null;
+
+        return new TimeUsuario(usuario, jogadoresSet, jogadorcap);
+    }
+
+    // Cria tabela de Times( timeid = usuarioid, nome, jogadoresids, ligaid )
     public void createTableTimes(){
         String createQuery = "CREATE TABLE times (" +
-                "timeid PRIMARY KEY, " +
+                "timeid INT PRIMARY KEY, " +
                 "nome VARCHAR(200), " +
-                "jogadores INTEGER[], " +
+                "jogadoresids INTEGER[], " +
                 "capitaoid INT," +
                 "ligaid INT, " +
                 "FOREIGN KEY (timeid) REFERENCES usuarios(usuarioid) ON DELETE CASCADE," +
@@ -46,7 +69,7 @@ public class TimeDAO {
     // Adiciona Time no banco de dados(sem jogadores)
     public int insertTime(int usuarioid, String name, int ligaid) throws SQLException {
 
-        String insertQuery = "INSERT INTO times (timeid, nome, jogadores, capitaoid, ligaid) VALUES (?, ?, ?, ?, ?) RETURNING timeid";
+        String insertQuery = "INSERT INTO times (timeid, nome, jogadoresids, capitaoid, ligaid) VALUES (?, ?, ?, ?, ?) RETURNING timeid";
 
         try(PreparedStatement insertStmt = conn.prepareStatement(insertQuery)){
 
@@ -73,10 +96,108 @@ public class TimeDAO {
     }
 
     // Insere Jogador no Time do Usuário
-    //public void insertJogadorTime(){}
+    public boolean insertJogadorTime(int jogadorid, int timeid) throws SQLException {
+
+        Jogador jogador = jogadorDAO.getPlayerById(jogadorid);
+        if(jogador == null) {
+            System.out.println("Jogador com ID " + jogadorid + " não encontrado.");
+            return false;
+        }
+
+        List<Integer> jogadoresList = new ArrayList<>();
+
+        String selectQuery = "SELECT jogadoresids FROM times WHERE timeid = ?";
+
+        try (PreparedStatement selectStmt = conn.prepareStatement(selectQuery)) {
+
+            selectStmt.setInt(1, timeid);
+            ResultSet rs = selectStmt.executeQuery();
+
+            if (!rs.next()) {
+                System.out.println("Time com ID " + timeid + " não encontrado.");
+                return false;
+            }
+
+            Array array = rs.getArray("jogadoresids");
+            if (array != null) {
+                jogadoresList.addAll(List.of((Integer[]) array.getArray()));
+            }
+
+            if (jogadoresList.contains(jogadorid)) {
+                System.out.println("Jogador já está no time.");
+                return false;
+            }
+
+            jogadoresList.add(jogadorid);
+
+            String updateQuery = "UPDATE times SET jogadoresids = ? WHERE timeid = ?";
+
+            try (PreparedStatement updateStmt = conn.prepareStatement(updateQuery)) {
+                Array novoArray = conn.createArrayOf("INTEGER", jogadoresList.toArray());
+                updateStmt.setArray(1, novoArray);
+                updateStmt.setInt(2, timeid);
+                updateStmt.executeUpdate();
+                System.out.println("Jogador " + jogadorid + " adicionado ao time " + timeid);
+                return true;
+            }
+
+        } catch ( SQLException e ) {
+            System.out.println(e);
+            throw e;
+        }
+
+    }
 
     // Remove Jogador do Time do Usuário
-    //public void removeJogadorTime(){}
+    public boolean removeJogadorTime(int jogadorid, int timeid) throws SQLException {
+        // Verifica se o jogador existe
+        if (jogadorDAO.getPlayerById(jogadorid) == null) {
+            System.out.println("Jogador com ID " + jogadorid + " não existe.");
+            return false;
+        }
+
+        List<Integer> jogadoresList = new ArrayList<>();
+
+        String selectQuery = "SELECT jogadoresids FROM times WHERE timeid = ?";
+
+        try (PreparedStatement selectStmt = conn.prepareStatement(selectQuery)) {
+            selectStmt.setInt(1, timeid);
+            ResultSet rs = selectStmt.executeQuery();
+
+            if (!rs.next()) {
+                System.out.println("Time com ID " + timeid + " não encontrado.");
+                return false;
+            }
+
+            Array array = rs.getArray("jogadoresids");
+            if (array != null) {
+                jogadoresList.addAll(List.of((Integer[]) array.getArray()));
+            }
+
+            if (!jogadoresList.contains(jogadorid)) {
+                System.out.println("Jogador não está no time.");
+                return false;
+            }
+
+            jogadoresList.remove(Integer.valueOf(jogadorid));
+
+            String updateQuery = "UPDATE times SET jogadoresids = ? WHERE timeid = ?";
+
+            try (PreparedStatement updateStmt = conn.prepareStatement(updateQuery)) {
+                Array novoArray = conn.createArrayOf("INTEGER", jogadoresList.toArray());
+                updateStmt.setArray(1, novoArray);
+                updateStmt.setInt(2, timeid);
+                updateStmt.executeUpdate();
+                System.out.println("Jogador " + jogadorid + " removido do time " + timeid);
+                return true;
+            }
+
+        } catch ( SQLException e ) {
+            System.out.println(e);
+            throw e;
+        }
+
+    }
 
     // Retorna objeto Time a partir de um id junto com seus jogadores
     public TimeUsuario getTimeById(int id) throws SQLException {
@@ -88,42 +209,63 @@ public class TimeDAO {
 
             try (ResultSet rs = dataStmt.executeQuery()) {
                 if (rs.next()) {
-
-                    Set<Jogador> jogadoresSet = new HashSet<>();
-
-                    int timeId = rs.getInt("timeid");
-
-                    Usuario usuario = (Usuario) usuarioDAO.getUsuarioById(rs.getInt("timeid"));
-
-                    String nome = rs.getString("nome");
-                    Array array = rs.getArray("jogadores_ids");
-
-                    if (array != null) {
-                        Integer[] jogadoresIds = (Integer[]) array.getArray();
-                        for (Integer jogadorId : jogadoresIds) {
-                            Jogador jogador = jogadorDAO.getPlayerById(jogadorId);
-                            if (jogador != null) {
-                                jogadoresSet.add(jogador);
-                            }
-                        }
-                    }
-                    int capitaoid = rs.getInt("capitaoid");
-                    int ligaid = rs.getInt("ligaid");
-
-                    Jogador jogadorcap = jogadorDAO.getPlayerById(capitaoid);
-                    return new TimeUsuario(usuario, jogadoresSet, jogadorcap);
+                    return construirTime(rs);
                 } else {
                     return null;  // Time não encontrado
                 }
             }
+        } catch ( SQLException e ) {
+            System.out.println(e);
+            throw e;
         }
+
     }
 
     // Retorna lista de todos os objetos Time
-    //public void List<TimeUsuario> getAllTimes(){}
+    public List<TimeUsuario> getAllTimes() throws SQLException {
+
+        List<TimeUsuario> times = new ArrayList<>();
+
+        String dataQuery = "SELECT * FROM times";
+
+        try (PreparedStatement dataStmt = conn.prepareStatement(dataQuery)) {
+
+            try (ResultSet rs = dataStmt.executeQuery()) {
+                while (rs.next()) {
+                    times.add(construirTime(rs));
+                }
+                return times;
+
+            }
+        } catch ( SQLException e ) {
+            System.out.println(e);
+            throw e;
+        }
+
+    }
 
     // Retorna objeto Time a partir de um id da liga
-    //public void List<TimeUsuario> getAllTimesByLigaId(){}
+    public List<TimeUsuario> getAllTimesByLigaId(int ligaid) throws SQLException {
+
+        List<TimeUsuario> times = new ArrayList<>();
+
+        String dataQuery = "SELECT * FROM times WHERE ligaid = ?";
+
+        try (PreparedStatement dataStmt = conn.prepareStatement(dataQuery)) {
+            dataStmt.setInt(1, ligaid);
+
+            try (ResultSet rs = dataStmt.executeQuery()) {
+                while (rs.next()) {
+                    times.add(construirTime(rs));
+                }
+
+                return times;
+            }
+        } catch ( SQLException e ) {
+            System.out.println(e);
+            throw e;
+        }
+    }
 
     //Remove Time por id
     public void deleteTimeById(int id){

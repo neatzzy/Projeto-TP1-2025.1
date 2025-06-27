@@ -13,9 +13,25 @@ public class JogadorDAO {
     private final Connection conn;
     private final ClubeDAO clubeDAO;
 
+    // Construtor de JogadorDAO
     public JogadorDAO(Connection conn, ClubeDAO clubeDAO) {
         this.conn = conn;
         this.clubeDAO = clubeDAO;
+    }
+
+    // Função auxiliar para ajudar na construção do Jogador
+    private Jogador construirJogador(ResultSet rs) throws SQLException {
+        int jogadorId = rs.getInt("jogadorid");
+        String nome = rs.getString("nome");
+        String posicaoStr = rs.getString("posicao");
+        double preco = rs.getDouble("preco");
+        double overall = rs.getDouble("overall");
+        int clubeId = rs.getInt("clubeid");
+
+        Posicao posicao = Posicao.valueOf(posicaoStr);
+        Clube clube = clubeDAO.getClubeById(clubeId);
+
+        return new Jogador(jogadorId, nome, posicao, clube, preco, overall);
     }
 
     // Cria tabela dos Jogadores(jogadorid, nome, posicao, preco, overall, clubeid)
@@ -55,7 +71,7 @@ public class JogadorDAO {
     public int insertJogador(String name, String posicao, double preco, double overall, int clubeid) throws SQLException{
 
         if(!clubeDAO.existsClubeById(clubeid)){
-            throw new SQLException("model.Clube not found," + " ID: " + clubeid);
+            throw new SQLException("Clube not found," + " ID: " + clubeid);
         }
 
         String insertQuery = "INSERT INTO jogadores (nome, posicao, preco, overall, clubeid) VALUES (?, ?, ?, ?, ?) RETURNING jogadorid";
@@ -86,33 +102,22 @@ public class JogadorDAO {
     }
 
     // Retorna um objeto Jogador a partir do id
-    public Jogador getPlayerById(int id){
+    public Jogador getPlayerById(int id) throws SQLException {
         String dataQuery = "SELECT * FROM jogadores WHERE jogadorid = ?";
         try(PreparedStatement dataStmt = conn.prepareStatement(dataQuery)){
             dataStmt.setInt(1, id);
             ResultSet rs = dataStmt.executeQuery();
 
             if (rs.next()) {
-                int jogadorId = rs.getInt("jogadorid");
-                String nome = rs.getString("nome");
-                String posicaoStr = rs.getString("posicao");
-                double preco = rs.getDouble("preco");
-                double overall = rs.getDouble("overall");
-                String clubeStr = rs.getString("clube");
-                int clubeid = rs.getInt("clubeid");
-
-                System.out.println("model.Jogador encontrado:" + nome);
-
-                Posicao posicao = Posicao.valueOf(posicaoStr);
-                Clube clube = clubeDAO.getClubeById(clubeid);
-                return new Jogador(jogadorId, nome, posicao, clube, preco, overall);
+                return construirJogador(rs);
+            } else {
+                return null;
             }
 
         } catch (SQLException e) {
             System.out.println(e);
+            throw e;
         }
-
-        return null;
     }
 
     // Retorna se existe tal jogador a partir do id
@@ -130,7 +135,7 @@ public class JogadorDAO {
     }
 
     // Retorna lista de todos os Jogadores
-    public List<Jogador> getAllJogadores(List<Clube> clubes){
+    public List<Jogador> getAllJogadores(List<Clube> clubes) throws SQLException {
         String dataQuery = "SELECT * FROM jogadores";
         List<Jogador> jogadores = new ArrayList<>();
 
@@ -138,13 +143,8 @@ public class JogadorDAO {
 
             ResultSet rs = dataStmt.executeQuery();
             while (rs.next()) {
-                int jogadorId = rs.getInt("jogadorid");
-                String nome = rs.getString("nome");
-                String posicaoStr = rs.getString("posicao");
-                double preco = rs.getDouble("preco");
-                double overall = rs.getDouble("overall");
+
                 int clubeId = rs.getInt("clubeid");
-                System.out.println("Jogador encontrado:" + nome);
 
                 // verifica se tem clube
                 Clube clube = clubes.stream()
@@ -153,15 +153,15 @@ public class JogadorDAO {
                         .orElse(null);
 
                 if (clube == null) {
-                    System.out.println("Clube inválido para jogador id " + jogadorId + ", clubeId: " + clubeId);
+                    System.out.println("Clube inválido para jogador, clubeId: " + clubeId);
                     continue;
                 }
 
-                Posicao posicao = Posicao.valueOf(posicaoStr);
                 // cria jogador e adiciona na lista
-                Jogador jogador = new Jogador(jogadorId, nome, posicao, clube, preco, overall);
+                Jogador jogador = construirJogador(rs);
+                // garantir a mesma instância do objeto
+                jogador.setClube(clube);
                 jogadores.add(jogador);
-
                 // adiciona o jogador ao novo clube criado!
                 clube.addJogador(jogador);
             }
@@ -169,15 +169,15 @@ public class JogadorDAO {
             return jogadores;
 
         }
-        catch(Exception e){
+        catch(SQLException e){
             System.out.println("Não conseguiu retornar todos os jogadores:" + e);
+            throw e;
         }
 
-        return null;
     }
 
     // Retorna lista do tipo Jogador de jogadores por clube
-    public List<Jogador> getJogadoresByClub(Clube clube){
+    public List<Jogador> getJogadoresByClub(Clube clube) throws SQLException {
         String dataQuery = "SELECT * FROM jogadores WHERE clubeid = ?";
         List<Jogador> jogadores = new ArrayList<>();
 
@@ -191,29 +191,19 @@ public class JogadorDAO {
 
             try (ResultSet rs = dataStmt.executeQuery()) {
                 while (rs.next()) {
-                    int jogadorId = rs.getInt("jogadorid");
-                    String nome = rs.getString("nome");
-                    String posicaoStr = rs.getString("posicao");
-                    double preco = rs.getDouble("preco");
-                    double overall = rs.getDouble("overall");
-
-                    System.out.println("Jogador encontrado:" + nome);
-
-                    Posicao posicao = Posicao.valueOf(posicaoStr);
-
-                    Jogador jogador = new Jogador(jogadorId, nome, posicao, clube, preco, overall);
-                    jogadores.add(jogador); // adiciona ao objeto de clube definido em getClubeById com os jogadores
-
+                    Jogador jogador = construirJogador(rs);
+                    jogador.setClube(clube);  // garante a mesma instância do clube
+                    jogadores.add(jogador);
+                    clube.addJogador(jogador); // adiciona ao objeto de clube definido em getClubeById com os jogadores
                 }
             }
             return jogadores;
 
-        }
-        catch(Exception e){
+        } catch ( SQLException e ) {
             System.out.println(e);
+            throw e;
         }
 
-        return null;
     }
 
     // Remove Jogador por id

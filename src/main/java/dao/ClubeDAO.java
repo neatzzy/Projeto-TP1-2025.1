@@ -29,6 +29,16 @@ public class ClubeDAO {
         }
     }
 
+    // Função auxiliar para ajudar na construção do Clube
+    private Clube construirClube(ResultSet rs) throws SQLException {
+        int id = rs.getInt("clubeid");
+        String nome = rs.getString("nome");
+        double overAtaque = rs.getDouble("overAtaque");
+        double overDefesa = rs.getDouble("overDefesa");
+
+        return new Clube(id, nome, overAtaque, overDefesa);
+    }
+
     // Retorna o ID de um Clube pelo nome
     public int getClubeIdByName(String name) throws SQLException {
         String dataQuery = "SELECT clubeid FROM clubes WHERE nome = ?";
@@ -40,7 +50,7 @@ public class ClubeDAO {
             }
         }
 
-        throw new SQLException("model.Clube not found: " + name);
+        throw new SQLException("Clube not found: " + name);
     }
 
     // Insere um time na database e retorna o id desse Clube
@@ -96,23 +106,22 @@ public class ClubeDAO {
     }
 
     // Retorna um objeto Clube a partir do id
-    public Clube getClubeById(int id){
+    public Clube getClubeById(int id) throws SQLException {
         String dataQuery = "SELECT * FROM clubes WHERE clubeid = ?";
         try(PreparedStatement dataStmt = conn.prepareStatement(dataQuery)){
             dataStmt.setInt(1, id);
             ResultSet rs = dataStmt.executeQuery();
 
             if(rs.next()){
-                String nome = rs.getString("nome");
-                double overAtaque = rs.getDouble("overAtaque");
-                double overDefesa = rs.getDouble("overDefesa");
-                return new Clube(id, nome, overAtaque, overDefesa); // não retorna os jogadores do clube( para isso é necessário chamar a função de buscar todos os jogadores do clube, se não for feito assim fica em um loop!
+                return construirClube(rs); // não retorna os jogadores do clube( para isso é necessário chamar a função de buscar todos os jogadores do clube, se não for feito assim fica em um loop!
+            } else {
+                return null;
             }
         } catch (SQLException e) {
             System.out.println(e);
+            throw e;
         }
 
-        return null;
     }
 
     // Retorna se existe tal Clube a partir do id
@@ -130,7 +139,7 @@ public class ClubeDAO {
     }
 
     // Retorna lista de objetos Clube com todos os clubes
-    public List<Clube> getAllClubes(){
+    public List<Clube> getAllClubes() throws SQLException {
         String dataQuery = "SELECT * FROM clubes";
         List<Clube> clubes = new ArrayList<>();
         try(PreparedStatement dataStmt = conn.prepareStatement(dataQuery)){
@@ -139,24 +148,20 @@ public class ClubeDAO {
 
             while(rs.next()){
 
-                int id = rs.getInt("clubeid");
-                String nome = rs.getString("nome");
-                double overAtaque = rs.getDouble("overAtaque");
-                double overDefesa = rs.getDouble("overDefesa");
-
-                System.out.println("Clube encontrado:" + nome);
-
-                Clube clube = new Clube(id, nome, overAtaque, overDefesa); // não retorna os jogadores do clube(para isso é necessário chamar a função de buscar todos os jogadores do clube)
+                // não retorna os jogadores do clube(para isso é necessário chamar a função de buscar todos os jogadores do clube)
+                Clube clube = construirClube(rs);
+                System.out.println("Clube encontrado:" + clube.getNome());
                 clubes.add(clube);
+
             }
 
             return clubes;
 
         } catch (SQLException e) {
             System.out.println(e);
+            throw e;
         }
 
-        return null;
     }
 
     // Remove Clube por id(também remove os jogadores associados)
