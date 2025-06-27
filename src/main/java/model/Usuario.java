@@ -6,11 +6,11 @@ public class Usuario extends Pessoa {
     private TimeUsuario timeUsuario;
     private Liga liga;
 
-    public Usuario(int id, String nome, String senha, UserType tipo) {
+    public Usuario(int id, String nome, String senha, UserType tipo, Liga liga) {
         super(id, nome, senha);
         this.timeUsuario = new TimeUsuario(this);
         this.tipo = tipo;
-        //TODO: quando tiver DAO de liga, instanciar o objeto com a liga a qual pertence (null ou existente)
+        this.liga = liga;
     }
 
     public boolean editarNomeLiga(String novoNome){
