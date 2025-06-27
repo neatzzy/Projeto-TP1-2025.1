@@ -56,61 +56,65 @@ public class ControllerTelaMercado {
     private ObservableList<Jogador> listaJogadores = FXCollections.observableArrayList();
 
     @FXML
-    public void initialize() throws SQLException {
-        comboBoxFiltro.setItems(FXCollections.observableArrayList("Todos", "ATACANTE", "MEIA", "ZAGUEIRO", "GOLEIRO"));
-        comboBoxFiltro.setValue("Todos");
+    public void initialize() {
+        try {
+            Dotenv dotenv = Dotenv.load();
+            String db_name = dotenv.get("DB_NAME");
+            String user = dotenv.get("DB_USER");
+            String pass = dotenv.get("DB_PASSWORD");
 
-        Dotenv dotenv = Dotenv.load();
-        String db_name = dotenv.get("DB_NAME");
-        String user = dotenv.get("DB_USER");
-        String pass = dotenv.get("DB_PASSWORD");
+            Database db = new Database();
+            Connection conn = db.connectToDb(db_name, user, pass);
+            ClubeDAO clubeDAO = new ClubeDAO(conn);
+            JogadorDAO jogadorDAO = new JogadorDAO(conn, clubeDAO);
 
-        Database db = new Database();
-        Connection conn = db.connectToDb(db_name, user, pass);
-        ClubeDAO clubeDAO = new ClubeDAO(conn);
-        JogadorDAO jogadorDAO = new JogadorDAO(conn, clubeDAO);
+            List<Clube> clubes = clubeDAO.getAllClubes();
+            jogadorDAO.getAllJogadores(clubes);
 
-        List<Clube> clubes = clubeDAO.getAllClubes();
-        jogadorDAO.getAllJogadores(clubes);
+            for (Clube clube : clubes) {
+                listaJogadores.addAll(clube.getJogadores());
+            }
 
-        for (Clube clube : clubes) {
-            listaJogadores.addAll(clube.getJogadores());
-        }
+            tableView.setItems(listaJogadores);
 
-        tableView.setItems(listaJogadores);
+            colTime.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getClube().getNome()));
+            colPosicao.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getStringPosicao()));
+            colJogador.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getNome()));
+            colPreco.setCellValueFactory(data -> new SimpleStringProperty("C$" + String.format("%.2f", data.getValue().getPreco())));
 
-        colTime.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getClube().getNome()));
-        colPosicao.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getStringPosicao()));
-        colJogador.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getNome()));
-        colPreco.setCellValueFactory(data -> new SimpleStringProperty("C$" + String.format("%.2f", data.getValue().getPreco())));
-        colComprar.setCellFactory(col -> new TableCell<Jogador, String>() {
-            private final Button btn = new Button("Comprar");
-
-            {
+            colComprar.setCellFactory(col -> {
+                Button btn = new Button("Comprar");
                 btn.setMaxWidth(Double.MAX_VALUE);
                 btn.setStyle("-fx-background-color: #43a047; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 8px;");
+                TableCell<Jogador, String> cell = new TableCell<>() {
+                    @Override
+                    protected void updateItem(String item, boolean empty) {
+                        super.updateItem(item, empty);
+                        if (empty) {
+                            setGraphic(null);
+                        } else {
+                            setGraphic(btn);
+                            setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
+                            setStyle("-fx-alignment: CENTER; -fx-padding: 0;");
+                        }
+                    }
+                };
                 btn.setOnAction(event -> {
-                    Jogador jogador = getTableView().getItems().get(getIndex());
+                    Jogador jogador = cell.getTableView().getItems().get(cell.getIndex());
                     System.out.println("Comprou: " + jogador.getNome());
                 });
-            }
+                return cell;
+            });
 
-            @Override
-            protected void updateItem(String item, boolean empty) {
-                super.updateItem(item, empty);
-                if (empty) {
-                    setGraphic(null);
-                } else {
-                    setGraphic(btn);
-                    setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
-                    setStyle("-fx-alignment: CENTER; -fx-padding: 0;");
-                }
-            }
-        });
+            comboBoxFiltro.setOnAction(e -> filtrar());
+            botaoPesquisar.setOnAction(e -> pesquisarJogador());
 
-        comboBoxFiltro.setOnAction(e -> filtrar());
-        botaoPesquisar.setOnAction(e -> pesquisarJogador());
+        } catch (SQLException e) {
+            e.printStackTrace();
+            // aqui você pode exibir um alerta, logar no sistema etc.
+        }
     }
+
 
     private void filtrar() {
         String filtro = comboBoxFiltro.getValue();
