@@ -26,31 +26,31 @@
         <!-- VBox centralizada para os botões -->
         <VBox layoutX="225.0" layoutY="99.0" spacing="10.0" prefWidth="150.0">
             <children>
-                <Button fx:id="ligaButton" text="Liga"
+                <Button fx:id="ligaButton" text="Liga" onAction="#liga"
                         prefWidth="150.0" prefHeight="36.0"
                         style="-fx-background-color: rgba(255,255,255,0.12); -fx-background-radius: 10;
                                -fx-text-fill: white; -fx-font-size: 16px; -fx-font-weight: bold;
                                -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.4), 3, 0, 0, 2);" />
 
-                <Button fx:id="escalarButton" text="Escalar"
+                <Button fx:id="escalarButton" text="Escalar" onAction="#escalar"
                         prefWidth="150.0" prefHeight="36.0"
                         style="-fx-background-color: rgba(255,255,255,0.12); -fx-background-radius: 10;
                                -fx-text-fill: white; -fx-font-size: 16px; -fx-font-weight: bold;
                                -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.4), 3, 0, 0, 2);" />
 
-                <Button fx:id="partidasButton" text="Partidas"
+                <Button fx:id="partidasButton" text="Partidas" onAction="#partidas"
                         prefWidth="150.0" prefHeight="36.0"
                         style="-fx-background-color: rgba(255,255,255,0.12); -fx-background-radius: 10;
                                -fx-text-fill: white; -fx-font-size: 16px; -fx-font-weight: bold;
                                -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.4), 3, 0, 0, 2);" />
 
-                <Button fx:id="jogadoresButton" text="Jogadores"
+                <Button fx:id="jogadoresButton" text="Jogadores" onAction="#jogadores"
                         prefWidth="150.0" prefHeight="36.0"
                         style="-fx-background-color: rgba(255,255,255,0.12); -fx-background-radius: 10;
                                -fx-text-fill: white; -fx-font-size: 16px; -fx-font-weight: bold;
                                -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.4), 3, 0, 0, 2);" />
 
-                <Button fx:id="editarPerfilButton" text="Editar Perfil"
+                <Button fx:id="editarPerfilButton" text="Editar Perfil" onAction="#editarPerfil"
                         prefWidth="150.0" prefHeight="36.0"
                         style="-fx-background-color: rgba(255,255,255,0.12); -fx-background-radius: 10;
                                -fx-text-fill: white; -fx-font-size: 15px; -fx-font-weight: bold;

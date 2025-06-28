@@ -12,9 +12,7 @@
           AnchorPane.topAnchor="0.0" AnchorPane.bottomAnchor="0.0"
           AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
         <HBox alignment="CENTER_LEFT" spacing="8.0">
-            <Button fx:id="btnVoltar"
-                    text="⟵ Voltar"
-                    style="-fx-font-size: 22px; -fx-background-color: rgba(255,255,255,0.12); -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 10; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.4), 3, 0, 0, 2);"/>
+            <Button fx:id="menuMontagem" layoutX="20.0" layoutY="14.0" mnemonicParsing="false" onAction="#voltar" style="-fx-background-color: rgba(255,255,255,0.12); -fx-background-radius: 10; -fx-text-fill: white; -fx-font-size: 20px; -fx-font-weight: bold; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.4), 3, 0, 0, 2);" text="☰" />
         </HBox>
         <Label text="Confrontos da Rodada"
                style="-fx-font-size: 40px; -fx-text-fill: white; -fx-font-family: 'Helvetica Rounded', Arial, sans-serif; -fx-font-weight: bold; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.6), 2, 0, 0, 1);" />

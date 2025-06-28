@@ -1,4 +1,4 @@
-package controller;
+/*package controller;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -75,4 +75,4 @@ public class ControllerTelaMenuAdmin {
     private void onSairButton(ActionEvent event) {
         // Lógica para logout ou voltar para tela de login
     }
-}
+}*/
