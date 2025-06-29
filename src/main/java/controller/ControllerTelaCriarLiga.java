@@ -108,6 +108,7 @@ public class ControllerTelaCriarLiga {
             usuarioDAO.insertUsuariosLiga(listaSelecionados, novaLiga);
             usuarioDAO.transformarUsuarioEmAdminLiga(this.usuario.getId());
             this.usuario.setTipo(UserType.ADMLIGA);
+            this.usuario.entrarLiga(novaLiga);
 
             mostrarAlerta("Sucesso", "Liga criada e usuários adicionados!");
             tfNomeLiga.clear();
