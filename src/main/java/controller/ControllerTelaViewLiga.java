@@ -50,7 +50,7 @@ public class ControllerTelaViewLiga {
         try {
             labelTitulo.setText(liga.getNome()); // Nome da liga no título
 
-            List<Pessoa> usuariosDaLiga = usuarioDAO.getAllUsuariosSemLiga();
+            List<Pessoa> usuariosDaLiga = usuarioDAO.getAllUsuariosByLigaId(liga.getId());
 
             List<Usuario> usuariosDaLiga2 = usuariosDaLiga.stream()
                     .map(u -> (Usuario) u)
