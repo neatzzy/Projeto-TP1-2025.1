@@ -45,7 +45,7 @@ public class ControllerTelaViewJogador {
             setDadosJogador(jogador.getNome(), jogador.getPosicao().toString(),
                     jogador.getClube().getNome(),
                     String.format("%.2f", jogador.getPreco()),
-                    String.format("%.0f", jogador.getOverall()));
+                    String.format("%.0f", jogador.getPontuacao()));
 
         }
         if (statsBox != null) {
