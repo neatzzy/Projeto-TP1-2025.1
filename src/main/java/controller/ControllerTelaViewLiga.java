@@ -71,22 +71,37 @@ public class ControllerTelaViewLiga {
     }
 
     @FXML
-    private void abrirMenu() {
+    private void sairLiga() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/screens/UsrMenuScreens/TelaMenuUsuario.fxml"));
-            Parent root = loader.load();
 
-            controller.ControllerTelaMenuUsuario controller = loader.getController();
-            controller.setConnection(conn);
-            controller.setUsuarioLogado(usuario);
+            boolean sucesso = usuarioDAO.removerUsuarioDaLiga(usuario, usuario.getLiga());
 
-            Stage stage = (Stage) sairButton.getScene().getWindow();
-            stage.setScene(new Scene(root));
-            stage.setTitle("Menu do Usuário");
+            if (sucesso) {
 
-            NavigationManager.clear();
+                mostrarAlerta("Sucesso", "Você saiu da liga.");
+
+                // Redireciona para o menu do usuário
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/screens/UsrMenuScreens/TelaMenuUsuario.fxml"));
+                Parent root = loader.load();
+
+                controller.ControllerTelaMenuUsuario controller = loader.getController();
+                controller.setConnection(conn);
+                controller.setUsuarioLogado(usuario);
+
+                Stage stage = (Stage) sairButton.getScene().getWindow();
+                stage.setScene(new Scene(root));
+                stage.setTitle("Menu do Usuário");
+
+                NavigationManager.clear();
+            } else {
+                mostrarAlerta("Erro", "Erro ao sair da liga.");
+            }
+
         } catch (IOException e) {
             mostrarAlerta("Erro", "Erro ao abrir o menu.");
+            e.printStackTrace();
+        } catch (SQLException e) {
+            mostrarAlerta("Erro", "Erro no banco de dados ao sair da liga.");
             e.printStackTrace();
         }
     }

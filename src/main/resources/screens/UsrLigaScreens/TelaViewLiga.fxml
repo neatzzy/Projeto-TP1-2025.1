@@ -23,6 +23,6 @@
 
         <!-- Lista de usuários -->
         <ListView fx:id="listViewUsuarios" layoutX="94.0" layoutY="70.0" prefHeight="245.0" prefWidth="413.0" style="-fx-background-color: rgba(255,255,255,0.08);                          -fx-border-color: white;                          -fx-border-radius: 8;                          -fx-background-radius: 8;" />
-        <Button fx:id="sairButton" layoutX="256.0" layoutY="331.0" mnemonicParsing="false" onAction="#abrirMenu" prefHeight="44.0" prefWidth="88.0" style="-fx-background-color: rgba(255,255,255,0.12);                        -fx-background-radius: 10;                        -fx-text-fill: white;                        -fx-font-size: 20px;                        -fx-font-weight: bold;                        -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.4), 3, 0, 0, 2);" text="Sair" />
+        <Button fx:id="sairButton" layoutX="256.0" layoutY="331.0" mnemonicParsing="false" onAction="#sairLiga" prefHeight="44.0" prefWidth="88.0" style="-fx-background-color: rgba(255,255,255,0.12);                        -fx-background-radius: 10;                        -fx-text-fill: white;                        -fx-font-size: 20px;                        -fx-font-weight: bold;                        -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.4), 3, 0, 0, 2);" text="Sair" />
     </children>
 </AnchorPane>
