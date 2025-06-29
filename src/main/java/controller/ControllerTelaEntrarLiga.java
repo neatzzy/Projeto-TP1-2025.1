@@ -105,12 +105,11 @@ public class ControllerTelaEntrarLiga {
         }
 
         try {
+
             boolean sucesso = usuarioDAO.insertUsuarioLiga(usuario, ligaSelecionada);
             if (sucesso) {
+
                 mostrarAlerta("Sucesso", "Você entrou na liga!");
-
-                usuario.entrarLiga(ligaSelecionada);
-
                 NavigationManager.clear();
 
                 try {

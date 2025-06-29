@@ -112,6 +112,7 @@ public class UsuarioDAO {
 
             if (linhasAfetadas > 0) {
                 liga.getUsuarios().add(usuario); // adiciona o usuário à lista da liga
+                usuario.entrarLiga(liga);           // adiciona objeto da liga ao objeto do usuário
                 return true;
             } else {
                 System.out.println("Falha ao associar usuário à liga.");
@@ -133,6 +134,7 @@ public class UsuarioDAO {
                 stmt.setInt(2, usuario.getId());
                 stmt.addBatch();  // adiciona ao batch
                 liga.getUsuarios().add(usuario); // adiciona o usuário à lista da liga
+                usuario.entrarLiga(liga);           // adiciona objeto da liga ao objeto do usuário
             }
             stmt.executeBatch(); // executa tudo de uma vez
         } catch ( SQLException e ) {
