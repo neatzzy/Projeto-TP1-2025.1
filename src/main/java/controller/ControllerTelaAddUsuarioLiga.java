@@ -5,7 +5,9 @@ import dao.UsuarioDAO;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.stage.Stage;
 import model.Liga;
 import model.Pessoa;
 import model.Usuario;
@@ -44,6 +46,15 @@ public class ControllerTelaAddUsuarioLiga {
         this.ligaDAO = new LigaDAO(conn);
         this.usuarioDAO = new UsuarioDAO(conn, ligaDAO);
         carregarUsuarios();
+    }
+
+    @FXML
+    public void voltar() {
+        Scene previous = NavigationManager.pop();
+        if (previous != null) {
+            Stage stage = (Stage) menuMontagem.getScene().getWindow();
+            stage.setScene(previous);
+        }
     }
 
     @FXML
@@ -105,13 +116,13 @@ public class ControllerTelaAddUsuarioLiga {
 
         usuarioDAO.insertUsuariosLiga(selecionados, liga);
 
-
         StringBuilder nomes = new StringBuilder();
         for (Usuario u : selecionados) {
             nomes.append(u.getNome()).append("\n");
         }
 
         mostrarAlerta("Sucesso", "Usuários adicionados:\n" + nomes);
+        carregarUsuarios();
     }
 
     private void mostrarAlerta(String titulo, String msg) {

@@ -53,6 +53,15 @@ public class ControllerTelaViewLigaAdm {
         carregarDados();
     }
 
+    @FXML
+    public void voltar() {
+        Scene previous = NavigationManager.pop();
+        if (previous != null) {
+            Stage stage = (Stage) menuMontagem.getScene().getWindow();
+            stage.setScene(previous);
+        }
+    }
+
     private void carregarDados() {
         try {
 
@@ -70,15 +79,6 @@ public class ControllerTelaViewLigaAdm {
         } catch (SQLException e) {
             mostrarAlerta("Erro", "Erro ao carregar usuários da liga.");
             e.printStackTrace();
-        }
-    }
-
-    @FXML
-    public void voltar() {
-        Scene previous = NavigationManager.pop();
-        if (previous != null) {
-            Stage stage = (Stage) menuMontagem.getScene().getWindow();
-            stage.setScene(previous);
         }
     }
 
@@ -165,7 +165,27 @@ public class ControllerTelaViewLigaAdm {
 
     @FXML
     private void abrirAdicionarUsuarios() {
-        mostrarAlerta("Aviso", "Função de adicionar usuários ainda não implementada.");
+
+        try {
+
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/screens/UsrLigaScreens/TelaAddUsuarioLiga.fxml"));
+            Parent root = loader.load();
+
+            NavigationManager.push(labelTitulo.getScene());
+
+            controller.ControllerTelaAddUsuarioLiga controller = loader.getController();
+            controller.setConnection(conn, this.usuario, this.liga);
+
+            Stage stage = (Stage) labelTitulo.getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.setTitle("Menu Liga");
+            stage.show();
+
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            mostrarAlerta("Erro", "Erro ao redirecionar para o menu.");
+        }
     }
 
     private void mostrarAlerta(String titulo, String mensagem) {
