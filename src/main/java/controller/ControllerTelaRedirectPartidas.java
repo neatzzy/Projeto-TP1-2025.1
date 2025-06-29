@@ -12,41 +12,50 @@ import javafx.event.ActionEvent;
 import javafx.util.Callback;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import model.Partida;
+import model.Clube;
 
 public class ControllerTelaRedirectPartidas {
     @FXML
     private Button btnVoltar;
     @FXML
-    private TableView<Confronto> tableConfrontos;
+    private TableView<Partida> tableConfrontos;
     @FXML
-    private TableColumn<Confronto, String> colMandante;
+    private TableColumn<Partida, String> colMandante;
     @FXML
-    private TableColumn<Confronto, String> colVisitante;
+    private TableColumn<Partida, String> colVisitante;
     @FXML
-    private TableColumn<Confronto, Void> colDetalhes;
+    private TableColumn<Partida, Void> colDetalhes;
+    @FXML
+    private Button menuMontagem;
 
-    private ObservableList<Confronto> confrontos = FXCollections.observableArrayList();
+    private ObservableList<Partida> partidas = FXCollections.observableArrayList();
 
     @FXML
     public void initialize() {
-        colMandante.setCellValueFactory(new PropertyValueFactory<>("mandante"));
-        colVisitante.setCellValueFactory(new PropertyValueFactory<>("visitante"));
+        colMandante.setCellValueFactory(cellData -> new javafx.beans.property.SimpleStringProperty(cellData.getValue().getClubeCasa().getNome()));
+        colVisitante.setCellValueFactory(cellData -> new javafx.beans.property.SimpleStringProperty(cellData.getValue().getClubeFora().getNome()));
         colDetalhes.setCellFactory(getDetalhesCellFactory());
-        // Exemplo de dados
-        confrontos.addAll(
-            new Confronto("Time A", "Time B"),
-            new Confronto("Time C", "Time D")
+        // Exemplo de dados (mock de clubes)
+        Clube clubeA = new Clube("Time A");
+        Clube clubeB = new Clube("Time B");
+        Clube clubeC = new Clube("Time C");
+        Clube clubeD = new Clube("Time D");
+        partidas.addAll(
+                new Partida(clubeA, clubeB),
+                new Partida(clubeC, clubeD)
         );
-        tableConfrontos.setItems(confrontos);
+        tableConfrontos.setItems(partidas);
     }
 
-    private Callback<TableColumn<Confronto, Void>, TableCell<Confronto, Void>> getDetalhesCellFactory() {
+    private Callback<TableColumn<Partida, Void>, TableCell<Partida, Void>> getDetalhesCellFactory() {
         return param -> new TableCell<>() {
             private final Button btn = new Button("Detalhes");
             {
                 btn.setOnAction((ActionEvent event) -> {
-                    Confronto confronto = getTableView().getItems().get(getIndex());
-                    // Ação ao clicar em detalhes
+                    Partida partida = getTableView().getItems().get(getIndex());
+                    // Exemplo de ação: mostrar nomes dos clubes
+                    System.out.println("Casa: " + partida.getClubeCasa().getNome() + ", Fora: " + partida.getClubeFora().getNome());
                 });
                 btn.setStyle("-fx-font-size: 16px; -fx-background-radius: 8; -fx-background-color: #fff; -fx-text-fill: #004D40;");
             }
@@ -69,18 +78,5 @@ public class ControllerTelaRedirectPartidas {
             Stage stage = (Stage) menuMontagem.getScene().getWindow();
             stage.setScene(previous);
         }
-    }
-
-    public static class Confronto {
-        private String mandante;
-        private String visitante;
-        public Confronto(String mandante, String visitante) {
-            this.mandante = mandante;
-            this.visitante = visitante;
-        }
-        public String getMandante() { return mandante; }
-        public void setMandante(String mandante) { this.mandante = mandante; }
-        public String getVisitante() { return visitante; }
-        public void setVisitante(String visitante) { this.visitante = visitante; }
     }
 }

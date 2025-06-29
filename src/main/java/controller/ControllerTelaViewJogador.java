@@ -1,13 +1,22 @@
 package controller;
 
 import javafx.fxml.FXML;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 import model.*;
 
+import java.sql.Connection;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class ControllerTelaViewJogador {
+    private Connection conn;
+    private Jogador jogador;
+
+    @FXML
+    private Button menuMontagem;
     @FXML
     private Label labelTitulo;
     @FXML
@@ -21,7 +30,7 @@ public class ControllerTelaViewJogador {
     @FXML
     private VBox statsBox;
 
-    public void AbrirTelaViewJogador(Jogador target) {
+    public void getTableStats(Jogador target) {
         AtomicReference<Jogador> jogadorRef = new AtomicReference<>();
 
         Simulacao.getPartidas().forEach(partida -> {
@@ -65,7 +74,19 @@ public class ControllerTelaViewJogador {
     }
 
     @FXML
-    private void voltar() {
-        // Lógica para abrir o menu lateral ou voltar
+    public void voltar() {
+        Scene previous = NavigationManager.pop();
+        if (previous != null) {
+            Stage stage = (Stage) menuMontagem.getScene().getWindow();
+            stage.setScene(previous);
+        }
+    }
+
+    public void setConnection(Connection conn) {
+        this.conn = conn;
+    }
+
+    public void setJogador(Jogador jogador) {
+        this.jogador = jogador;
     }
 }

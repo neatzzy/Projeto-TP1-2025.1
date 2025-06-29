@@ -2,9 +2,11 @@ package controller;
 
 import dao.ClubeDAO;
 import javafx.fxml.FXML;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
+import javafx.stage.Stage;
 import model.*;
 
 import java.sql.Connection;
@@ -18,7 +20,7 @@ public class ControllerTelaClubesUsuario{
     @FXML
     private FlowPane paneClubes;
     @FXML
-    private Button btnVoltar;
+    private Button menuMontagem;
 
     public void AbrirTelaClubes(Connection conn) {
         this.clubes = null;
@@ -55,8 +57,12 @@ public class ControllerTelaClubesUsuario{
     }
 
     @FXML
-    private void voltar() {
-        // Lógica para voltar à tela anterior
+    public void voltar() {
+        Scene previous = NavigationManager.pop();
+        if (previous != null) {
+            Stage stage = (Stage) menuMontagem.getScene().getWindow();
+            stage.setScene(previous);
+        }
     }
 
     public void criarBotoesClubes() {

@@ -50,6 +50,15 @@ public class Clube {
         this.partida = false;
     }
 
+    public Clube(String timeD) {
+        this.nome = timeD;
+        this.clubeDAO = null; // não precisa para retornar dados do banco de dados(nesse caso só quero o objeto Clube com os dados contidos no banco de dados)
+        this.jogadorDAO = null; // não precisa para retornar dados do banco de dados(nesse caso só quero o objeto Clube com os dados contidos no banco de dados)
+        jogadores = new HashSet<>(); // vai ser att em addJogador
+        jogA = jogD = 0; // vai ser att em addJogador
+        this.partida = false;
+    }
+
     // adiciona jogador ao clube e retorna false se ele ja estiver no clube
     // como jogador nao existe sem clube, addJogador tambem cria um jogador e nao o recebe como parametro (pode ter as mesmas caracteristicas que outros, mas o id eh diferente)
     public void addJogador(String nomeJogador, Posicao posicao, double preco, double overall) throws SQLException{

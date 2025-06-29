@@ -1,23 +1,16 @@
 package controller;
 
-import io.github.cdimascio.dotenv.Dotenv;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.stage.Stage;
 import model.Clube;
 import model.Jogador;
-import database.Database;
 import dao.ClubeDAO;
 import dao.JogadorDAO;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import model.*;
 
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
@@ -128,11 +121,6 @@ public class ControllerTelaMercado {
         tableView.setItems(filtrados);
     }
 
-
-    @FXML
-    public void abrirTelaMercado() {
-        // Implementa a lógica para abrir a tela de mercado
-    }
 
     @FXML
     private void pesquisarJogador() {

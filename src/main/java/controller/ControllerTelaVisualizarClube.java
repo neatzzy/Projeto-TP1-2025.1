@@ -33,7 +33,7 @@ public class ControllerTelaVisualizarClube {
     @FXML
     private TableColumn<Jogador, Void> colVerDetalhes;
     @FXML
-    private Button btnVoltar;
+    private Button menuMontagem;
 
     private Clube clube;
 
@@ -95,13 +95,29 @@ public class ControllerTelaVisualizarClube {
     }
 
     private void abrirDetalhesJogador(Jogador jogador) {
-        // Carrega a tela de detalhes do jogador
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/TelaDetalhesJogador.fxml"));
+            Parent root = loader.load();
+            ControllerTelaViewJogador controller = loader.getController();
+            controller.setJogador(jogador);
+            controller.getTableStats(jogador);
+
+            Stage stage = new Stage();
+            stage.setTitle("Detalhes do Jogador");
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML
-    private void btnVoltar() {
-        // Lógica para voltar à tela anterior
-
+    public void voltar() {
+        Scene previous = NavigationManager.pop();
+        if (previous != null) {
+            Stage stage = (Stage) menuMontagem.getScene().getWindow();
+            stage.setScene(previous);
+        }
     }
 
     public String getNomeClube() {
