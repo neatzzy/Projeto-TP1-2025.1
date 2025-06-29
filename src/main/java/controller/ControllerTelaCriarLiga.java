@@ -6,10 +6,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import model.Liga;
-import model.Pessoa;
-import model.UserType;
-import model.Usuario;
+import model.*;
 
 import java.sql.Connection;
 import java.sql.SQLException;

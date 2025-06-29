@@ -5,7 +5,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
-import model.Clube;
+import model.*;
 
 import java.sql.Connection;
 import java.sql.SQLException;

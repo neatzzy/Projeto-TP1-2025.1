@@ -3,10 +3,9 @@ package app;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-import controller.ControllerTelaInicio;
-
-import dao.LigaDAO;
-import dao.UsuarioDAO;
+import dao.*;
+import model.*;
+import controller.*;
 import io.github.cdimascio.dotenv.Dotenv;
 import javafx.application.Application;
 import javafx.scene.Parent;

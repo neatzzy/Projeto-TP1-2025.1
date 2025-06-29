@@ -13,8 +13,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.stage.Stage;
 import javafx.util.Callback;
-import model.Clube;
-import model.Jogador;
+import model.*;
 
 import java.sql.Connection;
 import java.sql.SQLException;
