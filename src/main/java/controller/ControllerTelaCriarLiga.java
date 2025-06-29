@@ -5,9 +5,17 @@ import dao.UsuarioDAO;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
-import model.*;
+import javafx.stage.Stage;
+import model.Liga;
+import model.Pessoa;
+import model.UserType;
+import model.Usuario;
 
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -38,6 +46,15 @@ public class ControllerTelaCriarLiga {
     private LigaDAO ligaDAO;
     private Usuario usuario;
 
+    @FXML
+    public void voltar(){
+        Scene previous = NavigationManager.pop();
+        if (previous != null) {
+            Stage stage = (Stage) menuMontagem.getScene().getWindow();
+            stage.setScene(previous);
+        }
+    }
+
     public void setConnection(Connection conn, Usuario usuario) {
         this.conn = conn;
         this.usuario = usuario;
@@ -47,19 +64,18 @@ public class ControllerTelaCriarLiga {
 
     }
 
+
     private void carregarUsuarios() {
         try {
 
-            List<Pessoa> todasPessoas = usuarioDAO.getAllUsuarios();
-            List<Usuario> usuariosSemLiga = new ArrayList<>();
+            List<Pessoa> usuariosSemLiga = usuarioDAO.getAllUsuariosSemLiga();
 
-            for (Pessoa p : todasPessoas) {
-                if (p instanceof Usuario u && u.getLiga() == null && u.getId() != this.usuario.getId()) {
-                    usuariosSemLiga.add(u);
-                }
-            }
+            List<Usuario> usuariosSemLiga2 = usuariosSemLiga.stream()
+                    .filter(u -> u.getId() != this.usuario.getId())
+                    .map(u -> (Usuario) u)
+                    .toList();
 
-            ObservableList<Usuario> obs = FXCollections.observableArrayList(usuariosSemLiga);
+            ObservableList<Usuario> obs = FXCollections.observableArrayList(usuariosSemLiga2);
             lvUsuarios.setItems(obs);
         } catch (SQLException e) {
             mostrarAlerta("Erro", "Erro ao carregar usuários.");
@@ -97,6 +113,29 @@ public class ControllerTelaCriarLiga {
             tfNomeLiga.clear();
             pfSenhaLiga.clear();
             lvUsuarios.getSelectionModel().clearSelection();
+
+            NavigationManager.pop();
+            NavigationManager.pop();
+
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/screens/UsrMenuScreens/TelaMenuUsuario.fxml"));
+                Parent root = loader.load();
+
+                controller.ControllerTelaMenuUsuario controller = loader.getController();
+                controller.setConnection(conn);
+                controller.setUsuarioLogado(this.usuario);
+
+                Stage stage = (Stage) btnCriarLiga.getScene().getWindow();
+                stage.setScene(new Scene(root));
+                stage.setTitle("Menu do Usuário");
+
+                NavigationManager.push(stage.getScene());
+
+            } catch (IOException e) {
+                e.printStackTrace();
+                mostrarAlerta("Erro", "Erro ao redirecionar para o menu.");
+            }
+
 
         } catch (SQLException e) {
             e.printStackTrace();

@@ -3,10 +3,13 @@ package controller;
 import dao.LigaDAO;
 import dao.UsuarioDAO;
 import javafx.fxml.FXML;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import model.*;
+import javafx.stage.Stage;
+import model.Liga;
+import model.Usuario;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.sql.Connection;
@@ -42,6 +45,15 @@ public class ControllerTelaEntrarLiga {
         this.usuarioDAO = new UsuarioDAO(this.conn, this.ligaDAO);
 
         carregarLigas();
+    }
+
+    @FXML
+    public void voltar(){
+        Scene previous = NavigationManager.pop();
+        if (previous != null) {
+            Stage stage = (Stage) menuMontagem.getScene().getWindow();
+            stage.setScene(previous);
+        }
     }
 
     private void carregarLigas() {
