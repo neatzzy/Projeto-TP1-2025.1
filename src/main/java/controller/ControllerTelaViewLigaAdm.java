@@ -80,6 +80,7 @@ public class ControllerTelaViewLigaAdm {
 
     @FXML
     private void initialize() {
+
         listViewUsuarios.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
 
         deletarButton.setOnAction(e -> deletarLiga()); // Ainda é opcional
@@ -142,7 +143,7 @@ public class ControllerTelaViewLigaAdm {
                 controller.setConnection(conn);
                 controller.setUsuarioLogado(this.usuario);
 
-                Stage stage = (Stage) menuMontagem.getScene().getWindow(); // corrige o botão se necessário
+                Stage stage = (Stage) menuMontagem.getScene().getWindow();
                 stage.setScene(new Scene(root));
                 stage.setTitle("Menu do Usuário");
             } catch (IOException e) {
@@ -172,7 +173,7 @@ public class ControllerTelaViewLigaAdm {
 
             Stage stage = (Stage) labelTitulo.getScene().getWindow();
             stage.setScene(new Scene(root));
-            stage.setTitle("Menu Liga");
+            stage.setTitle("Menu Adição Usuário Liga");
             stage.show();
 
 

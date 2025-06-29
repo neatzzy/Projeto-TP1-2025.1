@@ -5,6 +5,8 @@ import dao.UsuarioDAO;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
@@ -12,6 +14,7 @@ import model.Liga;
 import model.Pessoa;
 import model.Usuario;
 
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -118,7 +121,27 @@ public class ControllerTelaAddUsuarioLiga {
         }
 
         mostrarAlerta("Sucesso", "Usuários adicionados:\n" + nomes);
-        carregarUsuarios();
+
+        NavigationManager.pop();
+
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/screens/UsrLigaScreens/TelaViewLigaAdm.fxml"));
+            Parent root = loader.load();
+
+            ControllerTelaViewLigaAdm controller = loader.getController();
+            controller.setConnection(conn, this.liga, this.usuario); // passa os dados novamente
+
+            Stage stage = (Stage) menuMontagem.getScene().getWindow();
+
+            stage.setScene(new Scene(root));
+            stage.setTitle("Menu Liga");
+            stage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            mostrarAlerta("Erro", "Erro ao voltar para a tela da liga.");
+        }
+
     }
 
     private void mostrarAlerta(String titulo, String msg) {
