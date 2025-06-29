@@ -2,6 +2,7 @@ package app;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.List;
 
 import dao.*;
 import model.*;
@@ -30,6 +31,16 @@ public class Main extends Application {
         // Funções do banco de dados
         Database db = new Database();
         Connection conn = db.connectToDb(db_name, user, pass);
+
+        // Carrega todos os clubes e jogadores do banco de dados
+        ClubeDAO clubeDAO = new ClubeDAO(conn);
+        JogadorDAO jogadorDAO = new JogadorDAO(conn, clubeDAO);
+
+        List<Clube> clubes = clubeDAO.getAllClubes();
+        jogadorDAO.getAllJogadores(clubes);
+
+        //Gera as partidas aleatórias
+        Simulacao.gerarPartidasAleatorias(clubes);
 
         // Carrega FXML
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/screens/InicialScreens/TelaInicio.fxml"));

@@ -28,11 +28,11 @@
                 <!-- Tabela -->
                 <TableView fx:id="tableView" prefHeight="416.0" prefWidth="1000.0" style="-fx-font-size: 22px; -fx-font-family: 'Helvetica Rounded', Arial, sans-serif; -fx-font-weight: bold; -fx-background-radius: 12; -fx-background-color: rgba(255,255,255,0.92);">
                     <columns>
-                        <TableColumn fx:id="colTime" prefWidth="180" text="TIME" />
+                        <TableColumn fx:id="colNome" prefWidth="200" text="NOME" />
                         <TableColumn fx:id="colPosicao" prefWidth="140" text="POSIÇÃO" />
-                        <TableColumn fx:id="colJogador" prefWidth="260" text="JOGADOR" />
-                        <TableColumn fx:id="colPreco" prefWidth="140" text="PREÇO" />
-                        <TableColumn fx:id="colVerJogador" prefWidth="140" text="DETALHES" />
+                        <TableColumn fx:id="colClube" prefWidth="180" text="CLUBE" />
+                        <TableColumn fx:id="colPontuacao" prefWidth="140" text="PONTUAÇÃO" />
+                        <TableColumn fx:id="colDetalhes" prefWidth="140" text="DETALHES" />
                     </columns>
                     <columnResizePolicy>
                         <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
