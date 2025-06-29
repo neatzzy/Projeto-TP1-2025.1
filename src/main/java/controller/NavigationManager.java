@@ -10,6 +10,10 @@ public class NavigationManager {
         sceneStack.push(sceneInfo);
     }
 
+    public static void pop() {
+        sceneStack.pop();
+    }
+
     public static void popAndApply(Stage stage) {
         if (!sceneStack.isEmpty()) {
             SceneInfo previous = sceneStack.pop();
