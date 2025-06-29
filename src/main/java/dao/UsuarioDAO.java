@@ -156,6 +156,7 @@ public class UsuarioDAO {
             if (linhasAfetadas > 0) {
                 // Remove da lista/Set de usuários da liga em memória
                 liga.getUsuarios().remove(usuario);
+                usuario.sairLiga(liga);
                 return true;
             } else {
                 return false; // usuário não encontrado/no banco nenhuma linha afetada
