@@ -1,6 +1,8 @@
 package controller;
 
 import javafx.fxml.FXML;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -62,7 +64,11 @@ public class ControllerTelaRedirectPartidas {
 
     @FXML
     private void voltar(ActionEvent event) {
-        // Implementar navegação para tela anterior
+        Scene previous = NavigationManager.pop();
+        if (previous != null) {
+            Stage stage = (Stage) menuMontagem.getScene().getWindow();
+            stage.setScene(previous);
+        }
     }
 
     public static class Confronto {
