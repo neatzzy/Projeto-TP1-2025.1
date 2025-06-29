@@ -26,37 +26,37 @@
         <!-- VBox para botões -->
         <VBox layoutX="215.0" layoutY="75.0" spacing="6.0" prefWidth="170.0">
             <children>
-                <Button fx:id="simulacaoButton" text="Simulação"
+                <Button fx:id="simulacaoButton" text="Simulação" onAction="#abrirSimulacao"
                         prefWidth="170.0" prefHeight="34.0"
                         style="-fx-background-color: rgba(255,255,255,0.12); -fx-background-radius: 10;
                                -fx-text-fill: white; -fx-font-size: 15px; -fx-font-weight: bold;
                                -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.4), 3, 0, 0, 2);" />
 
-                <Button fx:id="ligasButton" text="Ligas"
+                <Button fx:id="ligasButton" text="Ligas" onAction="#abrirLigas"
                         prefWidth="170.0" prefHeight="34.0"
                         style="-fx-background-color: rgba(255,255,255,0.12); -fx-background-radius: 10;
                                -fx-text-fill: white; -fx-font-size: 15px; -fx-font-weight: bold;
                                -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.4), 3, 0, 0, 2);" />
 
-                <Button fx:id="usuariosButton" text="Usuários"
+                <Button fx:id="usuariosButton" text="Usuários" onAction="#abrirUsuarios"
                         prefWidth="170.0" prefHeight="34.0"
                         style="-fx-background-color: rgba(255,255,255,0.12); -fx-background-radius: 10;
                                -fx-text-fill: white; -fx-font-size: 15px; -fx-font-weight: bold;
                                -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.4), 3, 0, 0, 2);" />
 
-                <Button fx:id="clubesButton" text="Clubes"
+                <Button fx:id="clubesButton" text="Clubes" onAction="#abrirClubes"
                         prefWidth="170.0" prefHeight="34.0"
                         style="-fx-background-color: rgba(255,255,255,0.12); -fx-background-radius: 10;
                                -fx-text-fill: white; -fx-font-size: 14.5px; -fx-font-weight: bold;
                                -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.4), 3, 0, 0, 2);" />
 
-                <Button fx:id="jogadoresButton" text="Jogadores"
+                <Button fx:id="jogadoresButton" text="Jogadores" onAction="#abrirJogadores"
                         prefWidth="170.0" prefHeight="34.0"
                         style="-fx-background-color: rgba(255,255,255,0.12); -fx-background-radius: 10;
                                -fx-text-fill: white; -fx-font-size: 15px; -fx-font-weight: bold;
                                -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.4), 3, 0, 0, 2);" />
 
-                <Button fx:id="partidasButton" text="Partidas"
+                <Button fx:id="partidasButton" text="Partidas" onAction="#abrirPartidas"
                         prefWidth="170.0" prefHeight="34.0"
                         style="-fx-background-color: rgba(255,255,255,0.12); -fx-background-radius: 10;
                                -fx-text-fill: white; -fx-font-size: 15px; -fx-font-weight: bold;

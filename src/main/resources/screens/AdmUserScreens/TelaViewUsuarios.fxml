@@ -4,13 +4,10 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.shape.*?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: linear-gradient(to bottom right, #1B5E20, #004D40);" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: linear-gradient(to bottom right, #1B5E20, #004D40);" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ControllerTelaViewUsuarios">
     <children>
         <!-- Botão de menu -->
-        <Button fx:id="menuUsuarios" layoutX="20.0" layoutY="14.0" mnemonicParsing="false" text="☰"
-                style="-fx-background-color: rgba(255,255,255,0.12); -fx-background-radius: 10;
-                       -fx-text-fill: white; -fx-font-size: 20px; -fx-font-weight: bold;
-                       -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.4), 3, 0, 0, 2);" />
+        <Button fx:id="menuMontagem" layoutX="20.0" layoutY="14.0" mnemonicParsing="false" onAction="#voltar" style="-fx-background-color: rgba(255,255,255,0.12); -fx-background-radius: 10; -fx-text-fill: white; -fx-font-size: 20px; -fx-font-weight: bold; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.4), 3, 0, 0, 2);" text="☰" />
 
         <!-- Botão salvar/atualizar -->
         <Button fx:id="btnAtualizar" layoutX="480.0" layoutY="14.0" mnemonicParsing="false" text="Atualizar"

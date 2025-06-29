@@ -6,6 +6,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.input.MouseEvent;
@@ -25,6 +26,18 @@ public class ControllerTelaSimulacao implements Initializable {
 
     @FXML
     private Label menuLabel;
+
+    @FXML
+    private Button menuMontagem;
+
+    @FXML
+    public void voltar(){
+        Scene previous = NavigationManager.pop();
+        if (previous != null) {
+            Stage stage = (Stage) menuMontagem.getScene().getWindow();
+            stage.setScene(previous);
+        }
+    }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
