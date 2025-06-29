@@ -55,7 +55,7 @@ public class UsuarioDAO {
                 "tipo VARCHAR(200)," +
                 "senha VARCHAR(200)," +
                 "ligaid INTEGER, " +
-                "FOREIGN KEY (ligaid) REFERENCES ligas(id) ON DELETE SET NULL)";
+                "FOREIGN KEY (ligaid) REFERENCES ligas(ligaid) ON DELETE SET NULL)";;
         try(PreparedStatement createStmt = conn.prepareStatement(createQuery)){
             createStmt.executeUpdate();
             System.out.println("Table usuarios created");
@@ -298,6 +298,23 @@ public class UsuarioDAO {
 
         try (PreparedStatement stmt = conn.prepareStatement(updateQuery)) {
             stmt.setString(1, "adminLiga");
+            stmt.setInt(2, id);
+
+            int rowsAffected = stmt.executeUpdate();
+            return rowsAffected > 0;
+        } catch (SQLException e) {
+            System.out.println("Erro ao buscar usuários: " + e.getMessage());
+            throw e;
+        }
+    }
+
+    // Transforma admin em usuário após ele deletar liga
+    public boolean transformarAdminLigaEmUsuario(int id) throws SQLException {
+
+        String updateQuery = "UPDATE usuarios SET tipo = ? WHERE usuarioid = ?";
+
+        try (PreparedStatement stmt = conn.prepareStatement(updateQuery)) {
+            stmt.setString(1, "user");
             stmt.setInt(2, id);
 
             int rowsAffected = stmt.executeUpdate();
