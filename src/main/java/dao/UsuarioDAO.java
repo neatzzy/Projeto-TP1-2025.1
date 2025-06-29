@@ -24,6 +24,7 @@ public class UsuarioDAO {
 
     // Função auxiliar para ajudar na construção do Usuário(cria junto com a liga, mas a liga está vazia de usuários)
     private Pessoa construirUsuario(ResultSet rs) throws SQLException {
+
         int id = rs.getInt("usuarioid");
         String nome = rs.getString("nome");
         String senha = rs.getString("senha");
@@ -65,7 +66,7 @@ public class UsuarioDAO {
     }
 
     // Adiciona Usuário no banco de dados
-    public int insertUsuario(String name, String email, String tipo, String senha, int ligaid) throws SQLException {
+    public int insertUsuario(String name, String email, String tipo, String senha, Integer ligaid) throws SQLException {
 
         String insertQuery = "INSERT INTO usuarios (nome, email, tipo, senha, ligaid) VALUES (?, ?, ?, ?, ?) RETURNING usuarioid";
 
@@ -77,7 +78,11 @@ public class UsuarioDAO {
             insertStmt.setString(2, email);
             insertStmt.setString(3, tipo);
             insertStmt.setString(4, senhaHash);
-            insertStmt.setInt(5, ligaid);
+            if (ligaid == null) {
+                insertStmt.setNull(5, java.sql.Types.INTEGER);
+            } else {
+                insertStmt.setInt(5, ligaid);
+            }
 
             try(ResultSet rs = insertStmt.executeQuery()){
                 if(rs.next()) {
@@ -202,6 +207,30 @@ public class UsuarioDAO {
 
         List<Pessoa> usuarios = new ArrayList<>();
         String query = "SELECT * FROM usuarios";
+
+        try (PreparedStatement dataStmt = conn.prepareStatement(query);
+
+             ResultSet rs = dataStmt.executeQuery()) {
+
+            while (rs.next()) {
+                usuarios.add(construirUsuario(rs));
+            }
+
+            return usuarios;
+
+        } catch ( SQLException e ) {
+            System.out.println(e);
+            throw e;
+        }
+
+    }
+
+    // Retorna uma lista com todos os usuários usando o programa
+    public List<Pessoa> getAllUsuariosSemLiga() throws SQLException {
+
+        List<Pessoa> usuarios = new ArrayList<>();
+        String query = "SELECT * FROM usuarios WHERE ligaid IS NULL AND tipo = 'user'";
+
 
         try (PreparedStatement dataStmt = conn.prepareStatement(query);
 

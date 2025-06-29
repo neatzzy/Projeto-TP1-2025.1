@@ -61,7 +61,7 @@ public class ControllerTelaCadastro {
         }
 
         try {
-            int usuarioId = db.insertUsuario(nome, email, "user", senha, -1);
+            int usuarioId = db.insertUsuario(nome, email, "user", senha, null);
             mostrarAlerta("Sucesso", "Usuário cadastrado com ID: " + usuarioId);
             limparCampos();
 
