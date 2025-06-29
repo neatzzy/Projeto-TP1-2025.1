@@ -19,7 +19,6 @@ import model.Jogador;
 
 public class ControllerTelaDetalhesPartida {
     private Partida partida;
-    private Connection conn;
 
     @FXML private Button menuMontagem;
     @FXML private Label lblTimeA;
@@ -44,10 +43,6 @@ public class ControllerTelaDetalhesPartida {
     public void setPartida(Partida partida) {
         this.partida = partida;
         preencherTela();
-    }
-
-    public void setConnection(Connection conn) {
-        this.conn = conn;
     }
 
     @FXML
@@ -126,7 +121,6 @@ public class ControllerTelaDetalhesPartida {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/screens/UsrJogadorScreens/TelaViewJogador.fxml"));
             AnchorPane root = loader.load();
             ControllerTelaViewJogador controller = loader.getController();
-            controller.setConnection(conn);
             controller.setJogador(jogador);
             controller.getTableStats(jogador);
 

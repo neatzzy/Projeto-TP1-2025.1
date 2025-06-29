@@ -1,6 +1,7 @@
 package controller;
 
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.scene.control.Button;
@@ -14,10 +15,11 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import model.Partida;
 import model.Clube;
+import model.Simulacao;
 
 public class ControllerTelaRedirectPartidas {
     @FXML
-    private Button btnVoltar;
+    private Button menuMontagem;
     @FXML
     private TableView<Partida> tableConfrontos;
     @FXML
@@ -26,8 +28,6 @@ public class ControllerTelaRedirectPartidas {
     private TableColumn<Partida, String> colVisitante;
     @FXML
     private TableColumn<Partida, Void> colDetalhes;
-    @FXML
-    private Button menuMontagem;
 
     private ObservableList<Partida> partidas = FXCollections.observableArrayList();
 
@@ -36,15 +36,8 @@ public class ControllerTelaRedirectPartidas {
         colMandante.setCellValueFactory(cellData -> new javafx.beans.property.SimpleStringProperty(cellData.getValue().getClubeCasa().getNome()));
         colVisitante.setCellValueFactory(cellData -> new javafx.beans.property.SimpleStringProperty(cellData.getValue().getClubeFora().getNome()));
         colDetalhes.setCellFactory(getDetalhesCellFactory());
-        // Exemplo de dados (mock de clubes)
-        Clube clubeA = new Clube("Time A");
-        Clube clubeB = new Clube("Time B");
-        Clube clubeC = new Clube("Time C");
-        Clube clubeD = new Clube("Time D");
-        partidas.addAll(
-                new Partida(clubeA, clubeB),
-                new Partida(clubeC, clubeD)
-        );
+
+        partidas.addAll(Simulacao.getPartidas()); // Supondo que Simulacao tenha um método getPartidas() que retorna uma coleção de partidas
         tableConfrontos.setItems(partidas);
     }
 
@@ -54,8 +47,19 @@ public class ControllerTelaRedirectPartidas {
             {
                 btn.setOnAction((ActionEvent event) -> {
                     Partida partida = getTableView().getItems().get(getIndex());
-                    // Exemplo de ação: mostrar nomes dos clubes
-                    System.out.println("Casa: " + partida.getClubeCasa().getNome() + ", Fora: " + partida.getClubeFora().getNome());
+                    // Abre a tela de detalhes da partida
+                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/screens/UsrPartidaScreens/TelaDetalhesPartida.fxml"));
+                    try {
+                        Stage stage = (Stage) menuMontagem.getScene().getWindow();
+                        Scene scene = new Scene(loader.load());
+                        ControllerTelaDetalhesPartida controller = loader.getController();
+                        controller.setPartida(partida);
+                        stage.setScene(scene);
+                        stage.show();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
                 });
                 btn.setStyle("-fx-font-size: 16px; -fx-background-radius: 8; -fx-background-color: #fff; -fx-text-fill: #004D40;");
             }

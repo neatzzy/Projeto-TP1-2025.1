@@ -1,31 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
-<?import javafx.geometry.Insets?>
 
 <AnchorPane prefHeight="700.0" prefWidth="1100.0" style="-fx-background-color: linear-gradient(to bottom right, #1B5E20, #004D40);" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ControllerTelaDetalhesPartida">
     <VBox alignment="TOP_CENTER" spacing="12.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <HBox alignment="CENTER_LEFT" spacing="6.0">
-            <Button fx:id="menuMontagem" style="-fx-font-size: 18px; -fx-background-color: rgba(255,255,255,0.12); -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 10; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.4), 3, 0, 0, 2);" text="☰"
-                    onAction="#voltar">
+            <Button fx:id="menuMontagem" onAction="#voltar" style="-fx-font-size: 18px; -fx-background-color: rgba(255,255,255,0.12); -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 10; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.4), 3, 0, 0, 2);" text="☰">
                 <HBox.margin>
                     <Insets bottom="0" left="6" right="0" top="6" />
                 </HBox.margin>
             </Button>
         </HBox>
-        <Label style="-fx-font-size: 32px; -fx-text-fill: white; -fx-font-family: 'Helvetica Rounded', Arial, sans-serif; -fx-font-weight: bold; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.6), 2, 0, 0, 1);" text="DETALHES FLA x RMA" />
+        <Label style="-fx-font-size: 32px; -fx-text-fill: white; -fx-font-family: 'Helvetica Rounded', Arial, sans-serif; -fx-font-weight: bold; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.6), 2, 0, 0, 1);" text="DETALHES DA PARTIDA" />
         <HBox alignment="CENTER" spacing="24.0">
             <VBox alignment="CENTER">
-                <ImageView fx:id="imgTimeA" fitHeight="40" fitWidth="40" />
-                <Label fx:id="lblTimeA" prefHeight="40.0" prefWidth="32.0" style="-fx-font-size: 16px; -fx-text-fill: white;" text="FLA" />
+                <Label fx:id="lblTimeA" alignment="CENTER" maxWidth="220.0" prefHeight="40.0" prefWidth="180.0" style="-fx-font-size: 18px; -fx-text-fill: white; -fx-font-weight: bold;" text="FLAMENGO" wrapText="true" />
             </VBox>
             <Label fx:id="lblPlacar" style="-fx-font-size: 28px; -fx-text-fill: white; -fx-font-weight: bold;" text="5  ×  0" />
             <VBox alignment="CENTER">
-                <ImageView fx:id="imgTimeB" fitHeight="40" fitWidth="40" />
-                <Label fx:id="lblTimeB" style="-fx-font-size: 16px; -fx-text-fill: white;" text="RMA" />
+                <Label fx:id="lblTimeB" alignment="CENTER" maxWidth="220.0" prefHeight="40.0" prefWidth="180.0" style="-fx-font-size: 18px; -fx-text-fill: white; -fx-font-weight: bold;" text="REAL MADRID" wrapText="true" />
             </VBox>
         </HBox>
         <HBox alignment="CENTER" spacing="10.0">
