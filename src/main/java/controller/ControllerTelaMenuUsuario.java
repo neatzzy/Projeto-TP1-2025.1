@@ -68,8 +68,8 @@ public class ControllerTelaMenuUsuario {
 
                 NavigationManager.push(labelTitulo.getScene());
 
-                //ControllerTelaInicio controller = (ControllerTelaInicio) loader.getController();
-                //controller.setConnection(conn);
+                ControllerTelaViewLiga controller = (ControllerTelaViewLiga) loader.getController();
+                controller.setConnection(conn, this.usuario.getLiga(), this.usuario);
 
                 Stage stage = (Stage) labelTitulo.getScene().getWindow();
                 stage.setScene(new Scene(root));
