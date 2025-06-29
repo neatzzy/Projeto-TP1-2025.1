@@ -118,11 +118,7 @@ public class ControllerTelaDetalhesPartida {
 
     @FXML
     public void voltar() {
-        Scene previous = NavigationManager.pop();
-        if (previous != null) {
-            Stage stage = (Stage) menuMontagem.getScene().getWindow();
-            stage.setScene(previous);
-        }
+        NavigationManager.popAndApply((Stage) menuMontagem.getScene().getWindow());
     }
 
     private void abrirTelaViewJogador(Jogador jogador) {
@@ -134,9 +130,11 @@ public class ControllerTelaDetalhesPartida {
             controller.setJogador(jogador);
             controller.getTableStats(jogador);
 
-            NavigationManager.push(menuMontagem.getScene());
-
             Stage stage = (Stage) menuMontagem.getScene().getWindow();
+
+            SceneInfo sceneInfo = new SceneInfo(menuMontagem.getScene(), stage.getTitle());
+            NavigationManager.push(sceneInfo);
+
             stage.setScene(new Scene(root));
             stage.setTitle("Detalhes do Jogador: " + jogador.getNome());
             stage.show();

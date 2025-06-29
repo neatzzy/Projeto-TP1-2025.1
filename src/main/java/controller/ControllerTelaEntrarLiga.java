@@ -52,11 +52,7 @@ public class ControllerTelaEntrarLiga {
 
     @FXML
     public void voltar(){
-        Scene previous = NavigationManager.pop();
-        if (previous != null) {
-            Stage stage = (Stage) menuMontagem.getScene().getWindow();
-            stage.setScene(previous);
-        }
+        NavigationManager.popAndApply((Stage) lvLigas.getScene().getWindow());
     }
 
     private void carregarLigas() {
@@ -121,10 +117,12 @@ public class ControllerTelaEntrarLiga {
                     controller.setUsuarioLogado(this.usuario);
 
                     Stage stage = (Stage) btnEntrar.getScene().getWindow();
+
+                    SceneInfo sceneInfo = new SceneInfo(labelTitulo.getScene(), stage.getTitle());
+                    NavigationManager.push(sceneInfo);
+
                     stage.setScene(new Scene(root));
                     stage.setTitle("Menu do Usuário");
-
-                    NavigationManager.push(stage.getScene());
 
                 } catch (IOException e) {
                     e.printStackTrace();

@@ -30,11 +30,7 @@ public class ControllerTelaCadastro {
 
     @FXML
     public void voltar(){
-        Scene previous = NavigationManager.pop();
-        if (previous != null) {
-            Stage stage = (Stage) campoEmail.getScene().getWindow();
-            stage.setScene(previous);
-        }
+        NavigationManager.popAndApply((Stage) campoEmail.getScene().getWindow());
     }
 
     public void setConnection(Connection conn) {
@@ -65,8 +61,6 @@ public class ControllerTelaCadastro {
             mostrarAlerta("Sucesso", "Usuário cadastrado com ID: " + usuarioId);
             limparCampos();
 
-            NavigationManager.push(campoNome.getScene());
-
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/screens/InicialScreens/TelaLogin.fxml"));
             Parent root = loader.load();
 
@@ -76,6 +70,10 @@ public class ControllerTelaCadastro {
 
             Scene loginScene = new Scene(root);
             Stage stage = (Stage) campoEmail.getScene().getWindow();
+
+            SceneInfo sceneInfo = new SceneInfo(campoEmail.getScene(), stage.getTitle());
+            NavigationManager.push(sceneInfo);
+
             stage.setScene(loginScene);
             stage.setTitle("Tela de Login");
             stage.show();

@@ -49,7 +49,8 @@ public class ControllerTelaMenuUsuario {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/screens/UsrLigaScreens/TelaRedirectNoLiga.fxml"));
                 Parent root = loader.load();
 
-                NavigationManager.push(labelTitulo.getScene());
+                SceneInfo sceneInfo = new SceneInfo(labelTitulo.getScene(), "Menu do Usuário");
+                NavigationManager.push(sceneInfo);
 
                 ControllerTelaRedirectNoLiga controller = (ControllerTelaRedirectNoLiga) loader.getController();
                 controller.setConnection(conn, this.usuario);
@@ -63,7 +64,8 @@ public class ControllerTelaMenuUsuario {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/screens/UsrLigaScreens/TelaViewLiga.fxml"));
                 Parent root = loader.load();
 
-                NavigationManager.push(labelTitulo.getScene());
+                SceneInfo sceneInfo = new SceneInfo(labelTitulo.getScene(), "Menu do Usuário");
+                NavigationManager.push(sceneInfo);
 
                 ControllerTelaViewLiga controller = (ControllerTelaViewLiga) loader.getController();
                 controller.setConnection(conn, this.usuario.getLiga(), this.usuario);
@@ -77,7 +79,8 @@ public class ControllerTelaMenuUsuario {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/screens/UsrLigaScreens/TelaViewLigaAdm.fxml"));
                 Parent root = loader.load();
 
-                NavigationManager.push(labelTitulo.getScene());
+                SceneInfo sceneInfo = new SceneInfo(labelTitulo.getScene(), "Menu do Usuário");
+                NavigationManager.push(sceneInfo);
 
                 ControllerTelaViewLigaAdm controller = (ControllerTelaViewLigaAdm) loader.getController();
                 controller.setConnection(conn, this.usuario.getLiga(), this.usuario);
@@ -100,7 +103,8 @@ public class ControllerTelaMenuUsuario {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/screens/UsrEscalarScreens/TelaCampinho.fxml"));
             Parent root = loader.load();
 
-            NavigationManager.push(labelTitulo.getScene());
+            SceneInfo sceneInfo = new SceneInfo(labelTitulo.getScene(), "Menu do Usuário");
+            NavigationManager.push(sceneInfo);
 
             //ControllerTelaInicio controller = (ControllerTelaInicio) loader.getController();
             //controller.setConnection(conn);
@@ -120,7 +124,8 @@ public class ControllerTelaMenuUsuario {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/screens/UsrPartidaScreens/TelaRedirectPartidas.fxml"));
             Parent root = loader.load();
 
-            NavigationManager.push(labelTitulo.getScene());
+            SceneInfo sceneInfo = new SceneInfo(labelTitulo.getScene(), "Menu do Usuário");
+            NavigationManager.push(sceneInfo);
 
             //ControllerTelaInicio controller = (ControllerTelaInicio) loader.getController();
             //controller.setConnection(conn);
@@ -140,7 +145,8 @@ public class ControllerTelaMenuUsuario {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/screens/UsrJogadorScreens/TelaViewJogadores.fxml"));
             Parent root = loader.load();
 
-            NavigationManager.push(labelTitulo.getScene());
+            SceneInfo sceneInfo = new SceneInfo(labelTitulo.getScene(), "Menu do Usuário");
+            NavigationManager.push(sceneInfo);
 
             //ControllerTelaInicio controller = (ControllerTelaInicio) loader.getController();
             //controller.setConnection(conn);
@@ -160,12 +166,14 @@ public class ControllerTelaMenuUsuario {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/screens/UsrUsuarioScreens/TelaEditPerfilUsuario.fxml"));
             Parent root = loader.load();
 
-            NavigationManager.push(labelTitulo.getScene());
-
             //ControllerTelaInicio controller = (ControllerTelaInicio) loader.getController();
             //controller.setConnection(conn);
 
             Stage stage = (Stage) labelTitulo.getScene().getWindow();
+
+            SceneInfo sceneInfo = new SceneInfo(labelTitulo.getScene(), stage.getTitle());
+            NavigationManager.push(sceneInfo);
+
             stage.setScene(new Scene(root));
             stage.setTitle("Editar Perfil");
             stage.show();

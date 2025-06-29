@@ -1,25 +1,28 @@
 package controller;
 
-import javafx.scene.Scene;
-
+import javafx.stage.Stage;
 import java.util.Stack;
 
 public class NavigationManager {
-    private static final Stack<Scene> sceneStack = new Stack<>();
+    private static final Stack<SceneInfo> sceneStack = new Stack<>();
 
-    public static void push(Scene scene){
-        sceneStack.push(scene);
+    public static void push(SceneInfo sceneInfo) {
+        sceneStack.push(sceneInfo);
     }
 
-    public static Scene pop(){
-        return sceneStack.isEmpty() ? null: sceneStack.pop();
+    public static void popAndApply(Stage stage) {
+        if (!sceneStack.isEmpty()) {
+            SceneInfo previous = sceneStack.pop();
+            stage.setScene(previous.getScene());
+            stage.setTitle(previous.getTitle());
+        }
     }
 
-    public static boolean hasPrevious(){
+    public static boolean hasPrevious() {
         return !sceneStack.isEmpty();
     }
 
-    public static void clear(){
+    public static void clear() {
         sceneStack.clear();
     }
 }

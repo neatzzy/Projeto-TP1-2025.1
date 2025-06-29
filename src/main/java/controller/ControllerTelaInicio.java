@@ -28,8 +28,6 @@ public class ControllerTelaInicio {
     private void abrirTelaCadastro() {
         try {
 
-            NavigationManager.push(botaoLogin.getScene());
-
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/screens/InicialScreens/TelaCadastro.fxml"));
             Parent root = loader.load();
 
@@ -37,6 +35,10 @@ public class ControllerTelaInicio {
             controllerCadastro.setConnection(conn);
 
             Stage stage = (Stage) botaoCriar.getScene().getWindow();
+
+            SceneInfo sceneInfo = new SceneInfo(botaoCriar.getScene(), stage.getTitle());
+            NavigationManager.push(sceneInfo);
+
             stage.setScene(new Scene(root));
             stage.setTitle("Cadastro de Usuário");
             stage.show();
@@ -48,7 +50,6 @@ public class ControllerTelaInicio {
     @FXML
     private void abrirTelaLogin() {
         try {
-            NavigationManager.push(botaoLogin.getScene());
 
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/screens/InicialScreens/TelaLogin.fxml"));
             Parent root = loader.load();
@@ -57,6 +58,10 @@ public class ControllerTelaInicio {
             controllerLogin.setConnection(conn);
 
             Stage stage = (Stage) botaoLogin.getScene().getWindow();
+
+            SceneInfo sceneInfo = new SceneInfo(botaoCriar.getScene(), stage.getTitle());
+            NavigationManager.push(sceneInfo);
+
             stage.setScene(new Scene(root));
             stage.setTitle("Login");
             stage.show();

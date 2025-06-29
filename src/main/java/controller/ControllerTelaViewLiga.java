@@ -67,11 +67,7 @@ public class ControllerTelaViewLiga {
 
     @FXML
     public void voltar() {
-        Scene previous = NavigationManager.pop();
-        if (previous != null) {
-            Stage stage = (Stage) menuMontagem.getScene().getWindow();
-            stage.setScene(previous);
-        }
+        NavigationManager.popAndApply((Stage) menuMontagem.getScene().getWindow());
     }
 
     @FXML
@@ -89,8 +85,6 @@ public class ControllerTelaViewLiga {
             stage.setTitle("Menu do Usuário");
 
             NavigationManager.clear();
-            NavigationManager.push(stage.getScene());
-
         } catch (IOException e) {
             mostrarAlerta("Erro", "Erro ao abrir o menu.");
             e.printStackTrace();

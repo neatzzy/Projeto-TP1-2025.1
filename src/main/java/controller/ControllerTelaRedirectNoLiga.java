@@ -19,6 +19,9 @@ public class ControllerTelaRedirectNoLiga {
     private Button criarLigaButton;
 
     @FXML
+    private Button menuMontagem;
+
+    @FXML
     private Button acessarLigasButton;
 
     private Connection conn;
@@ -31,11 +34,7 @@ public class ControllerTelaRedirectNoLiga {
 
     @FXML
     public void voltar(){
-        Scene previous = NavigationManager.pop();
-        if (previous != null) {
-            Stage stage = (Stage) criarLigaButton.getScene().getWindow();
-            stage.setScene(previous);
-        }
+        NavigationManager.popAndApply((Stage) menuMontagem.getScene().getWindow());
     }
 
     @FXML
@@ -45,7 +44,8 @@ public class ControllerTelaRedirectNoLiga {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/screens/UsrLigaScreens/TelaCriarLiga.fxml"));
             Parent root = loader.load();
 
-            NavigationManager.push(criarLigaButton.getScene());
+            SceneInfo sceneInfo = new SceneInfo(menuMontagem.getScene(), "Liga");
+            NavigationManager.push(sceneInfo);
 
             controller.ControllerTelaCriarLiga controller = loader.getController();
             controller.setConnection(conn, usuario);
@@ -66,7 +66,8 @@ public class ControllerTelaRedirectNoLiga {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/screens/UsrLigaScreens/TelaEntrarLiga.fxml"));
             Parent root = loader.load();
 
-            NavigationManager.push(acessarLigasButton.getScene());
+            SceneInfo sceneInfo = new SceneInfo(menuMontagem.getScene(), "Liga");
+            NavigationManager.push(sceneInfo);
 
             controller.ControllerTelaEntrarLiga controller = loader.getController();
             controller.setConnection(conn, usuario);

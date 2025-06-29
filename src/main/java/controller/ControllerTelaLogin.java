@@ -31,11 +31,7 @@ public class ControllerTelaLogin {
 
     @FXML
     public void voltar(){
-        Scene previous = NavigationManager.pop();
-        if (previous != null) {
-            Stage stage = (Stage) campoEmail.getScene().getWindow();
-            stage.setScene(previous);
-        }
+        NavigationManager.popAndApply((Stage) campoEmail.getScene().getWindow());
     }
 
     public void setConnection(Connection conn) {
@@ -80,8 +76,6 @@ public class ControllerTelaLogin {
 
             try {
 
-                NavigationManager.push(campoEmail.getScene());
-
                 if (usuario instanceof Usuario){
 
                     Usuario usr = (Usuario) usuario;
@@ -94,8 +88,12 @@ public class ControllerTelaLogin {
                     controllerMenuUsuario.setConnection(conn);
 
                     Stage stage = (Stage) campoEmail.getScene().getWindow();
+
+                    SceneInfo sceneInfo = new SceneInfo(campoEmail.getScene(), stage.getTitle());
+                    NavigationManager.push(sceneInfo);
+
                     stage.setScene(new Scene(root));
-                    stage.setTitle("Menu Usuário");
+                    stage.setTitle("Menu do Usuário");
                     stage.show();
                 }
                 else if (usuario instanceof Admin){
@@ -110,6 +108,10 @@ public class ControllerTelaLogin {
                     controllerMenuAdm.setConnection(conn);
 
                     Stage stage = (Stage) campoEmail.getScene().getWindow();
+
+                    SceneInfo sceneInfo = new SceneInfo(campoEmail.getScene(), stage.getTitle());
+                    NavigationManager.push(sceneInfo);
+
                     stage.setScene(new Scene(root));
                     stage.setTitle("Menu Admin");
                     stage.show();

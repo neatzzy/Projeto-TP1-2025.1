@@ -55,11 +55,7 @@ public class ControllerTelaViewLigaAdm {
 
     @FXML
     public void voltar() {
-        Scene previous = NavigationManager.pop();
-        if (previous != null) {
-            Stage stage = (Stage) menuMontagem.getScene().getWindow();
-            stage.setScene(previous);
-        }
+        NavigationManager.popAndApply((Stage) menuMontagem.getScene().getWindow());
     }
 
     private void carregarDados() {
@@ -149,9 +145,6 @@ public class ControllerTelaViewLigaAdm {
                 Stage stage = (Stage) menuMontagem.getScene().getWindow(); // corrige o botão se necessário
                 stage.setScene(new Scene(root));
                 stage.setTitle("Menu do Usuário");
-
-                NavigationManager.push(stage.getScene());
-
             } catch (IOException e) {
                 e.printStackTrace();
                 mostrarAlerta("Erro", "Erro ao redirecionar para o menu.");
@@ -171,7 +164,8 @@ public class ControllerTelaViewLigaAdm {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/screens/UsrLigaScreens/TelaAddUsuarioLiga.fxml"));
             Parent root = loader.load();
 
-            NavigationManager.push(labelTitulo.getScene());
+            SceneInfo sceneInfo = new SceneInfo(labelTitulo.getScene(), "Liga");
+            NavigationManager.push(sceneInfo);
 
             controller.ControllerTelaAddUsuarioLiga controller = loader.getController();
             controller.setConnection(conn, this.usuario, this.liga);

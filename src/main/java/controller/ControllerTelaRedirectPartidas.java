@@ -73,10 +73,6 @@ public class ControllerTelaRedirectPartidas {
 
     @FXML
     private void voltar(ActionEvent event) {
-        Scene previous = NavigationManager.pop();
-        if (previous != null) {
-            Stage stage = (Stage) menuMontagem.getScene().getWindow();
-            stage.setScene(previous);
-        }
+        NavigationManager.popAndApply((Stage) menuMontagem.getScene().getWindow());
     }
 }

@@ -49,12 +49,14 @@ public class ControllerTelaMenuAdm {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/screens/AdmSimulacaoScreens/TelaSimulacao.fxml"));
             Parent root = loader.load();
 
-            NavigationManager.push(labelTitulo.getScene());
-
             //ControllerTelaInicio controller = (ControllerTelaInicio) loader.getController();
             //controller.setConnection(conn);
 
             Stage stage = (Stage) labelTitulo.getScene().getWindow();
+
+            SceneInfo sceneInfo = new SceneInfo(labelTitulo.getScene(), stage.getTitle());
+            NavigationManager.push(sceneInfo);
+
             stage.setScene(new Scene(root));
             stage.setTitle("Simulação");
             stage.show();
@@ -68,12 +70,14 @@ public class ControllerTelaMenuAdm {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/screens/AdmLigaScreens/TelaViewLigas.fxml"));
             Parent root = loader.load();
 
-            NavigationManager.push(labelTitulo.getScene());
-
             //ControllerTelaInicio controller = (ControllerTelaInicio) loader.getController();
             //controller.setConnection(conn);
 
             Stage stage = (Stage) labelTitulo.getScene().getWindow();
+
+            SceneInfo sceneInfo = new SceneInfo(labelTitulo.getScene(), stage.getTitle());
+            NavigationManager.push(sceneInfo);
+
             stage.setScene(new Scene(root));
             stage.setTitle("Ligas");
             stage.show();
@@ -87,12 +91,14 @@ public class ControllerTelaMenuAdm {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/screens/AdmUserScreens/TelaViewUsuarios.fxml"));
             Parent root = loader.load();
 
-            NavigationManager.push(labelTitulo.getScene());
-
             //ControllerTelaInicio controller = (ControllerTelaInicio) loader.getController();
             //controller.setConnection(conn);
 
             Stage stage = (Stage) labelTitulo.getScene().getWindow();
+
+            SceneInfo sceneInfo = new SceneInfo(labelTitulo.getScene(), stage.getTitle());
+            NavigationManager.push(sceneInfo);
+
             stage.setScene(new Scene(root));
             stage.setTitle("Usuários");
             stage.show();
@@ -106,12 +112,14 @@ public class ControllerTelaMenuAdm {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/screens/AdmClubesScreens/TelaRedirectClubesAdm.fxml"));
             Parent root = loader.load();
 
-            NavigationManager.push(labelTitulo.getScene());
-
             //ControllerTelaInicio controller = (ControllerTelaInicio) loader.getController();
             //controller.setConnection(conn);
 
             Stage stage = (Stage) labelTitulo.getScene().getWindow();
+
+            SceneInfo sceneInfo = new SceneInfo(labelTitulo.getScene(), stage.getTitle());
+            NavigationManager.push(sceneInfo);
+
             stage.setScene(new Scene(root));
             stage.setTitle("Clubes");
             stage.show();
@@ -125,12 +133,14 @@ public class ControllerTelaMenuAdm {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/screens/AdmJogadorScreens/TelaRedirectJogadoresAdm.fxml"));
             Parent root = loader.load();
 
-            NavigationManager.push(labelTitulo.getScene());
-
             //ControllerTelaInicio controller = (ControllerTelaInicio) loader.getController();
             //controller.setConnection(conn);
 
             Stage stage = (Stage) labelTitulo.getScene().getWindow();
+
+            SceneInfo sceneInfo = new SceneInfo(labelTitulo.getScene(), stage.getTitle());
+            NavigationManager.push(sceneInfo);
+
             stage.setScene(new Scene(root));
             stage.setTitle("Jogadores");
             stage.show();
@@ -144,12 +154,14 @@ public class ControllerTelaMenuAdm {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/screens/AdmPartidaScreens/TelaRedirectPartidasAdm.fxml"));
             Parent root = loader.load();
 
-            NavigationManager.push(labelTitulo.getScene());
-
             //ControllerTelaInicio controller = (ControllerTelaInicio) loader.getController();
             //controller.setConnection(conn);
 
             Stage stage = (Stage) labelTitulo.getScene().getWindow();
+
+            SceneInfo sceneInfo = new SceneInfo(labelTitulo.getScene(), stage.getTitle());
+            NavigationManager.push(sceneInfo);
+
             stage.setScene(new Scene(root));
             stage.setTitle("Partidas");
             stage.show();

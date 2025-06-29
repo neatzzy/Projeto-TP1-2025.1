@@ -32,11 +32,7 @@ public class ControllerTelaSimulacao implements Initializable {
 
     @FXML
     public void voltar(){
-        Scene previous = NavigationManager.pop();
-        if (previous != null) {
-            Stage stage = (Stage) menuMontagem.getScene().getWindow();
-            stage.setScene(previous);
-        }
+        NavigationManager.popAndApply((Stage) menuMontagem.getScene().getWindow());
     }
 
     @Override
