@@ -11,7 +11,7 @@
             style="-fx-background-color: linear-gradient(to bottom right, #1B5E20, #004D40);">
     <children>
         <!-- Botão de menu -->
-        <Button fx:id="menuMontagem" layoutX="20.0" layoutY="14.0" mnemonicParsing="false" onAction="#abrirMenu"
+        <Button fx:id="menuMontagem" layoutX="20.0" layoutY="14.0" mnemonicParsing="false"
                 style="-fx-background-color: rgba(255,255,255,0.12);
                       -fx-background-radius: 10;
                       -fx-text-fill: white;

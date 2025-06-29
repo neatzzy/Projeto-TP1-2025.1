@@ -14,7 +14,7 @@
         <Button fx:id="menuMontagem" layoutX="20.0" layoutY="14.0" mnemonicParsing="false" onAction="#voltar" style="-fx-background-color: rgba(255,255,255,0.12); -fx-background-radius: 10; -fx-text-fill: white; -fx-font-size: 20px; -fx-font-weight: bold; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.4), 3, 0, 0, 2);" text="☰" />
         <VBox layoutX="186.0" layoutY="120.0" spacing="20.0" prefWidth="228.0">
             <children>
-                <Button fx:id="criarLigaButton" text="Criar Liga"
+                <Button fx:id="criarLigaButton" text="Criar Liga" onAction="#irParaCriarLiga"
                         prefWidth="228.0" prefHeight="50.0"
                         style="-fx-background-color: rgba(255,255,255,0.12);
                                -fx-background-radius: 10;
@@ -23,7 +23,7 @@
                                -fx-font-weight: bold;
                                -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.4), 3, 0, 0, 2);" />
 
-                <Button fx:id="acessarLigasButton" text="Acessar Ligas"
+                <Button fx:id="acessarLigasButton" text="Acessar Ligas" onAction="#irParaEntrarLiga"
                         prefWidth="228.0" prefHeight="50.0"
                         style="-fx-background-color: rgba(255,255,255,0.12);
                                -fx-background-radius: 10;
