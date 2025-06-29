@@ -114,8 +114,7 @@ public class ControllerTelaCriarLiga {
             pfSenhaLiga.clear();
             lvUsuarios.getSelectionModel().clearSelection();
 
-            NavigationManager.pop();
-            NavigationManager.pop();
+            NavigationManager.clear();
 
             try {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/screens/UsrMenuScreens/TelaMenuUsuario.fxml"));

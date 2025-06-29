@@ -3,6 +3,8 @@ package controller;
 import dao.LigaDAO;
 import dao.UsuarioDAO;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.collections.FXCollections;
@@ -12,6 +14,7 @@ import model.Liga;
 import model.Usuario;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
@@ -105,6 +108,30 @@ public class ControllerTelaEntrarLiga {
             boolean sucesso = usuarioDAO.insertUsuarioLiga(usuario, ligaSelecionada);
             if (sucesso) {
                 mostrarAlerta("Sucesso", "Você entrou na liga!");
+
+                usuario.entrarLiga(ligaSelecionada);
+
+                NavigationManager.clear();
+
+                try {
+                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/screens/UsrMenuScreens/TelaMenuUsuario.fxml"));
+                    Parent root = loader.load();
+
+                    controller.ControllerTelaMenuUsuario controller = loader.getController();
+                    controller.setConnection(conn);
+                    controller.setUsuarioLogado(this.usuario);
+
+                    Stage stage = (Stage) btnEntrar.getScene().getWindow();
+                    stage.setScene(new Scene(root));
+                    stage.setTitle("Menu do Usuário");
+
+                    NavigationManager.push(stage.getScene());
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    mostrarAlerta("Erro", "Erro ao redirecionar para o menu.");
+                }
+
             } else {
                 mostrarAlerta("Erro", "Erro ao atualizar o usuário.");
             }
