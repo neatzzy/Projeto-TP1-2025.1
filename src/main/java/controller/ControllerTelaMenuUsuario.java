@@ -7,14 +7,11 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
-import model.Admin;
 import model.Simulacao;
 import model.UserType;
 import model.Usuario;
 import java.io.IOException;
 import java.sql.Connection;
-import java.sql.SQLException;
-import model.*;
 
 public class ControllerTelaMenuUsuario {
 
@@ -82,8 +79,8 @@ public class ControllerTelaMenuUsuario {
 
                 NavigationManager.push(labelTitulo.getScene());
 
-                //ControllerTelaInicio controller = (ControllerTelaInicio) loader.getController();
-                //controller.setConnection(conn);
+                ControllerTelaViewLigaAdm controller = (ControllerTelaViewLigaAdm) loader.getController();
+                controller.setConnection(conn, this.usuario.getLiga(), this.usuario);
 
                 Stage stage = (Stage) labelTitulo.getScene().getWindow();
                 stage.setScene(new Scene(root));
