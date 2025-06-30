@@ -67,6 +67,7 @@ public class Jogador {
     }
 
     public double calcularPontuacao(){
+        stats.setPosicao(this.getStringPosicao());
         double pontuacao = 0;
         pontuacao += stats. getDesarmes() * 1.5;
         pontuacao += stats.getGols() * 8.0;

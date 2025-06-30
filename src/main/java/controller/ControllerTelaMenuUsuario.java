@@ -166,8 +166,9 @@ public class ControllerTelaMenuUsuario {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/screens/UsrUsuarioScreens/TelaEditPerfilUsuario.fxml"));
             Parent root = loader.load();
 
-            //ControllerTelaInicio controller = (ControllerTelaInicio) loader.getController();
-            //controller.setConnection(conn);
+            ControllerTelaEditPerfilUsuario controller = (ControllerTelaEditPerfilUsuario) loader.getController();
+            controller.setConnection(conn);
+            controller.setUsuario(this.usuario);
 
             Stage stage = (Stage) labelTitulo.getScene().getWindow();
 

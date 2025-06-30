@@ -1,13 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.Pane?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.shape.Line?>
+<?import java.net.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: linear-gradient(to bottom right, #1B5E20, #004D40);" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ControllerTelaViewJogador">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: linear-gradient(to bottom right, #1B5E20, #004D40);" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ControllerTelaViewJogador">
 
     <children>
 
@@ -15,38 +13,33 @@
         <Button fx:id="menuMontagem" layoutX="20.0" layoutY="14.0" mnemonicParsing="false" onAction="#voltar" style="-fx-background-color: rgba(255,255,255,0.12);                        -fx-background-radius: 10;                        -fx-text-fill: white;                        -fx-font-size: 20px;                        -fx-font-weight: bold;                        -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.4), 3, 0, 0, 2);" text="☰" />
 
         <!-- Cabeçalho com nome e informações básicas -->
-        <Pane layoutX="19.0" layoutY="60.0" prefHeight="50.0" prefWidth="560.0"
-              style="-fx-background-color: transparent;">
+        <Pane layoutX="19.0" layoutY="60.0" prefHeight="50.0" prefWidth="560.0" style="-fx-background-color: transparent;">
 
             <!-- Nome do jogador -->
-            <Label fx:id="labelTitulo" layoutX="10.0" layoutY="5.0" prefHeight="25.0" prefWidth="160.0"
-                   style="-fx-text-fill: white;                               -fx-font-size: 15px;                               -fx-font-weight: bold;"
-                   text="Nome do Jogador"/>
+            <Label fx:id="labelTitulo" layoutX="10.0" layoutY="5.0" prefHeight="25.0" prefWidth="160.0" style="-fx-text-fill: white;                               -fx-font-size: 15px;                               -fx-font-weight: bold;" text="Nome do Jogador" />
 
-            <!-- Posição -->
-            <Label fx:id="labelPosicao" layoutX="179.0" layoutY="8.0" prefHeight="20.0" prefWidth="50.0"
-                   style="-fx-text-fill: white; -fx-font-size: 13px;" text="POS"/>
+           <Label fx:id="labelPosicao" layoutX="159.0" layoutY="8.0" prefHeight="20.0" prefWidth="71.0" style="-fx-text-fill: white; -fx-font-size: 13px; -fx-font-weight: bold;" text="POS" />
 
-            <!-- Clube -->
-            <Label fx:id="labelClube" layoutX="240.0" layoutY="8.0" prefHeight="20.0" prefWidth="80.0"
-                   style="-fx-text-fill: white; -fx-font-size: 13px;" text="Clube"/>
+           <!-- Clube -->
+           <Label fx:id="labelClube" layoutX="239.0" layoutY="8.0" prefHeight="20.0" prefWidth="110.0" style="-fx-text-fill: white; -fx-font-size: 13px; -fx-font-weight: bold;" text="Clube" />
 
-            <!-- Preço -->
-            <Label fx:id="labelPreco" layoutX="308.0" layoutY="8.0" prefHeight="20.0" prefWidth="60.0"
-                   style="-fx-text-fill: white; -fx-font-size: 13px;" text="10$"/>
+           <!-- Preço -->
+           <Label fx:id="labelPreco" layoutX="410.0" layoutY="8.0" prefHeight="20.0" prefWidth="60.0" style="-fx-text-fill: white; -fx-font-size: 13px; -fx-font-weight: bold;" text="10$" />
 
             <!-- Pontuação -->
-            <Label fx:id="labelPontuacao" layoutX="410.0" layoutY="0.0" prefHeight="30.0" prefWidth="130.0"
-                   style="-fx-text-fill: white;                               -fx-font-size: 18px;                               -fx-font-weight: bold;                               -fx-alignment: CENTER_RIGHT;                               -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.4), 2, 0, 0, 1);"
-                   text="30 pts"/>
+            <Label fx:id="labelPontuacao" layoutX="410.0" layoutY="0.0" prefHeight="30.0" prefWidth="130.0" style="-fx-text-fill: white;                               -fx-font-size: 18px;                               -fx-font-weight: bold;                               -fx-alignment: CENTER_RIGHT;                               -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.4), 2, 0, 0, 1);" text="30 pts" />
 
             <!-- Linha divisória -->
-            <Line endX="550.0" layoutX="0.0" layoutY="40.0" style="-fx-stroke: white; -fx-opacity: 0.3;"/>
+            <Line endX="550.0" layoutX="0.0" layoutY="40.0" style="-fx-stroke: white; -fx-opacity: 0.3;" />
 
         </Pane>
 
-        <!-- Área para estatísticas detalhadas -->
-        <VBox fx:id="statsBox" layoutX="30.0" layoutY="120.0" prefHeight="250.0" prefWidth="540.0" spacing="10" style="-fx-padding: 10;                      -fx-background-color: rgba(255,255,255,0.06);                      -fx-background-radius: 10;                      -fx-border-color: white;                      -fx-border-radius: 10;" />
+<!-- Área para estatísticas detalhadas -->
+<VBox fx:id="statsBox" layoutX="30.0" layoutY="120.0" prefHeight="250.0" prefWidth="540.0" spacing="10" style="-fx-padding: 10;              -fx-background-color: rgba(255,255,255,0.10);              -fx-background-radius: 10;              -fx-border-color: white;              -fx-border-radius: 10;">
+    <stylesheets>
+        <URL value="@../../CSS/styles.css" />
+    </stylesheets>
+</VBox>
 
     </children>
 </AnchorPane>

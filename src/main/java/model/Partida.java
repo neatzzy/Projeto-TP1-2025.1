@@ -150,6 +150,7 @@ public class Partida implements Simulavel{
             } else {
                 jogador.getStats().setSg(sgFora);
             }
+            jogador.calcularPontuacao();
 
         }
 

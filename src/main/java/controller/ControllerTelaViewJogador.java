@@ -44,8 +44,8 @@ public class ControllerTelaViewJogador {
         if (labelTitulo != null) {
             setDadosJogador(jogador.getNome(), jogador.getPosicao().toString(),
                     jogador.getClube().getNome(),
-                    String.format("%.2f", jogador.getPreco()),
-                    String.format("%.0f", jogador.getPontuacao()));
+                    String.format("%.2f$", jogador.getPreco()),
+                    String.format("%.2f pts", jogador.getPontuacao()));
 
         }
         if (statsBox != null) {
@@ -54,7 +54,7 @@ public class ControllerTelaViewJogador {
                 String stat = entry.getKey();
                 int valor = entry.getValue();
                 if (valor != 0) {
-                    Label statLabel = new Label(stat + ": " + valor);
+                    Label statLabel = new Label(stat);
                     statsBox.getChildren().add(statLabel);
                 }
             });

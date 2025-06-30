@@ -13,6 +13,7 @@ public class Stats {
     private int golsSofridos;
     private int cartaoAmarelo;
     private int faltasCometidas;
+    private String posicao;
 
     public int getDesarmes() {
         return desarmes;
@@ -110,6 +111,14 @@ public class Stats {
         this.faltasCometidas = faltasCometidas;
     }
 
+    public String getPosicao() {
+        return posicao;
+    }
+
+    public void setPosicao(String posicao) {
+        this.posicao = posicao;
+    }
+
     public void resetStats(){
         this.desarmes = 0;
         this.gols = 0;
@@ -130,7 +139,9 @@ public class Stats {
         statsMap.put("Desarmes - " + desarmes + " (+ " + (desarmes * 1.5) + " pts)", desarmes);
         statsMap.put("Gols - " + gols + " (+ " + (gols * 8) + " pts)", gols);
         statsMap.put("Assistências - " + assistencias + " (+ " + (assistencias * 5) + " pts)", assistencias);
-        statsMap.put("SG - " + (sg ? 1 : 0) + " (+5 pts)", sg ? 1 : 0);
+        if (posicao != null && (posicao.equalsIgnoreCase("ZAGUEIRO") || posicao.equalsIgnoreCase("GOLEIRO"))) {
+            statsMap.put("SG - " + (isSg() ? 1 : 0) + " (+5 pts)", sg ? 1 : 0);
+        }
         statsMap.put("Finalizações - " + finalizacoes + " (+ " + (finalizacoes * 0.8) + " pts)", finalizacoes);
         statsMap.put("Defesas - " + defesas + " (+ " + (defesas * 1.5) + " pts)", defesas);
         statsMap.put("Defesa de Pênalti - " + defesaPenalti + " (+ " + (defesaPenalti * 7) + " pts)", defesaPenalti);

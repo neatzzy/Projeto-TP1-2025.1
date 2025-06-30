@@ -31,6 +31,8 @@ public class Main extends Application {
         // Funções do banco de dados
         Database db = new Database();
         Connection conn = db.connectToDb(db_name, user, pass);
+        Simulacao simulacao = new Simulacao();
+        simulacao.InicializarConexoes(conn);
 
         // Carrega todos os clubes e jogadores do banco de dados
         ClubeDAO clubeDAO = new ClubeDAO(conn);
@@ -41,6 +43,8 @@ public class Main extends Application {
 
         //Gera as partidas aleatórias
         Simulacao.gerarPartidasAleatorias(clubes);
+
+        Simulacao.simular();
 
         // Carrega FXML
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/screens/InicialScreens/TelaInicio.fxml"));
