@@ -23,6 +23,7 @@ public class UsuarioDAO {
     }
 
     // Função auxiliar para ajudar na construção do Usuário(cria junto com a liga, mas a liga está vazia de usuários)
+    // Agora, use construirUsuario(ResultSet, Map<Integer, Liga>) para buscas em lote
     private Pessoa construirUsuario(ResultSet rs) throws SQLException {
 
         int id = rs.getInt("usuarioid");
@@ -33,9 +34,30 @@ public class UsuarioDAO {
 
         Liga liga = null;
         if (ligaid > 0) {
-            liga = ligaDAO.getLigaByID(ligaid); // não carrega usuários!
+            // Usa método otimizado do LigaDAO para buscar várias ligas em lote
+            // Aqui, para busca individual, mantém busca única
+            liga = ligaDAO.getLigaByID(ligaid);
         }
 
+        if ("user".equalsIgnoreCase(tipo)) {
+            return new Usuario(id, nome, senha, UserType.USUARIO, liga);
+        } else if ("adminLiga".equalsIgnoreCase(tipo)) {
+            return new Usuario(id, nome, senha, UserType.ADMLIGA, liga);
+        } else if ("admin".equalsIgnoreCase(tipo)) {
+            return new Admin(id, nome, senha, conn);
+        } else {
+            throw new IllegalArgumentException("Tipo inválido de usuário.");
+        }
+    }
+
+    // Função auxiliar otimizada para construir o Usuário usando um Map de ligas já carregadas
+    private Pessoa construirUsuario(ResultSet rs, java.util.Map<Integer, Liga> ligasMap) throws SQLException {
+        int id = rs.getInt("usuarioid");
+        String nome = rs.getString("nome");
+        String senha = rs.getString("senha");
+        String tipo = rs.getString("tipo");
+        int ligaid = rs.getInt("ligaid");
+        Liga liga = (ligaid > 0) ? ligasMap.get(ligaid) : null;
         if ("user".equalsIgnoreCase(tipo)) {
             return new Usuario(id, nome, senha, UserType.USUARIO, liga);
         } else if ("adminLiga".equalsIgnoreCase(tipo)) {
@@ -358,6 +380,38 @@ public class UsuarioDAO {
         } catch (Exception e) {
             System.out.println(e);
         }
+    }
+
+    // Busca todos os usuários otimizando as queries de liga usando LigaDAO.getLigasByIds
+    public List<Pessoa> getAllUsuariosOtimizado() throws SQLException {
+        List<Pessoa> usuarios = new ArrayList<>();
+        String query = "SELECT * FROM usuarios";
+        List<Integer> ligaIds = new ArrayList<>();
+        try (PreparedStatement dataStmt = conn.prepareStatement(query);
+             ResultSet rs = dataStmt.executeQuery()) {
+            while (rs.next()) {
+                int ligaid = rs.getInt("ligaid");
+                if (ligaid > 0 && !ligaIds.contains(ligaid)) {
+                    ligaIds.add(ligaid);
+                }
+            }
+        }
+        // Busca todas as ligas necessárias em uma query só usando método otimizado do LigaDAO
+        java.util.Map<Integer, Liga> ligasMap = new java.util.HashMap<>();
+        if (!ligaIds.isEmpty()) {
+            List<Liga> ligas = ligaDAO.getLigasByIds(ligaIds);
+            for (Liga liga : ligas) {
+                ligasMap.put(liga.getId(), liga);
+            }
+        }
+        // Agora busca novamente os usuários e monta usando o Map
+        try (PreparedStatement dataStmt = conn.prepareStatement(query);
+             ResultSet rs = dataStmt.executeQuery()) {
+            while (rs.next()) {
+                usuarios.add(construirUsuario(rs, ligasMap));
+            }
+        }
+        return usuarios;
     }
 
 }

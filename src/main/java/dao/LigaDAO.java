@@ -22,7 +22,7 @@ public class LigaDAO {
     }
 
     // Função auxiliar para ajudar na construção da Liga
-    private Liga construirLiga(ResultSet rs) throws SQLException {
+    Liga construirLiga(ResultSet rs) throws SQLException {
         int id = rs.getInt("ligaid");
         String nome = rs.getString("nome");
         String senha = rs.getString("senha");
@@ -113,6 +113,29 @@ public class LigaDAO {
             throw e;
         }
 
+    }
+
+    // Busca todas as ligas de uma vez por id (otimizado para uso em UsuarioDAO)
+    public List<Liga> getLigasByIds(List<Integer> ids) throws SQLException {
+        List<Liga> ligas = new ArrayList<>();
+        if (ids == null || ids.isEmpty()) return ligas;
+        StringBuilder sb = new StringBuilder("SELECT * FROM ligas WHERE ligaid IN (");
+        for (int i = 0; i < ids.size(); i++) {
+            sb.append("?");
+            if (i < ids.size() - 1) sb.append(",");
+        }
+        sb.append(")");
+        try (PreparedStatement stmt = conn.prepareStatement(sb.toString())) {
+            for (int i = 0; i < ids.size(); i++) {
+                stmt.setInt(i + 1, ids.get(i));
+            }
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    ligas.add(construirLiga(rs));
+                }
+            }
+        }
+        return ligas;
     }
 
     // Remove uma Liga do banco de dados(usuários daquela liga recebem null no ligaid)
