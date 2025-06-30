@@ -26,7 +26,7 @@ public class ControllerTelaViewJogadores {
     @FXML private TableColumn<Jogador, String> colNome;
     @FXML private TableColumn<Jogador, String> colPosicao;
     @FXML private TableColumn<Jogador, String> colClube;
-    @FXML private TableColumn<Jogador, String> colPontuacao;
+    @FXML private TableColumn<Jogador, Double> colPontuacao;
     @FXML private TableColumn<Jogador, Void> colDetalhes;
 
     private ObservableList<Jogador> listaJogadores = FXCollections.observableArrayList();
@@ -41,18 +41,18 @@ public class ControllerTelaViewJogadores {
         colNome.setCellValueFactory(new PropertyValueFactory<>("nome"));
         colPosicao.setCellValueFactory(cellData -> new javafx.beans.property.SimpleStringProperty(cellData.getValue().getStringPosicao()));
         colClube.setCellValueFactory(cellData -> new javafx.beans.property.SimpleStringProperty(cellData.getValue().getClube().getNome()));
-        colPontuacao.setCellValueFactory(cellData -> new javafx.beans.property.SimpleStringProperty(
-                String.format("%.2f", cellData.getValue().getPontuacao())
-        ));
 
-        // Corrige ordenação numérica da coluna de pontuação
-        colPontuacao.setComparator((s1, s2) -> {
-            try {
-                double d1 = Double.parseDouble(s1.replace(",", "."));
-                double d2 = Double.parseDouble(s2.replace(",", "."));
-                return Double.compare(d1, d2);
-            } catch (Exception e) {
-                return s1.compareTo(s2);
+        // Pontuação como Double para ordenação correta
+        colPontuacao.setCellValueFactory(new PropertyValueFactory<>("pontuacao"));
+        colPontuacao.setCellFactory(column -> new TableCell<>() {
+            @Override
+            protected void updateItem(Double item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setText(null);
+                } else {
+                    setText(String.format("%.2f", item));
+                }
             }
         });
 
@@ -69,7 +69,6 @@ public class ControllerTelaViewJogadores {
         jogadoresFiltrados.setAll(listaJogadores);
         tableView.setItems(jogadoresFiltrados);
     }
-
 
     @FXML
     public void voltar() {
@@ -106,11 +105,7 @@ public class ControllerTelaViewJogadores {
             @Override
             protected void updateItem(Void item, boolean empty) {
                 super.updateItem(item, empty);
-                if (empty) {
-                    setGraphic(null);
-                } else {
-                    setGraphic(btn);
-                }
+                setGraphic(empty ? null : btn);
             }
         });
     }

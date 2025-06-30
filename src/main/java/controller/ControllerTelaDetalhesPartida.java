@@ -6,7 +6,6 @@ import javafx.stage.Stage;
 import model.Partida;
 
 import java.io.IOException;
-import java.sql.Connection;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -15,7 +14,6 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import model.Clube;
 import model.Jogador;
-
 
 public class ControllerTelaDetalhesPartida {
     private Partida partida;
@@ -51,10 +49,35 @@ public class ControllerTelaDetalhesPartida {
         colPosicaoA.setCellValueFactory(cellData -> new javafx.beans.property.SimpleStringProperty(cellData.getValue().getStringPosicao()));
         colNomeA.setCellValueFactory(cellData -> new javafx.beans.property.SimpleStringProperty(cellData.getValue().getNome()));
         colPontuacaoA.setCellValueFactory(cellData -> new javafx.beans.property.SimpleObjectProperty<>(cellData.getValue().getPontuacao()));
+        colPontuacaoA.setCellFactory(column -> new TableCell<>() {
+            @Override
+            protected void updateItem(Double item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setText(null);
+                } else {
+                    setText(String.format("%.2f", item));
+                }
+            }
+        });
+
         // Configura colunas do time B
         colPosicaoB.setCellValueFactory(cellData -> new javafx.beans.property.SimpleStringProperty(cellData.getValue().getStringPosicao()));
         colNomeB.setCellValueFactory(cellData -> new javafx.beans.property.SimpleStringProperty(cellData.getValue().getNome()));
         colPontuacaoB.setCellValueFactory(cellData -> new javafx.beans.property.SimpleObjectProperty<>(cellData.getValue().getPontuacao()));
+        colPontuacaoB.setCellFactory(column -> new TableCell<>() {
+            @Override
+            protected void updateItem(Double item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setText(null);
+                } else {
+                    setText(String.format("%.2f", item));
+                }
+            }
+        });
+
+        // Botão detalhes A
         colDetalhesA.setCellFactory(param -> new TableCell<>() {
             private final Button btn = new Button("Ver detalhes");
             {
@@ -70,6 +93,8 @@ public class ControllerTelaDetalhesPartida {
                 setGraphic(empty ? null : btn);
             }
         });
+
+        // Botão detalhes B
         colDetalhesB.setCellFactory(param -> new TableCell<>() {
             private final Button btn = new Button("Ver detalhes");
             {
@@ -93,10 +118,12 @@ public class ControllerTelaDetalhesPartida {
         Clube clubeB = partida.getClubeFora();
         lblTimeA.setText(clubeA.getNome());
         lblTimeB.setText(clubeB.getNome());
-        // Placar e pontuação (mock, ajuste conforme sua lógica)
+        // Placar
         lblPlacar.setText(partida.getGolsClubeCasa() + "  ×  " + partida.getGolsClubeFora());
+        // Pontuação com 2 casas decimais
         lblPontuacaoA.setText(String.format("%.2f", calcularPontuacao(clubeA)));
         lblPontuacaoB.setText(String.format("%.2f", calcularPontuacao(clubeB)));
+
         // Jogadores
         ObservableList<Jogador> jogadoresA = FXCollections.observableArrayList(clubeA.getJogadores());
         ObservableList<Jogador> jogadoresB = FXCollections.observableArrayList(clubeB.getJogadores());
@@ -107,7 +134,6 @@ public class ControllerTelaDetalhesPartida {
     }
 
     private double calcularPontuacao(Clube clube) {
-        // Exemplo: soma das pontuações dos jogadores
         return clube.getJogadores().stream().mapToDouble(Jogador::getPontuacao).sum();
     }
 
@@ -117,7 +143,7 @@ public class ControllerTelaDetalhesPartida {
     }
 
     private void abrirTelaViewJogador(Jogador jogador) {
-        try{
+        try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/screens/UsrJogadorScreens/TelaViewJogador.fxml"));
             AnchorPane root = loader.load();
             ControllerTelaViewJogador controller = loader.getController();
@@ -132,7 +158,7 @@ public class ControllerTelaDetalhesPartida {
             stage.setScene(new Scene(root));
             stage.setTitle("Detalhes do Jogador: " + jogador.getNome());
             stage.show();
-        } catch(IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
