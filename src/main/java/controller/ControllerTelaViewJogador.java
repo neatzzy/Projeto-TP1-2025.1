@@ -84,5 +84,6 @@ public class ControllerTelaViewJogador {
 
     public void setJogador(Jogador jogador) {
         this.jogador = jogador;
+        setDadosJogador(jogador.getNome(), jogador.getStringPosicao(), jogador.getClube().getNome(), String.format("%.2f", jogador.getPreco()),  String.format("%.0f", jogador.getPontuacao()));
     }
 }

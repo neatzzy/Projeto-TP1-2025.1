@@ -89,7 +89,7 @@ public class ControllerTelaViewJogadores {
                 });
                 btn.setStyle("-fx-background-color: rgba(255,255,255,0.12); " +
                         "-fx-background-radius: 10; " +
-                        "-fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold;");
+                        "-fx-text-fill: green; -fx-font-size: 14px; -fx-font-weight: bold;");
             }
 
             @Override
@@ -105,21 +105,23 @@ public class ControllerTelaViewJogadores {
     }
 
     private void abrirDetalhesJogador(Jogador jogador) {
-        /*try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/screens/TelaDetalhesJogador.fxml"));
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/screens/UsrJogadorScreens/TelaViewJogador.fxml"));
             Parent root = loader.load();
 
-            ControllerTelaDetalhesJogador controller = loader.getController();
+            ControllerTelaViewJogador controller = loader.getController();
             controller.setJogador(jogador);
+            controller.getTableStats(jogador);
 
             Stage stage = (Stage) tableView.getScene().getWindow();
             NavigationManager.push(new SceneInfo(stage.getScene(), stage.getTitle()));
+
             stage.setScene(new Scene(root));
             stage.setTitle("Detalhes: " + jogador.getNome());
 
         } catch (IOException e) {
             e.printStackTrace();
-        }*/
+        }
     }
 }
 
