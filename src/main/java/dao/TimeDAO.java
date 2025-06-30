@@ -267,6 +267,21 @@ public class TimeDAO {
         }
     }
 
+    // Define capitão do time
+    public boolean setCapitao(int timeId, int jogadorId) throws SQLException {
+        String sql = "UPDATE times SET capitaoid = ? WHERE timeid = ?";
+
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, jogadorId);
+            stmt.setInt(2, timeId);
+            int rowsUpdated = stmt.executeUpdate();
+            return rowsUpdated > 0;
+        } catch ( SQLException e ) {
+            System.out.println(e);
+            throw e;
+        }
+    }
+
     //Remove Time por id
     public void deleteTimeById(int id){
         String deleteQuery = "DELETE FROM times WHERE timeid = ?";

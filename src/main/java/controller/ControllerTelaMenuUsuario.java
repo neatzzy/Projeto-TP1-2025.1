@@ -98,7 +98,6 @@ public class ControllerTelaMenuUsuario {
 
     @FXML
     private void escalar() {
-        if (Simulacao.getOcorreu()) return; // TODO: implementar algo mais visual depois
         try{
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/screens/UsrEscalarScreens/TelaCampinho.fxml"));
             Parent root = loader.load();
@@ -106,8 +105,8 @@ public class ControllerTelaMenuUsuario {
             SceneInfo sceneInfo = new SceneInfo(labelTitulo.getScene(), "Menu do Usuário");
             NavigationManager.push(sceneInfo);
 
-            //ControllerTelaInicio controller = (ControllerTelaInicio) loader.getController();
-            //controller.setConnection(conn);
+            ControllerTelaCampinho controller = (ControllerTelaCampinho) loader.getController();
+            controller.setConnection(conn, this.usuario);
 
             Stage stage = (Stage) labelTitulo.getScene().getWindow();
             stage.setScene(new Scene(root));

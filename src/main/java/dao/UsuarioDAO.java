@@ -154,9 +154,10 @@ public class UsuarioDAO {
             int linhasAfetadas = stmt.executeUpdate();
 
             if (linhasAfetadas > 0) {
-                // Remove da lista/Set de usuários da liga em memória
+                // Remove da lista/Set de usuários da liga em memória e remove time dele
                 liga.getUsuarios().remove(usuario);
                 usuario.sairLiga(liga);
+                usuario.setTimeUsuario(null);
                 return true;
             } else {
                 return false; // usuário não encontrado/no banco nenhuma linha afetada
