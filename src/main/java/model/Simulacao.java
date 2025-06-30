@@ -81,7 +81,6 @@ public class Simulacao {
         List<Liga> ligas = ligaDAO.getAllLigas();
 
         Simulacao.resetPartidasStats(partidas);
-        partidas.clear();
 
         for (Liga liga : ligas) {
             for (Usuario usuario : liga.getUsuarios()){

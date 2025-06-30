@@ -14,6 +14,7 @@ import javafx.stage.Stage;
 import model.*;
 
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 public class ControllerTelaSimulacao implements Initializable {
@@ -42,18 +43,24 @@ public class ControllerTelaSimulacao implements Initializable {
         label3.setVisible(false);
         label4.setVisible(false);
         label5.setVisible(false);
+    }
+
+    @FXML
+    private void simular(){
+        try {
+            Simulacao.simular();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
         carregarComProgresso();
     }
 
     @FXML
-    private void abrirMenu(MouseEvent event) {
+    private void resetarSimulacao(){
         try {
-            Parent root = FXMLLoader.load(getClass().getResource("/screens/UsrLigaScreens/TelaRanking.fxml")); // so pra testar, é pra redirecionar pro menu/simulacao
-            Stage stage = (Stage) menuLabel.getScene().getWindow();
-            stage.setScene(new Scene(root));
-            stage.show();
-        } catch (Exception e) {
-            e.printStackTrace();
+            Simulacao.resetar();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
     }
 

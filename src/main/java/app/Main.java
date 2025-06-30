@@ -38,13 +38,16 @@ public class Main extends Application {
         ClubeDAO clubeDAO = new ClubeDAO(conn);
         JogadorDAO jogadorDAO = new JogadorDAO(conn, clubeDAO);
 
+        // cria adm
+        //LigaDAO ligaDAO = new LigaDAO(conn);
+        //UsuarioDAO usuarioDAO = new UsuarioDAO(conn, ligaDAO);
+        //usuarioDAO.insertUsuario("admin", "admTP1@gmail.com", "admin", "123123", null);
+
         List<Clube>clubes = clubeDAO.getAllClubes();
         jogadorDAO.getAllJogadores(clubes);
 
         //Gera as partidas aleatórias
         Simulacao.gerarPartidasAleatorias(clubes);
-
-        //Simulacao.simular();
 
         // Carrega FXML
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/screens/InicialScreens/TelaInicio.fxml"));
