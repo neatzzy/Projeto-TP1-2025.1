@@ -55,7 +55,7 @@ public class TimeDAO {
                 "capitaoid INT," +
                 "ligaid INT, " +
                 "FOREIGN KEY (timeid) REFERENCES usuarios(usuarioid) ON DELETE CASCADE," +
-                "FOREIGN KEY (ligaid) REFERENCES ligas(id) ON DELETE CASCADE" +
+                "FOREIGN KEY (ligaid) REFERENCES ligas(ligaid) ON DELETE CASCADE" +
                 ")";
         try(PreparedStatement createStmt = conn.prepareStatement(createQuery)){
             createStmt.executeUpdate();

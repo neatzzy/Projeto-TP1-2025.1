@@ -50,12 +50,12 @@ public class UsuarioDAO {
     // Cria tabela de Usuários( usuarioid, nome, tipo, senha, nomeliga)
     public void createTableUsuarios(){
         String createQuery = "CREATE TABLE usuarios" +
-                "(usuarioid SERIAL, nome VARCHAR(200), " +
+                "(usuarioid SERIAL PRIMARY KEY, nome VARCHAR(200), " +
                 "email VARCHAR(255) UNIQUE," +
                 "tipo VARCHAR(200)," +
-                "senha VARCHAR(200)," +
+                "senha VARCHAR(200) NOT NULL," +
                 "ligaid INTEGER, " +
-                "FOREIGN KEY (ligaid) REFERENCES ligas(ligaid) ON DELETE SET NULL)";;
+                "FOREIGN KEY (ligaid) REFERENCES ligas(ligaid) ON DELETE SET NULL)";
         try(PreparedStatement createStmt = conn.prepareStatement(createQuery)){
             createStmt.executeUpdate();
             System.out.println("Table usuarios created");
