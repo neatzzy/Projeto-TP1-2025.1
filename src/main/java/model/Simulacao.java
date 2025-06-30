@@ -63,7 +63,6 @@ public class Simulacao {
 
         for (Partida partida : partidas){
             partida.simular();
-            partida.mostrarResumoPartida();
         }
 
         ocorreu = true;

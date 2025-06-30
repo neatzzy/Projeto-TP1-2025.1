@@ -7,6 +7,8 @@ import model.Clube;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 public class JogadorDAO {
 
@@ -135,47 +137,36 @@ public class JogadorDAO {
     }
 
     // Retorna lista de todos os Jogadores
-    public List<Jogador> getAllJogadores(List<Clube> clubes) throws SQLException {
-        String dataQuery = "SELECT * FROM jogadores";
-        List<Jogador> jogadores = new ArrayList<>();
+public List<Jogador> getAllJogadores(List<Clube> clubes) throws SQLException {
+    String dataQuery = "SELECT * FROM jogadores";
+    List<Jogador> jogadores = new ArrayList<>();
 
-        try(PreparedStatement dataStmt = conn.prepareStatement(dataQuery)){
+    // Cria um mapa para acesso rápido aos clubes por ID
+    Map<Integer, Clube> clubeMap = clubes.stream()
+            .collect(Collectors.toMap(Clube::getId, c -> c));
 
-            ResultSet rs = dataStmt.executeQuery();
-            while (rs.next()) {
+    try (PreparedStatement dataStmt = conn.prepareStatement(dataQuery)) {
+        ResultSet rs = dataStmt.executeQuery();
+        while (rs.next()) {
+            int clubeId = rs.getInt("clubeid");
+            Clube clube = clubeMap.get(clubeId);
 
-                int clubeId = rs.getInt("clubeid");
-
-                // verifica se tem clube
-                Clube clube = clubes.stream()
-                        .filter(c -> c.getId() == clubeId)
-                        .findFirst()
-                        .orElse(null);
-
-                if (clube == null) {
-                    System.out.println("Clube inválido para jogador, clubeId: " + clubeId);
-                    continue;
-                }
-
-                // cria jogador e adiciona na lista
-                Jogador jogador = construirJogador(rs);
-                // garantir a mesma instância do objeto
-                jogador.setClube(clube);
-                jogadores.add(jogador);
-                // adiciona o jogador ao novo clube criado!
-                clube.addJogador(jogador);
+            if (clube == null) {
+                System.out.println("Clube inválido para jogador, clubeId: " + clubeId);
+                continue;
             }
 
-            return jogadores;
-
+            Jogador jogador = construirJogador(rs);
+            jogador.setClube(clube);
+            jogadores.add(jogador);
+            clube.addJogador(jogador);
         }
-        catch(SQLException e){
-            System.out.println("Não conseguiu retornar todos os jogadores:" + e);
-            throw e;
-        }
-
+        return jogadores;
+    } catch (SQLException e) {
+        System.out.println("Não conseguiu retornar todos os jogadores:" + e);
+        throw e;
     }
-
+}
     // Retorna lista do tipo Jogador de jogadores por clube
     public List<Jogador> getJogadoresByClub(Clube clube) throws SQLException {
         String dataQuery = "SELECT * FROM jogadores WHERE clubeid = ?";

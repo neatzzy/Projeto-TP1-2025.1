@@ -20,3 +20,10 @@
     -fx-background-color: rgba(255,255,255,0.15);
     -fx-translate-y: 1;
 }
+
+.stats-box-label, .stats-box-content {
+    -fx-text-fill: #fff;
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.6), 2, 0, 0, 1);
+}
