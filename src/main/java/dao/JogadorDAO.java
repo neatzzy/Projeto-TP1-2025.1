@@ -235,4 +235,28 @@ public class JogadorDAO {
         }
     }
 
+    public List<Jogador> getPlayersByIds(List<Integer> ids) throws SQLException {
+        if (ids == null || ids.isEmpty()) {
+            return new ArrayList<>();
+        }
+
+        String placeholders = ids.stream().map(id -> "?").collect(Collectors.joining(","));
+        String dataQuery = "SELECT * FROM jogadores WHERE jogadorid IN (" + placeholders + ")";
+        List<Jogador> jogadores = new ArrayList<>();
+
+        try (PreparedStatement dataStmt = conn.prepareStatement(dataQuery)) {
+            for (int i = 0; i < ids.size(); i++) {
+                dataStmt.setInt(i + 1, ids.get(i));
+            }
+            ResultSet rs = dataStmt.executeQuery();
+
+            while (rs.next()) {
+                jogadores.add(construirJogadorOtimizado(rs, clubeDAO.getClubeById(rs.getInt("clubeid"))));
+            }
+        } catch (SQLException e) {
+            System.err.println("Erro ao buscar jogadores por IDs: " + e.getMessage());
+            throw e;
+        }
+        return jogadores;
+    }
 }

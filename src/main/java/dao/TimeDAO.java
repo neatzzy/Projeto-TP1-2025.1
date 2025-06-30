@@ -26,23 +26,33 @@ public class TimeDAO {
 
     // Função auxiliar para ajudar na construção do Time
     private TimeUsuario construirTime(ResultSet rs) throws SQLException {
-        Set<Jogador> jogadoresSet = new HashSet<>();
         int timeId = rs.getInt("timeid");
-        Usuario usuario = (Usuario) usuarioDAO.getUsuarioById(rs.getInt("timeid"));
+        Usuario usuario = (Usuario) usuarioDAO.getUsuarioById(timeId);
         String nome = rs.getString("nome");
         Array array = rs.getArray("jogadoresids");
+        int capitaoid = rs.getInt("capitaoid");
 
+        Set<Jogador> jogadoresSet = new HashSet<>();
+        Jogador jogadorcap = null;
+        List<Integer> idsParaBuscar = new ArrayList<>();
         if (array != null) {
             Integer[] jogadoresIds = (Integer[]) array.getArray();
             for (Integer jogadorId : jogadoresIds) {
-                Jogador jogador = jogadorDAO.getPlayerById(jogadorId);
-                if (jogador != null) jogadoresSet.add(jogador);
+                idsParaBuscar.add(jogadorId);
             }
         }
-
-        int capitaoid = rs.getInt("capitaoid");
-        Jogador jogadorcap = capitaoid > 0 ? jogadorDAO.getPlayerById(capitaoid) : null;
-
+        if (capitaoid > 0 && !idsParaBuscar.contains(capitaoid)) {
+            idsParaBuscar.add(capitaoid);
+        }
+        if (!idsParaBuscar.isEmpty()) {
+            List<Jogador> jogadores = jogadorDAO.getPlayersByIds(idsParaBuscar);
+            for (Jogador jogador : jogadores) {
+                if (jogador.getId() == capitaoid) {
+                    jogadorcap = jogador;
+                }
+                jogadoresSet.add(jogador);
+            }
+        }
         return new TimeUsuario(usuario, jogadoresSet, jogadorcap);
     }
 
