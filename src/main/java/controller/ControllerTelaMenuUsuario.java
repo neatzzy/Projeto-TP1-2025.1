@@ -82,7 +82,7 @@ public class ControllerTelaMenuUsuario {
                 SceneInfo sceneInfo = new SceneInfo(labelTitulo.getScene(), "Menu do Usuário");
                 NavigationManager.push(sceneInfo);
 
-                ControllerTelaViewLigaAdm controller = (ControllerTelaViewLigaAdm) loader.getController();
+                ControllerTelaViewLigaAdm controller = loader.getController();
                 controller.setConnection(conn, this.usuario.getLiga(), this.usuario);
 
                 Stage stage = (Stage) labelTitulo.getScene().getWindow();
@@ -105,12 +105,12 @@ public class ControllerTelaMenuUsuario {
             SceneInfo sceneInfo = new SceneInfo(labelTitulo.getScene(), "Menu do Usuário");
             NavigationManager.push(sceneInfo);
 
-            ControllerTelaCampinho controller = (ControllerTelaCampinho) loader.getController();
+            ControllerTelaCampinho controller = loader.getController();
             controller.setConnection(conn, this.usuario);
 
             Stage stage = (Stage) labelTitulo.getScene().getWindow();
             stage.setScene(new Scene(root));
-            stage.setTitle("Campinho");
+            stage.setTitle("Escalar Jogadores");
             stage.show();
         } catch(IOException e){
             e.printStackTrace();

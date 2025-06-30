@@ -1,4 +1,3 @@
-
 package controller;
 
 import dao.*;
@@ -92,8 +91,9 @@ public class ControllerTelaCampinho {
             SceneInfo sceneInfo = new SceneInfo(menuMontagem.getScene(), "Menu do Usuário");
             NavigationManager.push(sceneInfo);
 
+            // Usa o timeUsuario já carregado no objeto usuario
             ControllerTelaMercado controller = (ControllerTelaMercado) loader.getController();
-            controller.setConnection(conn, timeDAO.getTimeById(usuario.getId()), usuario);
+            controller.setConnection(conn, usuario.getTimeUsuario(), usuario);
 
             Stage stage = (Stage) menuMontagem.getScene().getWindow();
             stage.setScene(new Scene(root));
@@ -103,15 +103,17 @@ public class ControllerTelaCampinho {
         } catch (IOException e) {
             mostrarAlerta("Erro", "Erro ao abrir o mercado.");
             e.printStackTrace();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
         }
     }
 
     private void carregarJogadores() {
         try {
-
-            TimeUsuario timeusuario = timeDAO.getTimeById(usuario.getId());
+            // Usa o timeUsuario já carregado no objeto usuario
+            TimeUsuario timeusuario = usuario.getTimeUsuario();
+            if (timeusuario == null) {
+                timeusuario = timeDAO.getTimeById(usuario.getId());
+                usuario.setTimeUsuario(timeusuario);
+            }
 
             int goleiro = 0, zagueiro = 0, meio = 0, ataque = 0;
 
