@@ -21,7 +21,7 @@ public class JogadorDAO {
         this.clubeDAO = clubeDAO;
     }
 
-    // Função auxiliar para ajudar na construção do Jogador
+    // Função auxiliar para ajudar na construção do Jogador (antiga)
     private Jogador construirJogador(ResultSet rs) throws SQLException {
         int jogadorId = rs.getInt("jogadorid");
         String nome = rs.getString("nome");
@@ -29,10 +29,19 @@ public class JogadorDAO {
         double preco = rs.getDouble("preco");
         double overall = rs.getDouble("overall");
         int clubeId = rs.getInt("clubeid");
-
         Posicao posicao = Posicao.valueOf(posicaoStr);
         Clube clube = clubeDAO.getClubeById(clubeId);
+        return new Jogador(jogadorId, nome, posicao, clube, preco, overall);
+    }
 
+    // Função otimizada para construir Jogador recebendo o clube como parâmetro
+    private Jogador construirJogadorOtimizado(ResultSet rs, Clube clube) throws SQLException {
+        int jogadorId = rs.getInt("jogadorid");
+        String nome = rs.getString("nome");
+        String posicaoStr = rs.getString("posicao");
+        double preco = rs.getDouble("preco");
+        double overall = rs.getDouble("overall");
+        Posicao posicao = Posicao.valueOf(posicaoStr);
         return new Jogador(jogadorId, nome, posicao, clube, preco, overall);
     }
 
@@ -137,36 +146,39 @@ public class JogadorDAO {
     }
 
     // Retorna lista de todos os Jogadores
-public List<Jogador> getAllJogadores(List<Clube> clubes) throws SQLException {
-    String dataQuery = "SELECT * FROM jogadores";
-    List<Jogador> jogadores = new ArrayList<>();
+    public List<Jogador> getAllJogadores(List<Clube> clubes) throws SQLException {
+        String dataQuery = "SELECT jogadorid, nome, posicao, preco, overall, clubeid FROM jogadores";
+        List<Jogador> jogadores = new ArrayList<>();
+        Map<Integer, Clube> clubeMap = clubes.stream()
+                .collect(Collectors.toMap(Clube::getId, c -> c));
 
-    // Cria um mapa para acesso rápido aos clubes por ID
-    Map<Integer, Clube> clubeMap = clubes.stream()
-            .collect(Collectors.toMap(Clube::getId, c -> c));
+        try (PreparedStatement dataStmt = conn.prepareStatement(dataQuery)) {
+            dataStmt.setFetchSize(500); // Tentando otimizar a consulta para grandes conjuntos de dados
+            ResultSet rs = dataStmt.executeQuery();
 
-    try (PreparedStatement dataStmt = conn.prepareStatement(dataQuery)) {
-        ResultSet rs = dataStmt.executeQuery();
-        while (rs.next()) {
-            int clubeId = rs.getInt("clubeid");
-            Clube clube = clubeMap.get(clubeId);
+            while (rs.next()) {
+                int clubeId = rs.getInt("clubeid");
+                Clube clube = clubeMap.get(clubeId);
 
-            if (clube == null) {
-                System.out.println("Clube inválido para jogador, clubeId: " + clubeId);
-                continue;
+                if (clube == null) {
+                    // Melhor log, evita flood no console
+                    System.err.printf("Clube inválido para jogador [ID jogador: %d, clubeId: %d]%n", rs.getInt("id"), clubeId);
+                    continue;
+                }
+
+                Jogador jogador = construirJogadorOtimizado(rs, clube);
+                jogador.setClube(clube);
+                jogadores.add(jogador);
+                clube.addJogador(jogador);
+                System.out.println("Jogador adicionado: " + jogador.getNome() + " do clube " + clube.getNome());
             }
-
-            Jogador jogador = construirJogador(rs);
-            jogador.setClube(clube);
-            jogadores.add(jogador);
-            clube.addJogador(jogador);
+        } catch (SQLException e) {
+            System.err.println("Erro ao retornar todos os jogadores: " + e.getMessage());
+            throw e;
         }
         return jogadores;
-    } catch (SQLException e) {
-        System.out.println("Não conseguiu retornar todos os jogadores:" + e);
-        throw e;
     }
-}
+
     // Retorna lista do tipo Jogador de jogadores por clube
     public List<Jogador> getJogadoresByClub(Clube clube) throws SQLException {
         String dataQuery = "SELECT * FROM jogadores WHERE clubeid = ?";
