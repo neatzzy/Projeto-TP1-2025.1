@@ -44,7 +44,7 @@ public class Main extends Application {
         //Gera as partidas aleatórias
         Simulacao.gerarPartidasAleatorias(clubes);
 
-        Simulacao.simular();
+        //Simulacao.simular();
 
         // Carrega FXML
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/screens/InicialScreens/TelaInicio.fxml"));
@@ -61,6 +61,8 @@ public class Main extends Application {
     }
 
     public static void main(String[] args) throws SQLException {
+
+
 
         launch(args); // roda as telas
 

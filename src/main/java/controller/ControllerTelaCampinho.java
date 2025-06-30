@@ -60,7 +60,7 @@ public class ControllerTelaCampinho {
             }
 
             if (timeDAO.getTimeById(usuario.getId()) == null) {
-                timeDAO.insertTime(usuario.getId(), "Time do " + usuario.getNome(), usuario.getLiga().getId());
+                timeDAO.insertTime(usuario.getId(), "Time de " + usuario.getNome(), usuario.getLiga().getId());
             }
 
             TimeUsuario timeUsuario = timeDAO.getTimeById(usuario.getId());
@@ -177,6 +177,10 @@ public class ControllerTelaCampinho {
             mostrarAlerta("Erro", "Erro ao carregar jogadores.");
             e.printStackTrace();
         }
+    }
+
+    private void salvarTime(){
+        // Funcionalidade para salvar o time do usuário
     }
 
     private void mostrarAlerta(String titulo, String msg) {

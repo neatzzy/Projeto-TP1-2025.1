@@ -120,7 +120,7 @@ public class ControllerTelaMercado {
                         }
 
 
-                        double saldoAtual = 100.0 - timeUsuario.getPreco();
+                        double saldoAtual = 150.0 - timeUsuario.getPreco();
                         if (jogador.getPreco() > saldoAtual) {
                             mostrarAlerta("Erro", "Saldo insuficiente para comprar este jogador.");
                             return;
