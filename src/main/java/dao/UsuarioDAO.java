@@ -328,6 +328,26 @@ public class UsuarioDAO {
         }
     }
 
+    // Atualiza dados do usuário
+    public boolean updateUsuario(Usuario usuario) throws SQLException {
+        String updateQuery = "UPDATE usuarios SET nome = ?, senha = ? WHERE usuarioid = ?";
+
+        try (PreparedStatement stmt = conn.prepareStatement(updateQuery)) {
+
+            String senhaHash = encoder.encode(usuario.getSenha()); // criptografa a nova senha
+
+            stmt.setString(1, usuario.getNome());
+            stmt.setString(2, senhaHash);
+            stmt.setInt(3, usuario.getId()); // ID fixo
+            int linhasAfetadas = stmt.executeUpdate();
+            return linhasAfetadas > 0;
+
+        } catch (SQLException e) {
+            System.out.println("Erro ao atualizar usuário: " + e.getMessage());
+            throw e;
+        }
+    }
+
     // deleta tabela de Usuarios
     public void deleteUsuariosTable() {
         String deleteQuery = "DROP TABLE IF EXISTS usuarios";
