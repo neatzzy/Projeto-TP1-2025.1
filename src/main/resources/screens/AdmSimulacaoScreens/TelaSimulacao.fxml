@@ -1,41 +1,57 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ProgressBar?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 
-<AnchorPane prefHeight="337.0" prefWidth="650.0" style="-fx-background-color: linear-gradient(to bottom right, #1B5E20, #004D40);" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/23.0.1 " fx:controller="controller.ControllerTelaSimulacao">
+<AnchorPane prefHeight="400.0" prefWidth="650.0"
+            style="-fx-background-color: linear-gradient(to bottom right, #1B5E20, #004D40);"
+            xmlns="http://javafx.com/javafx/23.0.1"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="controller.ControllerTelaSimulacao">
 
-    <Button fx:id="menuMontagem" layoutX="20.0" layoutY="14.0" mnemonicParsing="false" onAction="#voltar" style="-fx-background-color: rgba(255,255,255,0.12); -fx-background-radius: 10; -fx-text-fill: white; -fx-font-size: 20px; -fx-font-weight: bold; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.4), 3, 0, 0, 2);" text="☰" />
-    <Label layoutX="620.0" layoutY="13.0" style="-fx-font-size: 20px; -fx-text-fill: white;" text="⎋" />
-    <Label alignment="CENTER" layoutX="250.0" layoutY="45.0" style="-fx-font-size: 30px; -fx-text-fill: white; -fx-font-family: 'Poppins';" text="Simulando" />
+    <!-- Botão de menu -->
+    <Button fx:id="menuMontagem" layoutX="20.0" layoutY="14.0" onAction="#voltar" text="☰"
+            style="-fx-background-color: rgba(255,255,255,0.12); -fx-background-radius: 10;
+                   -fx-text-fill: white; -fx-font-size: 20px; -fx-font-weight: bold;
+                   -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.4), 3, 0, 0, 2);" />
 
-    <VBox alignment="CENTER" layoutX="232.0" layoutY="97.0" spacing="10">
+    <!-- Container central -->
+    <VBox layoutX="100.0" layoutY="60.0" prefWidth="450.0" alignment="CENTER" spacing="20"
+          style="-fx-background-color: rgba(255,255,255,0.05); -fx-padding: 30;
+                 -fx-background-radius: 10; -fx-border-color: white; -fx-border-radius: 10;">
+        <children>
+            <!-- Título -->
+            <Label text="Simulador de Partidas"
+                   style="-fx-font-size: 26px; -fx-text-fill: white; -fx-font-family: 'Poppins'; -fx-font-weight: bold;" />
 
-        <Label fx:id="label1" style="-fx-text-fill: white; -fx-font-size: 16px;" text="Flamengu 4 X 0 Curintias" />
-        <Label fx:id="label2" style="-fx-text-fill: white; -fx-font-size: 16px;" text="Bangu 5 X 0 Curintias" />
-        <Label fx:id="label3" style="-fx-text-fill: white; -fx-font-size: 16px;" text="Bangu 1 X 1 Flamengu" />
-        <Label fx:id="label4" style="-fx-text-fill: white; -fx-font-size: 20px;" text="..." />
-        <Label fx:id="label5" style="-fx-text-fill: white; -fx-font-size: 18px;" text="Simulação finalizada!" />
+            <!-- Barra de Progresso -->
+            <ProgressBar fx:id="progressBar" prefWidth="300.0" progress="0.0"
+                         style="-fx-accent: #009688;" />
 
+            <!-- Mensagem dinâmica -->
+            <Label fx:id="labelMensagem" alignment="CENTER"
+                   style="-fx-text-fill: white; -fx-font-size: 18px;" />
+
+            <!-- Botões -->
+            <HBox alignment="CENTER" spacing="20">
+                <children>
+                    <Button fx:id="btnSimular"
+                            text="Simular"
+                            onAction="#simular"
+                            prefWidth="150.0"
+                            style="-fx-font-size: 18px; -fx-background-color: #009688; -fx-text-fill: white;
+                                   -fx-font-weight: bold; -fx-background-radius: 10;
+                                   -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 2, 0, 0, 1);" />
+
+                    <Button fx:id="btnResetarSimulacao"
+                            text="Resetar Simulação"
+                            onAction="#resetarSimulacao"
+                            prefWidth="150.0"
+                            style="-fx-font-size: 18px; -fx-background-color: #009688; -fx-text-fill: white;
+                                   -fx-font-weight: bold; -fx-background-radius: 10;
+                                   -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 2, 0, 0, 1);" />
+                </children>
+            </HBox>
+        </children>
     </VBox>
-
-   <ProgressBar fx:id="progressBar" layoutX="225.0" layoutY="28.0" prefWidth="200.0" progress="0.0" />
-
-   <Button fx:id="btnSimular"
-           text="simular"
-           layoutX="350.0" layoutY="300.0"
-           prefWidth="200.0"
-           style="-fx-font-size: 18px; -fx-background-color: #009688; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 10; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 2, 0, 0, 1);"
-           alignment="CENTER"
-           onAction="#simular"/>
-    <Button fx:id="btnResetarSimulacao"
-            text="Resetar Simulação"
-            layoutX="225.0" layoutY="300.0"
-            prefWidth="200.0"
-            style="-fx-font-size: 18px; -fx-background-color: #009688; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 10; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 2, 0, 0, 1);"
-            alignment="CENTER"
-            onAction="#resetarSimulacao"/>
 </AnchorPane>

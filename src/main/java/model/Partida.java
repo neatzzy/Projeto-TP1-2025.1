@@ -418,7 +418,23 @@ public class Partida implements Simulavel{
         for(Jogador jogador : clubeFora.getJogadores()){
             jogador.getStats().resetStats();
         }
+
+        this.golsClubeCasa = 0;
+        this.golsClubeFora = 0;
+        this.assistClubeCasa = 0;
+        this.assistClubeFora = 0;
+        this.golsPenaltiCasa = 0;
+        this.golsPenaltiFora = 0;
+
+        this.jogadoresGolCasa.clear();
+        this.jogadoresGolFora.clear();
+        this.jogadoresAssistenciaCasa.clear();
+        this.jogadoresAssistenciaFora.clear();
+
+        this.cartaoVermelhoClubeCasa = false;
+        this.cartaoVermelhoClubeFora = false;
     }
+
 
     public void mostrarResumoPartida() {
         System.out.println("=== RESUMO DA PARTIDA ===");

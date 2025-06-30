@@ -62,7 +62,7 @@ public class Simulacao {
         }
 
         for (Partida partida : partidas){
-            partida.simular();
+            partida.simular(); // já calcula a pontuação dos jogadores junto
         }
 
         ocorreu = true;
@@ -82,6 +82,14 @@ public class Simulacao {
 
         Simulacao.resetPartidasStats(partidas);
 
+        for (Partida partida : partidas){
+            for (Jogador jogador : partida.getClubeCasa().getJogadores()){
+                jogador.calcularPontuacao();
+            }
+            for (Jogador jogador : partida.getClubeFora().getJogadores()){
+                jogador.calcularPontuacao();
+            }
+        }
         for (Liga liga : ligas) {
             for (Usuario usuario : liga.getUsuarios()){
                 usuario.getTimeUsuario().calcularPontuacao(); // vai zerar a pontuacao pois os stats estao zerados
