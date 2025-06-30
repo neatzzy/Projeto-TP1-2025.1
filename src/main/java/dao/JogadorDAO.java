@@ -153,7 +153,6 @@ public class JogadorDAO {
                 .collect(Collectors.toMap(Clube::getId, c -> c));
 
         try (PreparedStatement dataStmt = conn.prepareStatement(dataQuery)) {
-            dataStmt.setFetchSize(500); // Tentando otimizar a consulta para grandes conjuntos de dados
             ResultSet rs = dataStmt.executeQuery();
 
             while (rs.next()) {
