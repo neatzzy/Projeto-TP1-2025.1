@@ -34,14 +34,16 @@ public class ControllerTelaMercado {
 
     private Connection conn;
     private TimeDAO timeDAO;
-    private TimeUsuario timeUsuario;
     private Usuario usuario;
+    private TimeUsuario timeusuario;
 
-    public void setConnection(Connection conn, TimeUsuario timeUsuario, Usuario usuario) {
+    public void setConnection(Connection conn, Usuario usuario, TimeDAO timedao) {
         this.conn = conn;
-        this.timeUsuario = timeUsuario;
         this.usuario = usuario;
-        this.timeDAO = new TimeDAO(conn, new UsuarioDAO(conn, new LigaDAO(conn)), new JogadorDAO(conn, new ClubeDAO(conn)));
+        this.timeusuario = usuario.getTimeUsuario();
+        this.timeDAO = timedao;
+
+        inicializarInterface();
     }
 
     @FXML
@@ -50,7 +52,9 @@ public class ControllerTelaMercado {
     }
 
     @FXML
-    public void initialize() {
+    private void inicializarInterface() {
+
+        timeusuario.imprimirTime();
 
         colTime.setCellValueFactory(cell -> new SimpleStringProperty(cell.getValue().getClube().getNome()));
         colPosicao.setCellValueFactory(cell -> new SimpleStringProperty(cell.getValue().getStringPosicao()));
@@ -61,107 +65,71 @@ public class ControllerTelaMercado {
         comboBoxFiltro.setValue("Todos");
 
         colComprar.setCellFactory(col -> new TableCell<>() {
-            private final Button btn = new Button("Comprar");
+            private final Button btn = new Button();
+
             {
                 btn.setOnAction(e -> {
                     Jogador jogador = getTableView().getItems().get(getIndex());
 
                     try {
-                        if (timeUsuario.getJogadores().contains(jogador)) {
-                            mostrarAlerta("Erro", "Este jogador já está no seu time.");
-                            return;
+                        if (timeusuario.getJogadores().contains(jogador)) {
+
+                            // Remover jogador
+                            timeusuario.removeJogador(jogador);
+                            timeusuario.setPreco(timeusuario.getPreco() - jogador.getPreco());
+                            usuario.setTimeUsuario(timeusuario);
+
+                            mostrarAlerta("Remoção", "Jogador removido com sucesso!");
+                        } else {
+                            // Adicionar jogador
+                            boolean inseriu = timeusuario.addJogador(jogador);
+                            if (!inseriu) {
+                                mostrarAlerta("Erro", "Esse jogador não pode ser adicionado!");
+                                return;
+                            }
+
+                            timeusuario.setPreco(timeusuario.getPreco() + jogador.getPreco());
+                            usuario.setTimeUsuario(timeusuario);
+
+                            mostrarAlerta("Sucesso", "Jogador comprado com sucesso!");
                         }
-
-                        // Contar jogadores por posição
-                        long countZagueiros = timeUsuario.getJogadores().stream()
-                                .filter(j -> j.getPosicao() == Posicao.ZAGUEIRO)
-                                .count();
-
-                        long countMeias = timeUsuario.getJogadores().stream()
-                                .filter(j -> j.getPosicao() == Posicao.MEIA)
-                                .count();
-
-                        long countAtacantes = timeUsuario.getJogadores().stream()
-                                .filter(j -> j.getPosicao() == Posicao.ATACANTE)
-                                .count();
-
-                        long countGoleiro = timeUsuario.getJogadores().stream()
-                                .filter(j -> j.getPosicao() == Posicao.GOLEIRO)
-                                .count();
-
-                        // Verificar limites
-                        switch (jogador.getPosicao()) {
-                            case ZAGUEIRO:
-                                if (countZagueiros >= 4) {
-                                    mostrarAlerta("Erro", "Você só pode ter no máximo 4 zagueiros no time.");
-                                    return;
-                                }
-                                break;
-                            case MEIA:
-                                if (countMeias >= 4) {
-                                    mostrarAlerta("Erro", "Você só pode ter no máximo 4 meio-campistas no time.");
-                                    return;
-                                }
-                                break;
-                            case ATACANTE:
-                                if (countAtacantes >= 3) {
-                                    mostrarAlerta("Erro", "Você só pode ter no máximo 3 atacantes no time.");
-                                    return;
-                                }
-                                break;
-                            case GOLEIRO:
-                                if (countGoleiro >= 1) {
-                                    mostrarAlerta("Erro", "Você só pode ter no máximo 1 goleiro no time.");
-                                    return;
-                                }
-                                break;
-                            default:
-                                break;
-                        }
-
-
-                        double saldoAtual = 150.0 - timeUsuario.getPreco();
-                        if (jogador.getPreco() > saldoAtual) {
-                            mostrarAlerta("Erro", "Saldo insuficiente para comprar este jogador.");
-                            return;
-                        }
-
-
-                        boolean inseriu = timeDAO.insertJogadorTime(jogador.getId(), usuario.getId());
-                        //NAO ERA PRA PRECISAR!
-                        if (!inseriu) {
-                            mostrarAlerta("Erro", "Este jogador já está no seu time.");
-                            return;
-                        }
-
-                        timeUsuario.addJogador(jogador);
-                        timeUsuario.setPreco(timeUsuario.getPreco() + jogador.getPreco());
-                        mostrarAlerta("Sucesso", "Jogador comprado com sucesso!");
 
                         NavigationManager.pop();
 
                         FXMLLoader loader = new FXMLLoader(getClass().getResource("/screens/UsrEscalarScreens/TelaCampinho.fxml"));
-                        Parent root = loader.load();
 
+                        Parent root = loader.load();
                         ControllerTelaCampinho controller = (ControllerTelaCampinho) loader.getController();
                         controller.setConnection(conn, usuario);
-
                         Stage stage = (Stage) menuMontagem.getScene().getWindow();
                         stage.setScene(new Scene(root));
                         stage.setTitle("Campinho");
-                        stage.show();
 
+                        stage.show();
 
                     } catch (Exception ex) {
                         ex.printStackTrace();
-                        mostrarAlerta("Erro", "Erro ao comprar jogador.");
+                        mostrarAlerta("Erro", "Erro ao processar jogador.");
                     }
                 });
             }
+
             @Override
             protected void updateItem(Void item, boolean empty) {
                 super.updateItem(item, empty);
-                setGraphic(empty ? null : btn);
+                if (empty || getIndex() >= getTableView().getItems().size()) {
+                    setGraphic(null);
+                } else {
+                    Jogador jogador = getTableView().getItems().get(getIndex());
+                    if (timeusuario.getJogadores().contains(jogador)) {
+                        btn.setText("Remover");
+                        btn.setStyle("-fx-background-color: #E53935; -fx-text-fill: white; -fx-background-radius: 10;");
+                    } else {
+                        btn.setText("Comprar");
+                        btn.setStyle("-fx-background-color: #43A047; -fx-text-fill: white; -fx-background-radius: 10;");
+                    }
+                    setGraphic(btn);
+                }
             }
         });
 

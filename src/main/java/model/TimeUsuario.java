@@ -46,6 +46,16 @@ public class TimeUsuario {
         pontuacao += capitao.getPontuacao(); // adiciona a pontuacao do capitao duplicadamente
         return true;
     }
+
+    // calcula o preço
+    public double calcularPreco(){
+        preco = 0;
+        for (Jogador jogador : jogadores){
+            preco += jogador.getPreco();
+        }
+        return preco;
+    }
+
     // adiciona jogador no time se houver vaga 
     public boolean addJogador(Jogador jogador){
         if (Simulacao.getOcorreu() || this.isFull() || (preco + jogador.getPreco()) > usuario.getCartoletas()) return false;

@@ -20,6 +20,7 @@ public class ControllerTelaCampinho {
     @FXML private Button menuMontagem;
     @FXML private Label labelNomeClube;
     @FXML private Button mercadoButton;
+    @FXML private Button botaoSalvar;
 
     @FXML private Label labelGoleiro;
     @FXML private Label labelZagueiro1;
@@ -35,11 +36,26 @@ public class ControllerTelaCampinho {
     @FXML private ComboBox<String> selectCapitao;
     @FXML private Label labelSaldo;
 
+    // Botões das posições (bolinhas)
+    @FXML private Button goleiroButton;
+    @FXML private Button zagueiroButton1;
+    @FXML private Button zagueiroButton2;
+    @FXML private Button zagueiroButton3;
+    @FXML private Button zagueiroButton4;
+    @FXML private Button meioButton1;
+    @FXML private Button meioButton2;
+    @FXML private Button meioButton3;
+    @FXML private Button atacanteButton1;
+    @FXML private Button atacanteButton2;
+    @FXML private Button atacanteButton3;
+
     private Connection conn;
     private Usuario usuario;
+    private TimeUsuario timeusuario;
     private TimeDAO timeDAO;
 
     public void setConnection(Connection conn, Usuario usuario) {
+
         this.conn = conn;
         this.usuario = usuario;
         this.timeDAO = new TimeDAO(conn, new UsuarioDAO(conn, new LigaDAO(conn)), new JogadorDAO(conn, new ClubeDAO(conn)));
@@ -50,29 +66,31 @@ public class ControllerTelaCampinho {
             return;
         }
 
+        if (usuario.getLiga() == null) {
+            mostrarAlerta("Erro", "Você precisa entrar em uma liga antes de montar seu time.");
+            voltar();
+            return;
+        }
+
         try {
 
-            if (usuario.getLiga() == null) {
-                mostrarAlerta("Erro", "Você precisa entrar em uma liga antes de montar seu time.");
-                voltar();
-                return;
+            this.timeusuario = usuario.getTimeUsuario();
+
+            // por algum motivo misterioso é necessário
+            if (this.timeusuario == null || this.timeusuario.getJogadores() == null || this.timeusuario.getJogadores().isEmpty()) {
+                this.timeusuario = timeDAO.getTimeById(usuario.getId());
+                usuario.setTimeUsuario(this.timeusuario);
             }
 
-            if (timeDAO.getTimeById(usuario.getId()) == null) {
-                timeDAO.insertTime(usuario.getId(), "Time de " + usuario.getNome(), usuario.getLiga().getId());
-            }
+            double preco = this.timeusuario.calcularPreco();
+            this.timeusuario.setPreco(preco);
+            usuario.setTimeUsuario(this.timeusuario);
 
-            TimeUsuario timeUsuario = timeDAO.getTimeById(usuario.getId());
-            usuario.setTimeUsuario(timeUsuario); // atualiza o objeto em memória
-
-            labelNomeClube.setText(timeUsuario.getNome());
-
-            carregarJogadores();
-
-        } catch (SQLException e) {
-            mostrarAlerta("Erro", "Erro ao carregar informações do time.");
+        } catch(SQLException e) {
             e.printStackTrace();
         }
+
+        carregarJogadores();
 
     }
 
@@ -91,9 +109,8 @@ public class ControllerTelaCampinho {
             SceneInfo sceneInfo = new SceneInfo(menuMontagem.getScene(), "Menu do Usuário");
             NavigationManager.push(sceneInfo);
 
-            // Usa o timeUsuario já carregado no objeto usuario
             ControllerTelaMercado controller = (ControllerTelaMercado) loader.getController();
-            controller.setConnection(conn, usuario.getTimeUsuario(), usuario);
+            controller.setConnection(conn, usuario, timeDAO);
 
             Stage stage = (Stage) menuMontagem.getScene().getWindow();
             stage.setScene(new Scene(root));
@@ -107,83 +124,117 @@ public class ControllerTelaCampinho {
     }
 
     private void carregarJogadores() {
-        try {
-            // Usa o timeUsuario já carregado no objeto usuario
-            TimeUsuario timeusuario = usuario.getTimeUsuario();
-            if (timeusuario == null) {
-                timeusuario = timeDAO.getTimeById(usuario.getId());
-                usuario.setTimeUsuario(timeusuario);
-            }
 
-            int goleiro = 0, zagueiro = 0, meio = 0, ataque = 0;
+        this.timeusuario.imprimirTime();
+        labelNomeClube.setText(this.timeusuario.getNome());
 
-            for (Jogador jogador : timeusuario.getJogadores()) {
-                switch (jogador.getPosicao()) {
-                    case GOLEIRO -> {
-                        labelGoleiro.setText("GOL: " + jogador.getNome());
-                        selectCapitao.getItems().add(jogador.getNome());
-                        goleiro++;
+        int goleiro = 0, zagueiro = 0, meio = 0, ataque = 0;
+
+        for (Jogador jogador : timeusuario.getJogadores()) {
+            switch (jogador.getPosicao()) {
+                case GOLEIRO -> {
+                    labelGoleiro.setText("GOL: " + jogador.getNome());
+                    selectCapitao.getItems().add(jogador.getNome());
+                    goleiro++;
+                    goleiroButton.setStyle("-fx-background-color: #43A047; -fx-background-radius: 50%; -fx-border-color: white; -fx-border-radius: 50%; -fx-border-width: 1.5;");
+                }
+                case ZAGUEIRO -> {
+                    if (++zagueiro == 1) {
+                        labelZagueiro1.setText("ZAG: " + jogador.getNome());
+                        zagueiroButton1.setStyle("-fx-background-color: #43A047; -fx-background-radius: 50%; -fx-border-color: white; -fx-border-radius: 50%; -fx-border-width: 1.5;");
                     }
-                    case ZAGUEIRO -> {
-                        if (++zagueiro == 1) labelZagueiro1.setText("ZAG: " + jogador.getNome());
-                        else if (zagueiro == 2) labelZagueiro2.setText("ZAG: " + jogador.getNome());
-                        else if (zagueiro == 3) labelZagueiro3.setText("ZAG: " + jogador.getNome());
-                        else if (zagueiro == 4) labelZagueiro4.setText("ZAG: " + jogador.getNome());
-                        selectCapitao.getItems().add(jogador.getNome());
+                    else if (zagueiro == 2) {
+                        labelZagueiro2.setText("ZAG: " + jogador.getNome());
+                        zagueiroButton2.setStyle("-fx-background-color: #43A047; -fx-background-radius: 50%; -fx-border-color: white; -fx-border-radius: 50%; -fx-border-width: 1.5;");
                     }
-                    case MEIA -> {
-                        if (++meio == 1) labelMeio1.setText("MEI: " + jogador.getNome());
-                        else if (meio == 2) labelMeio2.setText("MEI: " + jogador.getNome());
-                        else if (meio == 3) labelMeio3.setText("MEI: " + jogador.getNome());
-                        selectCapitao.getItems().add(jogador.getNome());
+                    else if (zagueiro == 3) {
+                        labelZagueiro3.setText("ZAG: " + jogador.getNome());
+                        zagueiroButton3.setStyle("-fx-background-color: #43A047; -fx-background-radius: 50%; -fx-border-color: white; -fx-border-radius: 50%; -fx-border-width: 1.5;");
                     }
-                    case ATACANTE -> {
-                        if (++ataque == 1) labelAtaque1.setText("ATA: " + jogador.getNome());
-                        else if (ataque == 2) labelAtaque2.setText("ATA: " + jogador.getNome());
-                        else if (ataque == 3) labelAtaque3.setText("ATA: " + jogador.getNome());
-                        selectCapitao.getItems().add(jogador.getNome());
+                    else if (zagueiro == 4) {
+                        labelZagueiro4.setText("ZAG: " + jogador.getNome());
+                        zagueiroButton4.setStyle("-fx-background-color: #43A047; -fx-background-radius: 50%; -fx-border-color: white; -fx-border-radius: 50%; -fx-border-width: 1.5;");
                     }
+                    selectCapitao.getItems().add(jogador.getNome());
+                }
+                case MEIA -> {
+                    if (++meio == 1) {
+                        labelMeio1.setText("MEI: " + jogador.getNome());
+                        meioButton1.setStyle("-fx-background-color: #43A047; -fx-background-radius: 50%; -fx-border-color: white; -fx-border-radius: 50%; -fx-border-width: 1.5;");
+                    }
+                    else if (meio == 2) {
+                        labelMeio2.setText("MEI: " + jogador.getNome());
+                        meioButton2.setStyle("-fx-background-color: #43A047; -fx-background-radius: 50%; -fx-border-color: white; -fx-border-radius: 50%; -fx-border-width: 1.5;");
+                    }
+                    else if (meio == 3) {
+                        labelMeio3.setText("MEI: " + jogador.getNome());
+                        meioButton3.setStyle("-fx-background-color: #43A047; -fx-background-radius: 50%; -fx-border-color: white; -fx-border-radius: 50%; -fx-border-width: 1.5;");
+                    }
+                    selectCapitao.getItems().add(jogador.getNome());
+                }
+                case ATACANTE -> {
+                    if (++ataque == 1) {
+                        labelAtaque1.setText("ATA: " + jogador.getNome());
+                        atacanteButton1.setStyle("-fx-background-color: #43A047; -fx-background-radius: 50%; -fx-border-color: white; -fx-border-radius: 50%; -fx-border-width: 1.5;");
+                    }
+                    else if (ataque == 2) {
+                        labelAtaque2.setText("ATA: " + jogador.getNome());
+                        atacanteButton2.setStyle("-fx-background-color: #43A047; -fx-background-radius: 50%; -fx-border-color: white; -fx-border-radius: 50%; -fx-border-width: 1.5;");
+                    }
+                    else if (ataque == 3) {
+                        labelAtaque3.setText("ATA: " + jogador.getNome());
+                        atacanteButton3.setStyle("-fx-background-color: #43A047; -fx-background-radius: 50%; -fx-border-color: white; -fx-border-radius: 50%; -fx-border-width: 1.5;");
+                    }
+                    selectCapitao.getItems().add(jogador.getNome());
                 }
             }
+        }
 
-            double saldo = (100.0 - usuario.getTimeUsuario().getPreco());
-            labelSaldo.setText("Saldo restante: " + String.format("%.2f", saldo) + "$");
+        Jogador capitaoAtual = this.timeusuario.getCapitao();
+        if (capitaoAtual != null) {
+            selectCapitao.setValue(capitaoAtual.getNome());
+        }
 
-            selectCapitao.setOnAction(e -> {
-                String nomeSelecionado = selectCapitao.getValue();
-                if (nomeSelecionado == null) return;
+        double saldo = (150.0 - usuario.getTimeUsuario().getPreco());
+        labelSaldo.setText("Saldo restante: " + String.format("%.2f", saldo) + "$");
 
-                try {
+        selectCapitao.setOnAction(e -> {
+            String nomeSelecionado = selectCapitao.getValue();
+            if (nomeSelecionado == null) return;
+            Jogador capitao = usuario.getTimeUsuario().getJogadores().stream()
+                    .filter(j -> j.getNome().equals(nomeSelecionado))
+                    .findFirst().orElse(null);
 
-                    Jogador capitao = usuario.getTimeUsuario().getJogadores().stream()
-                            .filter(j -> j.getNome().equals(nomeSelecionado))
-                            .findFirst().orElse(null);
+            if (capitao == null) {
+                mostrarAlerta("Erro", "Jogador não encontrado.");
+                return;
+            }
 
-                    if (capitao == null) {
-                        mostrarAlerta("Erro", "Jogador não encontrado.");
-                        return;
-                    }
-
-                    timeDAO.setCapitao(usuario.getId(), capitao.getId());
-                    usuario.getTimeUsuario().setCapitao(capitao);
-                    mostrarAlerta("Sucesso", capitao.getNome() + " foi definido como capitão!");
-
-
-                } catch (SQLException ex) {
-                    ex.printStackTrace();
-                    mostrarAlerta("Erro", "Erro ao definir capitão.");
-                }
+            usuario.getTimeUsuario().setCapitao(capitao);
+            mostrarAlerta("Sucesso", capitao.getNome() + " foi definido como capitão!");
             });
 
+    }
+
+    @FXML
+    private void salvarTime() {
+        try {
+
+            TimeUsuario time = usuario.getTimeUsuario();
+            Jogador capitao = time.getCapitao();
+            if (capitao != null) {
+                timeDAO.setCapitao(usuario.getId(), capitao.getId());
+            }
+
+            timeDAO.alterarTime(usuario.getId(), time.getJogadores());
+            mostrarAlerta("Sucesso", "Time salvo com sucesso!");
+
         } catch (SQLException e) {
-            mostrarAlerta("Erro", "Erro ao carregar jogadores.");
             e.printStackTrace();
+            mostrarAlerta("Erro", "Erro ao salvar time.");
         }
     }
 
-    private void salvarTime(){
-        // Funcionalidade para salvar o time do usuário
-    }
 
     private void mostrarAlerta(String titulo, String msg) {
         Alert alerta = new Alert(Alert.AlertType.INFORMATION);

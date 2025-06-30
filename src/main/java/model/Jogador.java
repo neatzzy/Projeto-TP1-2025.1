@@ -95,6 +95,19 @@ public class Jogador {
         return this.pontuacao;
     }
 
+    // só pra comparar
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        Jogador other = (Jogador) obj;
+        return this.id == other.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return Integer.hashCode(id);
+    }
 
 }
 

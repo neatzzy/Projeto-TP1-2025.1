@@ -158,6 +158,28 @@ public class TimeDAO {
 
     }
 
+    // Função para time já no banco de dados a partir de uma lista de jogadores
+    public void alterarTime(int idUsuario, Set<Jogador> jogadores) throws SQLException {
+
+        Integer[] jogadorIds = jogadores.stream()
+                .map(Jogador::getId)
+                .toArray(Integer[]::new);
+
+        String updateQuery = "UPDATE times SET jogadoresids = ? WHERE timeid = ?";
+
+        try (PreparedStatement updateStmt = conn.prepareStatement(updateQuery)) {
+            Array novoArray = conn.createArrayOf("INTEGER", jogadorIds);
+            updateStmt.setArray(1, novoArray);
+            updateStmt.setInt(2, idUsuario);
+            updateStmt.executeUpdate();
+            System.out.println("Escalação atualizada para o time " + idUsuario);
+        } catch (SQLException e) {
+            System.out.println("Erro ao atualizar escalação: " + e.getMessage());
+            throw e;
+        }
+    }
+
+
     // Remove Jogador do Time do Usuário
     public boolean removeJogadorTime(int jogadorid, int timeid) throws SQLException {
         // Verifica se o jogador existe
