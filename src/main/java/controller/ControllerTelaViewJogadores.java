@@ -45,6 +45,17 @@ public class ControllerTelaViewJogadores {
                 String.format("%.2f", cellData.getValue().getPontuacao())
         ));
 
+        // Corrige ordenação numérica da coluna de pontuação
+        colPontuacao.setComparator((s1, s2) -> {
+            try {
+                double d1 = Double.parseDouble(s1.replace(",", "."));
+                double d2 = Double.parseDouble(s2.replace(",", "."));
+                return Double.compare(d1, d2);
+            } catch (Exception e) {
+                return s1.compareTo(s2);
+            }
+        });
+
         // Adiciona os botões de detalhes
         addButtonDetalhes();
 
@@ -124,4 +135,3 @@ public class ControllerTelaViewJogadores {
         }
     }
 }
-
