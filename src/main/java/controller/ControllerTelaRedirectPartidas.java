@@ -51,6 +51,10 @@ public class ControllerTelaRedirectPartidas {
                     FXMLLoader loader = new FXMLLoader(getClass().getResource("/screens/UsrPartidaScreens/TelaDetalhesPartida.fxml"));
                     try {
                         Stage stage = (Stage) menuMontagem.getScene().getWindow();
+
+                        SceneInfo sceneInfo = new SceneInfo(menuMontagem.getScene(), stage.getTitle());
+                        NavigationManager.push(sceneInfo);
+
                         Scene scene = new Scene(loader.load());
                         ControllerTelaDetalhesPartida controller = loader.getController();
                         controller.setPartida(partida);
