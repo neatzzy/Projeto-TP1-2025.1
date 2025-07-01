@@ -61,6 +61,7 @@ ENTRY
     type
     volume
     year
+    wikipedia
   }
   {}
   { label extra.label sort.label }
@@ -634,6 +635,21 @@ FUNCTION {inproceedings}
   if$
   new.block
   note output
+  fin.entry
+}
+
+FUNCTION {wikipedia}
+{ output.bibitem
+  format.authors output
+  author format.key output
+  output.year.check
+  new.block
+  format.title "title" output.check
+  new.block
+  howpublished output
+  note output
+  new.block
+  "Wikipedia" output
   fin.entry
 }
 
