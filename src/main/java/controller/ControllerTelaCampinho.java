@@ -74,16 +74,16 @@ public class ControllerTelaCampinho {
 
         try {
 
-            this.timeusuario = usuario.getTimeUsuario();
+            timeusuario = usuario.getTimeUsuario();
 
-            if (this.timeusuario == null) {
-                this.timeusuario = timeDAO.getTimeById(usuario.getId());
-                usuario.setTimeUsuario(this.timeusuario);
+            if (timeusuario == null) {
+                timeusuario = timeDAO.getTimeById(usuario.getId());
+                usuario.setTimeUsuario(timeusuario);
             }
 
-            double preco = this.timeusuario.calcularPreco();
-            this.timeusuario.setPreco(preco);
-            usuario.setTimeUsuario(this.timeusuario);
+            double preco = timeusuario.calcularPreco();
+            timeusuario.setPreco(preco);
+            usuario.setTimeUsuario(timeusuario);
 
         } catch(SQLException e) {
             e.printStackTrace();
@@ -124,8 +124,37 @@ public class ControllerTelaCampinho {
 
     private void carregarJogadores() {
 
-        this.timeusuario.imprimirTime();
-        labelNomeClube.setText(this.timeusuario.getNome());
+        timeusuario.imprimirTime();
+
+        // Limpa o estado visual antes de recarregar
+        labelNomeClube.setText(timeusuario.getNome());
+
+        labelGoleiro.setText("GOL: ?");
+        labelZagueiro1.setText("ZAG: ?");
+        labelZagueiro2.setText("ZAG: ?");
+        labelZagueiro3.setText("ZAG: ?");
+        labelZagueiro4.setText("ZAG: ?");
+        labelMeio1.setText("MEI: ?");
+        labelMeio2.setText("MEI: ?");
+        labelMeio3.setText("MEI: ?");
+        labelAtaque1.setText("ATA: ?");
+        labelAtaque2.setText("ATA: ?");
+        labelAtaque3.setText("ATA: ?");
+
+        goleiroButton.setStyle(defaultStyle());
+        zagueiroButton1.setStyle(defaultStyle());
+        zagueiroButton2.setStyle(defaultStyle());
+        zagueiroButton3.setStyle(defaultStyle());
+        zagueiroButton4.setStyle(defaultStyle());
+        meioButton1.setStyle(defaultStyle());
+        meioButton2.setStyle(defaultStyle());
+        meioButton3.setStyle(defaultStyle());
+        atacanteButton1.setStyle(defaultStyle());
+        atacanteButton2.setStyle(defaultStyle());
+        atacanteButton3.setStyle(defaultStyle());
+
+        selectCapitao.getItems().clear();
+        selectCapitao.setValue(null);
 
         int goleiro = 0, zagueiro = 0, meio = 0, ataque = 0;
 
@@ -189,13 +218,13 @@ public class ControllerTelaCampinho {
             }
         }
 
-        Jogador capitaoAtual = this.timeusuario.getCapitao();
+        Jogador capitaoAtual = timeusuario.getCapitao();
         if (capitaoAtual != null) {
-            boolean capitaoAindaNoTime = this.timeusuario.getJogadores().contains(capitaoAtual);
+            boolean capitaoAindaNoTime = timeusuario.getJogadores().contains(capitaoAtual);
             if (capitaoAindaNoTime) {
                 selectCapitao.setValue(capitaoAtual.getNome());
             } else {
-                this.timeusuario.removeCapitao(); // remove o capitão do time
+                timeusuario.removeCapitao(); // remove o capitão do time
                 selectCapitao.setValue(null); // limpa o campo visualmente
             }
         }
@@ -225,17 +254,15 @@ public class ControllerTelaCampinho {
     private void salvarTime() {
         try {
 
-            Jogador capitao = this.timeusuario.getCapitao();
+            Jogador capitao = timeusuario.getCapitao();
 
             if (capitao != null) {
                 timeDAO.setCapitao(usuario.getId(), capitao.getId());
-                this.timeusuario.setCapitao(capitao);
             } else {
                 timeDAO.removeCapitao(usuario.getId());
-                this.timeusuario.removeCapitao();
             }
 
-            timeDAO.alterarTime(usuario.getId(), this.timeusuario.getJogadores());
+            timeDAO.alterarTime(usuario.getId(), timeusuario.getJogadores());
             mostrarAlerta("Sucesso", "Time salvo com sucesso!");
 
         } catch (SQLException e) {
@@ -244,6 +271,43 @@ public class ControllerTelaCampinho {
         }
     }
 
+    @FXML
+    private void venderTimeCompleto() {
+        Alert confirmacao = new Alert(Alert.AlertType.CONFIRMATION);
+        confirmacao.setTitle("Confirmação");
+        confirmacao.setHeaderText("Certeza que deseja vender todo o time?");
+        confirmacao.setContentText("Essa ação não poderá ser desfeita");
+
+        ButtonType botaoSim = new ButtonType("Sim");
+        ButtonType botaoNao = new ButtonType("Não", ButtonBar.ButtonData.CANCEL_CLOSE);
+
+        confirmacao.getButtonTypes().setAll(botaoSim, botaoNao);
+
+        confirmacao.showAndWait().ifPresent(resposta -> {
+            if (resposta == botaoSim) {
+                try {
+                    timeusuario.getJogadores().clear();
+                    timeusuario.setPreco(0.0);
+                    timeusuario.removeCapitao();
+                    timeDAO.removeCapitao(usuario.getId());
+                    timeDAO.alterarTime(usuario.getId(), timeusuario.getJogadores());
+                    usuario.setTimeUsuario(timeusuario);
+
+                    carregarJogadores();
+                    mostrarAlerta("Sucesso", "Todos os jogadores foram vendidos!");
+
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                    mostrarAlerta("Erro", "Erro ao vender o time completo.");
+                }
+            }
+        });
+    }
+
+    private String defaultStyle() {
+        return "-fx-background-color: transparent; -fx-background-radius: 50%; -fx-border-color: white;" +
+                " -fx-border-radius: 50%; -fx-border-width: 1.5; -fx-effect: dropshadow(gaussian, black, 4, 0, 0, 1);";
+    }
 
     private void mostrarAlerta(String titulo, String msg) {
         Alert alerta = new Alert(Alert.AlertType.INFORMATION);

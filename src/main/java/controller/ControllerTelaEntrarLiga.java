@@ -1,7 +1,6 @@
 package controller;
 
-import dao.LigaDAO;
-import dao.UsuarioDAO;
+import dao.*;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -40,12 +39,14 @@ public class ControllerTelaEntrarLiga {
     private UsuarioDAO usuarioDAO;
     private LigaDAO ligaDAO;
     private Usuario usuario;
+    private TimeDAO timeDAO;
 
     public void setConnection(Connection conn, Usuario usuario) {
         this.conn = conn;
         this.usuario = usuario;
         this.ligaDAO = new LigaDAO(this.conn);
         this.usuarioDAO = new UsuarioDAO(this.conn, this.ligaDAO);
+        this.timeDAO = new TimeDAO(conn, new UsuarioDAO(conn, new LigaDAO(conn)), new JogadorDAO(conn, new ClubeDAO(conn)));
 
         carregarLigas();
     }
@@ -104,6 +105,10 @@ public class ControllerTelaEntrarLiga {
 
             boolean sucesso = usuarioDAO.insertUsuarioLiga(usuario, ligaSelecionada);
             if (sucesso) {
+
+                if(!timeDAO.usuarioTemTime(usuario.getId())) {
+                    timeDAO.insertTime(usuario.getId(), "Time de" + usuario.getNome(), ligaSelecionada.getId());
+                }
 
                 mostrarAlerta("Sucesso", "Você entrou na liga!");
                 NavigationManager.clear();

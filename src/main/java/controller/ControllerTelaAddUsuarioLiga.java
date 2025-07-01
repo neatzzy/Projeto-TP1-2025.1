@@ -1,7 +1,6 @@
 package controller;
 
-import dao.LigaDAO;
-import dao.UsuarioDAO;
+import dao.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -38,8 +37,9 @@ public class ControllerTelaAddUsuarioLiga {
     private UsuarioDAO usuarioDAO;
     private LigaDAO ligaDAO;
     private Usuario usuario;
-    private Liga liga;
+    private TimeDAO timeDAO;
 
+    private Liga liga;
     private List<Usuario> usuariosDisponiveis = new ArrayList<>();
 
     public void setConnection(Connection conn, Usuario usuario, Liga liga) {
@@ -48,6 +48,7 @@ public class ControllerTelaAddUsuarioLiga {
         this.liga = liga;
         this.ligaDAO = new LigaDAO(conn);
         this.usuarioDAO = new UsuarioDAO(conn, ligaDAO);
+        this.timeDAO = new TimeDAO(conn, new UsuarioDAO(conn, new LigaDAO(conn)), new JogadorDAO(conn, new ClubeDAO(conn)));
         carregarUsuarios();
     }
 
@@ -114,6 +115,12 @@ public class ControllerTelaAddUsuarioLiga {
         }
 
         usuarioDAO.insertUsuariosLiga(selecionados, liga);
+
+        for(Usuario u : selecionados){
+            if(!timeDAO.usuarioTemTime(u.getId())) {
+                timeDAO.insertTime(u.getId(), "Time de" + u.getNome(), liga.getId());
+            }
+        }
 
         StringBuilder nomes = new StringBuilder();
         for (Usuario u : selecionados) {

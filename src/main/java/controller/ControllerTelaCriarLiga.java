@@ -1,7 +1,6 @@
 package controller;
 
-import dao.LigaDAO;
-import dao.UsuarioDAO;
+import dao.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -45,6 +44,7 @@ public class ControllerTelaCriarLiga {
     private UsuarioDAO usuarioDAO;
     private LigaDAO ligaDAO;
     private Usuario usuario;
+    private TimeDAO timeDAO;
 
     @FXML
     public void voltar(){
@@ -56,10 +56,10 @@ public class ControllerTelaCriarLiga {
         this.usuario = usuario;
         this.ligaDAO = new LigaDAO(conn);
         this.usuarioDAO = new UsuarioDAO(conn, ligaDAO);
+        this.timeDAO = new TimeDAO(conn, new UsuarioDAO(conn, new LigaDAO(conn)), new JogadorDAO(conn, new ClubeDAO(conn)));
         carregarUsuarios();
 
     }
-
 
     private void carregarUsuarios() {
         try {
@@ -104,6 +104,17 @@ public class ControllerTelaCriarLiga {
 
             usuarioDAO.insertUsuariosLiga(listaSelecionados, novaLiga);
             usuarioDAO.transformarUsuarioEmAdminLiga(this.usuario.getId());
+
+            for(Usuario u : listaSelecionados){
+                if(!timeDAO.usuarioTemTime(u.getId())) {
+                    timeDAO.insertTime(u.getId(), "Time de" + u.getNome(), idNovaLiga);
+                }
+            }
+
+            if(!timeDAO.usuarioTemTime(usuario.getId())) {
+                timeDAO.insertTime(usuario.getId(), "Time de" + usuario.getNome(), idNovaLiga);
+            }
+
             this.usuario.setTipo(UserType.ADMLIGA);
 
             mostrarAlerta("Sucesso", "Liga criada e usuários adicionados!");
