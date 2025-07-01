@@ -27,12 +27,12 @@ public class TimeUsuario {
     // Construtor para retornar dados do banco de dados, já incluindo os jogadores do time
     public TimeUsuario(Usuario usuario, Set<Jogador> jogadores, Jogador jogcapitao){
         this.usuario = usuario;
-        this.jogadores = jogadores;
-        this.pontuacao = 0;
-        this.preco = 0;
-        this.capitao = jogcapitao;
-        valido = false;
-        contG = contZ = contM = contA = 0;
+        this.jogadores = new HashSet<>();
+        for (Jogador jogador : jogadores){
+            this.addJogador(jogador);
+        }
+        pontuacao = 0;
+        capitao = jogcapitao;
     }
 
 

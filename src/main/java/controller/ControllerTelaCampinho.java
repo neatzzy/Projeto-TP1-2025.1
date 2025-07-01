@@ -286,9 +286,7 @@ public class ControllerTelaCampinho {
         confirmacao.showAndWait().ifPresent(resposta -> {
             if (resposta == botaoSim) {
                 try {
-                    timeusuario.getJogadores().clear();
-                    timeusuario.setPreco(0.0);
-                    timeusuario.removeCapitao();
+                    timeusuario.removerTodosJogadores();
                     timeDAO.removeCapitao(usuario.getId());
                     timeDAO.alterarTime(usuario.getId(), timeusuario.getJogadores());
                     usuario.setTimeUsuario(timeusuario);

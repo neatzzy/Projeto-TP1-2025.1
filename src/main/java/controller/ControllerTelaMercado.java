@@ -93,7 +93,6 @@ public class ControllerTelaMercado {
 
                             // Remover jogador
                             timeusuario.removeJogador(jogador);
-                            timeusuario.setPreco(timeusuario.getPreco() - jogador.getPreco());
 
                             usuario.setTimeUsuario(timeusuario);
 
@@ -106,7 +105,6 @@ public class ControllerTelaMercado {
                                 return;
                             }
 
-                            timeusuario.setPreco(timeusuario.getPreco() + jogador.getPreco());
                             usuario.setTimeUsuario(timeusuario);
 
                             mostrarAlerta("Sucesso", "Jogador comprado com sucesso!");
