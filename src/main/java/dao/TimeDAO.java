@@ -253,6 +253,20 @@ public class TimeDAO {
 
     }
 
+    // Verifica se o usuário já tem time
+    public boolean usuarioTemTime(int usuarioId) throws SQLException {
+        String sql = "SELECT 1 FROM times WHERE timeid = ? LIMIT 1";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, usuarioId);
+            try (ResultSet rs = stmt.executeQuery()) {
+                return rs.next();
+            }
+        } catch ( SQLException e ) {
+            System.out.println(e);
+            throw e;
+        }
+    }
+
     // Retorna lista de todos os objetos Time
     public List<TimeUsuario> getAllTimes() throws SQLException {
 
