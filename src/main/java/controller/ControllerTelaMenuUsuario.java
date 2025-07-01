@@ -98,6 +98,10 @@ public class ControllerTelaMenuUsuario {
 
     @FXML
     private void escalar() {
+
+        // precisa
+        this.usuario.setTimeUsuario(null);
+
         try{
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/screens/UsrEscalarScreens/TelaCampinho.fxml"));
             Parent root = loader.load();

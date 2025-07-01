@@ -77,6 +77,7 @@ public class ControllerTelaMercado {
                             // Remover jogador
                             timeusuario.removeJogador(jogador);
                             timeusuario.setPreco(timeusuario.getPreco() - jogador.getPreco());
+
                             usuario.setTimeUsuario(timeusuario);
 
                             mostrarAlerta("Remoção", "Jogador removido com sucesso!");

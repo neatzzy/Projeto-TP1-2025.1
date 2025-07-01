@@ -314,6 +314,20 @@ public class TimeDAO {
         }
     }
 
+    // Remove o capitão do time
+    public boolean removeCapitao(int timeId) throws SQLException {
+        String sql = "UPDATE times SET capitaoid = NULL WHERE timeid = ?";
+
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, timeId);
+            int rowsUpdated = stmt.executeUpdate();
+            return rowsUpdated > 0;
+        } catch (SQLException e) {
+            System.out.println(e);
+            throw e;
+        }
+    }
+
     //Remove Time por id
     public void deleteTimeById(int id){
         String deleteQuery = "DELETE FROM times WHERE timeid = ?";

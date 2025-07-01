@@ -76,8 +76,7 @@ public class ControllerTelaCampinho {
 
             this.timeusuario = usuario.getTimeUsuario();
 
-            // por algum motivo misterioso é necessário
-            if (this.timeusuario == null || this.timeusuario.getJogadores() == null || this.timeusuario.getJogadores().isEmpty()) {
+            if (this.timeusuario == null) {
                 this.timeusuario = timeDAO.getTimeById(usuario.getId());
                 usuario.setTimeUsuario(this.timeusuario);
             }
@@ -192,7 +191,13 @@ public class ControllerTelaCampinho {
 
         Jogador capitaoAtual = this.timeusuario.getCapitao();
         if (capitaoAtual != null) {
-            selectCapitao.setValue(capitaoAtual.getNome());
+            boolean capitaoAindaNoTime = this.timeusuario.getJogadores().contains(capitaoAtual);
+            if (capitaoAindaNoTime) {
+                selectCapitao.setValue(capitaoAtual.getNome());
+            } else {
+                this.timeusuario.setCapitao(null); // remove o capitão do time
+                selectCapitao.setValue(null); // limpa o campo visualmente
+            }
         }
 
         double saldo = (150.0 - usuario.getTimeUsuario().getPreco());
@@ -220,13 +225,17 @@ public class ControllerTelaCampinho {
     private void salvarTime() {
         try {
 
-            TimeUsuario time = usuario.getTimeUsuario();
-            Jogador capitao = time.getCapitao();
+            Jogador capitao = this.timeusuario.getCapitao();
+
             if (capitao != null) {
                 timeDAO.setCapitao(usuario.getId(), capitao.getId());
+                this.timeusuario.setCapitao(capitao);
+            } else {
+                timeDAO.removeCapitao(usuario.getId());
+                this.timeusuario.setCapitao(null);
             }
 
-            timeDAO.alterarTime(usuario.getId(), time.getJogadores());
+            timeDAO.alterarTime(usuario.getId(), this.timeusuario.getJogadores());
             mostrarAlerta("Sucesso", "Time salvo com sucesso!");
 
         } catch (SQLException e) {
