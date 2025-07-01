@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0"
+            style="-fx-background-color: linear-gradient(to bottom right, #1B5E20, #004D40);"
+            xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="controller.ControllerTelaViewLigas"
+            >
+
+    <children>
+        <!-- Botão menu -->
+        <Button fx:id="menuMontagem" layoutX="20.0" layoutY="14.0" mnemonicParsing="false" onAction="#voltar" style="-fx-background-color: rgba(255,255,255,0.12); -fx-background-radius: 10; -fx-text-fill: white; -fx-font-size: 20px; -fx-font-weight: bold; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.4), 3, 0, 0, 2);" text="☰" />
+
+
+        <!-- Botão de atualizar ou criar nova liga -->
+        <Button fx:id="btnNovaLiga" layoutX="460.0" layoutY="14.0" mnemonicParsing="false" text="Nova Liga"
+                style="-fx-background-color: #009688; -fx-text-fill: white; -fx-font-size: 16px;
+                       -fx-font-weight: bold; -fx-background-radius: 10;
+                       -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 2, 0, 0, 1);" />
+
+        <!-- Cabeçalho com filtro opcional -->
+        <Pane layoutX="20.0" layoutY="60.0" prefHeight="50.0" prefWidth="560.0"
+              style="-fx-background-color: transparent;">
+            <children>
+                <TextField fx:id="tfBuscaLiga" layoutX="10.0" layoutY="10.0" promptText="Buscar Liga"
+                           prefHeight="30.0" prefWidth="300.0"
+                           style="-fx-font-size: 15px; -fx-background-radius: 8;" />
+                <Button fx:id="btnBuscar" layoutX="320.0" layoutY="10.0" text="Buscar"
+                        style="-fx-background-color: #00796B; -fx-text-fill: white; -fx-font-size: 14px;
+                               -fx-background-radius: 8;" />
+                <Line endX="550.0" layoutX="0.0" layoutY="45.0"
+                      style="-fx-stroke: white; -fx-opacity: 0.3;" />
+            </children>
+        </Pane>
+
+        <!-- Área onde ligas serão listadas dinamicamente -->
+        <VBox fx:id="ligasBox" layoutX="30.0" layoutY="130.0" prefHeight="250.0" prefWidth="540.0" spacing="10"
+              style="-fx-padding: 10; -fx-background-color: rgba(255,255,255,0.06);
+                     -fx-background-radius: 10; -fx-border-color: white; -fx-border-radius: 10;" />
+    </children>
+</AnchorPane>

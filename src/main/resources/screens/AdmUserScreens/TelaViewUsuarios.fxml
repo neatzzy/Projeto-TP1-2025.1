@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: linear-gradient(to bottom right, #1B5E20, #004D40);" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ControllerTelaViewUsuarios">
+    <children>
+        <!-- Botão de menu -->
+        <Button fx:id="menuMontagem" layoutX="20.0" layoutY="14.0" mnemonicParsing="false" onAction="#voltar" style="-fx-background-color: rgba(255,255,255,0.12); -fx-background-radius: 10; -fx-text-fill: white; -fx-font-size: 20px; -fx-font-weight: bold; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.4), 3, 0, 0, 2);" text="☰" />
+
+        <!-- Botão salvar/atualizar -->
+        <Button fx:id="btnAtualizar" layoutX="480.0" layoutY="14.0" mnemonicParsing="false" text="Atualizar"
+                style="-fx-background-color: #009688; -fx-text-fill: white; -fx-font-size: 16px;
+                       -fx-font-weight: bold; -fx-background-radius: 10;
+                       -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 2, 0, 0, 1);" />
+
+        <!-- Cabeçalho com campos editáveis -->
+        <Pane layoutX="19.0" layoutY="60.0" prefHeight="50.0" prefWidth="560.0" style="-fx-background-color: transparent;">
+            <children>
+                <!-- Nome do usuário -->
+                <TextField fx:id="tfNomeUsuario" layoutX="10.0" layoutY="5.0" prefHeight="25.0" prefWidth="160.0"
+                           promptText="Nome" style="-fx-font-size: 15px; -fx-font-weight: bold; -fx-background-radius: 8;" />
+
+                <!-- Email -->
+                <TextField fx:id="tfEmail" layoutX="180.0" layoutY="5.0" prefHeight="25.0" prefWidth="180.0"
+                           promptText="Email" style="-fx-font-size: 15px; -fx-background-radius: 8;" />
+
+                <!-- Tipo de usuário -->
+                <ComboBox fx:id="cbTipo" layoutX="370.0" layoutY="5.0" prefHeight="25.0" prefWidth="90.0"
+                          promptText="Tipo" style="-fx-font-size: 15px; -fx-background-radius: 8;" />
+
+                <!-- ID -->
+                <TextField fx:id="tfId" layoutX="470.0" layoutY="5.0" prefHeight="25.0" prefWidth="60.0"
+                           promptText="ID" editable="false" style="-fx-font-size: 15px; -fx-background-radius: 8; -fx-text-fill: #FFD600; -fx-font-weight: bold; -fx-alignment: CENTER;" />
+
+                <!-- Linha divisória -->
+                <Line endX="550.0" layoutX="0.0" layoutY="40.0" style="-fx-stroke: white; -fx-opacity: 0.3;" />
+            </children>
+        </Pane>
+
+        <!-- Área para visualização de detalhes do usuário -->
+        <VBox fx:id="usuariosBox" layoutX="30.0" layoutY="130.0" prefHeight="250.0" prefWidth="540.0" spacing="10"
+              style="-fx-padding: 10; -fx-background-color: rgba(255,255,255,0.06);
+                     -fx-background-radius: 10; -fx-border-color: white; -fx-border-radius: 10;" />
+    </children>
+</AnchorPane>

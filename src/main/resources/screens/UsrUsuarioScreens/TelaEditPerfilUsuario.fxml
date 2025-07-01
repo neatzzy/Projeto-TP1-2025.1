@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0"
+            style="-fx-background-color: linear-gradient(to bottom right, #1B5E20, #004D40);"
+            fx:controller="controller.ControllerTelaEditPerfilUsuario"
+            xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1">
+    <children>
+        <!-- Botão voltar/menu -->
+        <Button fx:id="menuMontagem" layoutX="20.0" layoutY="14.0" onAction="#voltar" mnemonicParsing="false" text="☰"
+                style="-fx-background-color: rgba(255,255,255,0.12); -fx-background-radius: 10;
+                       -fx-text-fill: white; -fx-font-size: 20px; -fx-font-weight: bold;
+                       -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.4), 3, 0, 0, 2);" />
+
+        <!-- Botão salvar alterações -->
+        <Button fx:id="btnSalvarPerfil" layoutX="450.0" layoutY="14.0" mnemonicParsing="false" text="Salvar" onAction="#salvarPerfil"
+                style="-fx-background-color: #009688; -fx-text-fill: white; -fx-font-size: 16px;
+                       -fx-font-weight: bold; -fx-background-radius: 10;
+                       -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 2, 0, 0, 1);" />
+
+        <!-- Área de edição de perfil -->
+        <VBox layoutX="50.0" layoutY="80.0" prefWidth="500.0" spacing="20"
+              style="-fx-background-color: rgba(255,255,255,0.05); -fx-padding: 20; -fx-background-radius: 10; -fx-border-color: white; -fx-border-radius: 10;">
+            <children>
+                <!-- Nome -->
+                <TextField fx:id="tfNome" promptText="Nome" prefHeight="30"
+                           style="-fx-font-size: 16px; -fx-background-radius: 8;" />
+
+                <PasswordField fx:id="pfSenhaAntiga" promptText="Senha Atual" prefHeight="30"
+                               style="-fx-font-size: 16px; -fx-background-radius: 8;" />
+
+                <!-- Senha -->
+                <PasswordField fx:id="pfSenha" promptText="Nova Senha" prefHeight="30"
+                               style="-fx-font-size: 16px; -fx-background-radius: 8;" />
+
+                <!-- Confirmar Senha -->
+                <PasswordField fx:id="pfConfirmarSenha" promptText="Confirmar Senha" prefHeight="30"
+                               style="-fx-font-size: 16px; -fx-background-radius: 8;" />
+            </children>
+        </VBox>
+
+        <!-- Feedback / mensagens -->
+        <Label fx:id="lblMensagem" layoutX="50.0" layoutY="350.0" prefWidth="500.0"
+               style="-fx-text-fill: white; -fx-font-size: 14px; -fx-alignment: center;" />
+    </children>
+</AnchorPane>

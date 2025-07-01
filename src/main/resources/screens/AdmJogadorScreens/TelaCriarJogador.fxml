@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.scene.shape.Line?>
+<AnchorPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="screens.AdmJogadorScreens.TelaCriarJogador"
+            prefHeight="400.0" prefWidth="600.0"
+            style="-fx-background-color: linear-gradient(to bottom right, #1B5E20, #004D40);">
+    <children>
+        <!-- Botão de menu -->
+        <Button fx:id="menuMontagem" layoutX="20.0" layoutY="14.0" mnemonicParsing="false" onAction="#voltar" style="-fx-background-color: rgba(255,255,255,0.12); -fx-background-radius: 10; -fx-text-fill: white; -fx-font-size: 20px; -fx-font-weight: bold; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.4), 3, 0, 0, 2);" text="☰" />
+        <Button fx:id="btnSalvar" layoutX="418.0" layoutY="14.0" mnemonicParsing="false" onAction="#salvarJogador" style="-fx-background-color: #009688; -fx-text-fill: white; -fx-font-size: 16px; -fx-font-weight: bold; -fx-background-radius: 10; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 2, 0, 0, 1);" text="Salvar" />
+        <!-- Cabeçalho com campos editáveis -->
+        <Pane layoutX="19.0" layoutY="60.0" prefHeight="50.0" prefWidth="560.0" style="-fx-background-color: transparent;">
+            <children>
+                <!-- Nome do jogador -->
+                <TextField fx:id="tfNome" layoutX="10.0" layoutY="5.0" prefHeight="25.0" prefWidth="120.0" promptText="Nome do Jogador" style="-fx-font-size: 15px; -fx-font-weight: bold; -fx-background-radius: 8;" />
+                <!-- Posição (ComboBox) -->
+                <ComboBox fx:id="cbPosicao" layoutX="140.0" layoutY="5.0" prefHeight="23.0" prefWidth="70.0" promptText="POS" style="-fx-font-size: 15px; -fx-background-radius: 8;" />
+                <!-- Clube (ComboBox) -->
+                <ComboBox fx:id="cbClube" layoutX="220.0" layoutY="5.0" prefHeight="25.0" prefWidth="90.0" promptText="Clube" style="-fx-font-size: 15px; -fx-background-radius: 8;" />
+                <!-- Preço -->
+                <TextField fx:id="tfPreco" layoutX="320.0" layoutY="5.0" prefHeight="25.0" prefWidth="70.0" promptText="Preço" style="-fx-font-size: 15px; -fx-background-radius: 8;" />
+                <!-- Pontuação -->
+                <TextField fx:id="tfPontuacao" layoutX="400.0" layoutY="5.0" prefHeight="25.0" prefWidth="70.0" promptText="Pts" style="-fx-font-size: 15px; -fx-background-radius: 8;" />
+                <!-- Overall (OVR) -->
+                <TextField fx:id="tfOverall" layoutX="480.0" layoutY="5.0" prefHeight="25.0" prefWidth="60.0" promptText="OVR" style="-fx-font-size: 15px; -fx-background-radius: 8; -fx-text-fill: #FFD600; -fx-font-weight: bold; -fx-alignment: CENTER;" />
+                <!-- Linha divisória -->
+                <Line endX="550.0" layoutX="0.0" layoutY="40.0" style="-fx-stroke: white; -fx-opacity: 0.3;" />
+            </children>
+        </Pane>
+        <!-- Área para estatísticas detalhadas -->
+        <VBox fx:id="statsBox" layoutX="30.0" layoutY="130.0" prefHeight="250.0" prefWidth="540.0" spacing="10" style="-fx-padding: 10; -fx-background-color: rgba(255,255,255,0.06); -fx-background-radius: 10; -fx-border-color: white; -fx-border-radius: 10;" />
+    </children>
+</AnchorPane>
