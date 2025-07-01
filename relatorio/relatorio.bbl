@@ -1,9 +1,15 @@
 \begin{thebibliography}{}
 
-\bibitem[{Wikipédia} 2025]{wiki:cartola}
-{Wikipédia} (2025).
-\newblock {Cartola FC}.
+\bibitem[{Cartola FC} ]{wiki:cartola}
+{Cartola FC}.
+\newblock {Wikipédia}.
 \newblock \url{https://pt.wikipedia.org/wiki/Cartola_FC}.
+\newblock [Online; acesso em 01-jun-2025].
+
+\bibitem[{Esporte fantasy} ]{wiki:fantasy}
+{Esporte fantasy}.
+\newblock {Wikipédia}.
+\newblock \url{https://pt.wikipedia.org/wiki/Esporte_fantasy}.
 \newblock [Online; acesso em 01-jun-2025].
 
 \end{thebibliography}
