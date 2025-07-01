@@ -105,6 +105,12 @@ public class ControllerTelaCriarLiga {
             usuarioDAO.insertUsuariosLiga(listaSelecionados, novaLiga);
             usuarioDAO.transformarUsuarioEmAdminLiga(this.usuario.getId());
 
+            for(Usuario u : listaSelecionados){
+                if(!timeDAO.usuarioTemTime(u.getId())) {
+                    timeDAO.insertTime(u.getId(), "Time de" + u.getNome(), idNovaLiga);
+                }
+            }
+
             if(!timeDAO.usuarioTemTime(usuario.getId())) {
                 timeDAO.insertTime(usuario.getId(), "Time de" + usuario.getNome(), idNovaLiga);
             }
