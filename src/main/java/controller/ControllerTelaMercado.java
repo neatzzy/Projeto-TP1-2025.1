@@ -12,6 +12,7 @@ import javafx.scene.control.*;
 import javafx.stage.Stage;
 import model.*;
 
+import java.io.IOException;
 import java.sql.Connection;
 import java.util.HashSet;
 import java.util.Set;
@@ -48,7 +49,23 @@ public class ControllerTelaMercado {
 
     @FXML
     public void voltar(){
-        NavigationManager.popAndApply((Stage) menuMontagem.getScene().getWindow());
+
+        try {
+            NavigationManager.pop();
+
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/screens/UsrEscalarScreens/TelaCampinho.fxml"));
+
+            Parent root = loader.load();
+            ControllerTelaCampinho controller = (ControllerTelaCampinho) loader.getController();
+            controller.setConnection(conn, usuario);
+            Stage stage = (Stage) menuMontagem.getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.setTitle("Campinho");
+
+            stage.show();
+        }catch (IOException e){
+               throw new RuntimeException(e);
+        }
     }
 
     @FXML
@@ -95,18 +112,7 @@ public class ControllerTelaMercado {
                             mostrarAlerta("Sucesso", "Jogador comprado com sucesso!");
                         }
 
-                        NavigationManager.pop();
-
-                        FXMLLoader loader = new FXMLLoader(getClass().getResource("/screens/UsrEscalarScreens/TelaCampinho.fxml"));
-
-                        Parent root = loader.load();
-                        ControllerTelaCampinho controller = (ControllerTelaCampinho) loader.getController();
-                        controller.setConnection(conn, usuario);
-                        Stage stage = (Stage) menuMontagem.getScene().getWindow();
-                        stage.setScene(new Scene(root));
-                        stage.setTitle("Campinho");
-
-                        stage.show();
+                        tableView.refresh();
 
                     } catch (Exception ex) {
                         ex.printStackTrace();
@@ -134,10 +140,7 @@ public class ControllerTelaMercado {
             }
         });
 
-        // Carregar todos jogadores da simulação
         carregarJogadores();
-
-        // Configurar evento filtro e pesquisa
         comboBoxFiltro.setOnAction(e -> filtrar());
         botaoPesquisar.setOnAction(e -> filtrar());
     }
