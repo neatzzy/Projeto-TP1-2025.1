@@ -60,7 +60,9 @@ public class Main extends Application {
         // Mostra a tela
         primaryStage.setTitle("Tela de Início");
         primaryStage.setScene(new Scene(root));
+        primaryStage.centerOnScreen();
         primaryStage.show();
+
     }
 
     public static void main(String[] args) throws SQLException {

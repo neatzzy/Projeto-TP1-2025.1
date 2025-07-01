@@ -1,5 +1,6 @@
 package controller;
 
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -40,6 +41,7 @@ public class ControllerTelaInicio {
             NavigationManager.push(sceneInfo);
 
             stage.setScene(new Scene(root));
+            stage.centerOnScreen();
             stage.setTitle("Cadastro de Usuário");
             stage.show();
         } catch (IOException e) {
@@ -63,6 +65,7 @@ public class ControllerTelaInicio {
             NavigationManager.push(sceneInfo);
 
             stage.setScene(new Scene(root));
+            stage.centerOnScreen();
             stage.setTitle("Login");
             stage.show();
         } catch (IOException e) {
