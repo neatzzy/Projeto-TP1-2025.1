@@ -195,7 +195,7 @@ public class ControllerTelaCampinho {
             if (capitaoAindaNoTime) {
                 selectCapitao.setValue(capitaoAtual.getNome());
             } else {
-                this.timeusuario.setCapitao(null); // remove o capitão do time
+                this.timeusuario.removeCapitao(); // remove o capitão do time
                 selectCapitao.setValue(null); // limpa o campo visualmente
             }
         }
@@ -232,7 +232,7 @@ public class ControllerTelaCampinho {
                 this.timeusuario.setCapitao(capitao);
             } else {
                 timeDAO.removeCapitao(usuario.getId());
-                this.timeusuario.setCapitao(null);
+                this.timeusuario.removeCapitao();
             }
 
             timeDAO.alterarTime(usuario.getId(), this.timeusuario.getJogadores());
