@@ -70,8 +70,8 @@ public class ControllerTelaMenuAdm {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/screens/AdmLigaScreens/TelaViewLigas.fxml"));
             Parent root = loader.load();
 
-            //ControllerTelaInicio controller = (ControllerTelaInicio) loader.getController();
-            //controller.setConnection(conn);
+            ControllerTelaViewLigas controller = (ControllerTelaViewLigas) loader.getController();
+            controller.setConnection(conn);
 
             Stage stage = (Stage) labelTitulo.getScene().getWindow();
 
@@ -91,8 +91,8 @@ public class ControllerTelaMenuAdm {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/screens/AdmUserScreens/TelaViewUsuarios.fxml"));
             Parent root = loader.load();
 
-            //ControllerTelaInicio controller = (ControllerTelaInicio) loader.getController();
-            //controller.setConnection(conn);
+            ControllerTelaViewUsuarios controller = (ControllerTelaViewUsuarios) loader.getController();
+            controller.setConnection(conn);
 
             Stage stage = (Stage) labelTitulo.getScene().getWindow();
 

@@ -98,11 +98,53 @@ public class Simulacao {
 
         ocorreu = false;
     }
+
+    public static boolean trocarClubes(Clube clube1, Clube clube2) {
+        if (clube1 == null || clube2 == null || clube1.equals(clube2)) return false;
+
+        Partida partida1 = null;
+        Partida partida2 = null;
+
+        for (Partida p : partidas) {
+            if (p.getClubeCasa().equals(clube1) || p.getClubeFora().equals(clube1)) {
+                partida1 = p;
+            }
+            if (p.getClubeCasa().equals(clube2) || p.getClubeFora().equals(clube2)) {
+                partida2 = p;
+            }
+        }
+
+        if (partida1 == null || partida2 == null) return false;
+
+        // Troca os clubes
+        if (partida1.getClubeCasa().equals(clube1)) {
+            partida1.setClubeCasa(clube2);
+        } else {
+            partida1.setClubeFora(clube2);
+        }
+
+        if (partida2.getClubeCasa().equals(clube2)) {
+            partida2.setClubeCasa(clube1);
+        } else {
+            partida2.setClubeFora(clube1);
+        }
+
+        return true;
+    }
+
     // TODO: implementar o metodo resetStats() que itera pelos jogadores e reseta seus stats
     private static void resetPartidasStats(Set<Partida> partidas){
         for(Partida partida : partidas){
             partida.resetStats();
         }
+    }
+
+    public static void clear(){
+        for (Partida p : partidas) {
+            p.getClubeCasa().setPartida(false);
+            p.getClubeFora().setPartida(false);
+        }
+        partidas.clear();
     }
 
     // getters
