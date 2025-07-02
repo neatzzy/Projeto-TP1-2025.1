@@ -95,6 +95,8 @@ public class Simulacao {
         for (Liga liga : ligas) {
             System.out.println("LIGA: " + liga);
 
+            ocorreu = false;
+
             // Pega todos os times da liga direto pelo DAO
             Map<Integer, TimeUsuario> timesComIds = timeDAO.getAllTimesComIdsPorLigaId(liga.getId());
 
