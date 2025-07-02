@@ -31,6 +31,7 @@ public class TimeUsuario {
         for (Jogador jogador : jogadores){
             this.addJogador(jogador);
         }
+        this.setCapitao(jogcapitao);
         pontuacao = 0;
         capitao = jogcapitao;
     }
@@ -38,10 +39,18 @@ public class TimeUsuario {
 
     // calcula a pontuacao ou retorna falso se a escalacao eh invalida ou se a simulacao nao ocorreu
     public boolean calcularPontuacao(){
+
+        System.out.println("teve sim? " + Simulacao.getOcorreu());
+        System.out.println("valido? " + valido);
+
         if (!Simulacao.getOcorreu() || valido == false) return false;
+
+        System.out.println("TA VALENDO");
+
         pontuacao = 0;
         for (Jogador jogadori : jogadores){
             pontuacao += jogadori.calcularPontuacao();
+            System.out.println("add: " + pontuacao);
         }
         pontuacao += capitao.getPontuacao(); // adiciona a pontuacao do capitao duplicadamente
         return true;
@@ -151,6 +160,12 @@ public class TimeUsuario {
         System.out.println();
     }
     // getters
+
+
+    public void setJogadores(Set<Jogador> jogadores) {
+        this.jogadores = jogadores;
+    }
+
     public Usuario getUsuario() {
         return usuario;
     }

@@ -1,16 +1,12 @@
 package model;
 
-import dao.LigaDAO;
-import dao.UsuarioDAO;
+import dao.*;
 import database.Database;
 
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.Random;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set; // uso para declarar variavel da classe Set
-import java.util.HashSet; // uso para instanciar o objeto
+import java.sql.Time;
+import java.util.*;
 // a ideia eh puxar os dados do db e colocar os clubes em uma lista, para gerar as partidas ou adiciona-las manualmente e depois simula-las
 // juntamente com a simulacao da liga
 
@@ -19,10 +15,12 @@ public class Simulacao {
     private static Set<Partida> partidas = new HashSet<>();
     private static LigaDAO ligaDAO;
     private static UsuarioDAO usuarioDAO;
+    private static TimeDAO timeDAO;
 
     public void InicializarConexoes(Connection conn){
         ligaDAO = new LigaDAO(conn);
         usuarioDAO = new UsuarioDAO(conn, new LigaDAO(conn));
+        timeDAO = new TimeDAO(conn, new UsuarioDAO(conn, new LigaDAO(conn)), new JogadorDAO(conn, new ClubeDAO(conn)));
     }
 
     // recebe uma lista de clubes e os sorteia em partidas, retorna falso se a lista nao for par
@@ -53,7 +51,12 @@ public class Simulacao {
     // OBS: cuidar para que todos os clubes do campeonato estejam em alguma partida antes de simular
     public static boolean simular() throws SQLException {
 
+        System.out.println("Simular INICIOU");
+
         List<Liga> ligas = ligaDAO.getAllLigas();
+
+        Map<Integer, Jogador> jogadoresSimulados = new HashMap<>();
+
 
         for (Liga liga : ligas) {
             for (Usuario usuario : liga.getUsuarios()){
@@ -63,15 +66,76 @@ public class Simulacao {
 
         for (Partida partida : partidas){
             partida.simular(); // já calcula a pontuação dos jogadores junto
+
+            // Adiciona jogadores do time da casa
+            for (Jogador j : partida.getClubeCasa().getJogadores()) {
+                jogadoresSimulados.put(j.getId(), j);
+            }
+
+            // Adiciona jogadores do time visitante
+            for (Jogador j : partida.getClubeFora().getJogadores()) {
+                jogadoresSimulados.put(j.getId(), j);
+            }
+        }
+
+        // usuário é nulo ent ne entra
+        /*
+        for (Liga liga : ligas) {
+            System.out.println("LIGA: " + liga);
+            for (Usuario usuario : liga.getUsuarios()){
+                System.out.println("USUARIO: " + usuario);
+                usuario.getTimeUsuario().calcularPontuacao();
+                System.out.println("CALCULANDO PONTUACAO: " + usuario.getTimeUsuario().getPontuacao());
+                timeDAO.inserirPontuacaoTime(usuario.getId(), usuario.getTimeUsuario().getPontuacao());
+            }
+        }
+         */
+
+        // Agora, para cada usuário, substitua os jogadores do time pelos simulados e calcula pontuação
+        for (Liga liga : ligas) {
+            System.out.println("LIGA: " + liga);
+
+            // Pega todos os times da liga direto pelo DAO
+            Map<Integer, TimeUsuario> timesComIds = timeDAO.getAllTimesComIdsPorLigaId(liga.getId());
+
+            for (Map.Entry<Integer, TimeUsuario> entry : timesComIds.entrySet()) {
+
+                ocorreu = false;
+
+                int idTime = entry.getKey();
+                TimeUsuario time = entry.getValue();
+
+                System.out.println("TIME ID: " + idTime);
+
+                time.imprimirTime();
+
+                // Substituir jogadores pelos simulados
+                List<Jogador> jogadoresOriginais = new ArrayList<>(time.getJogadores());
+
+                for (int i = 0; i < jogadoresOriginais.size(); i++) {
+                    Jogador original = jogadoresOriginais.get(i);
+                    Jogador simulado = jogadoresSimulados.get(original.getId());
+                    if (simulado != null) {
+                        jogadoresOriginais.set(i, simulado);
+                    }
+                }
+
+                time.setJogadores(new HashSet<>(jogadoresOriginais));
+
+                System.out.println("ocorreu sim1: " + ocorreu);
+
+                ocorreu = true;
+
+                // Calcula pontuação atualizada
+                time.calcularPontuacao();
+                System.out.println("CALCULANDO PONTUACAO (Time ID " + idTime + "): " + time.getPontuacao());
+
+                // Atualiza no banco usando o id do time
+                timeDAO.inserirPontuacaoTime(idTime, time.getPontuacao());
+            }
         }
 
         ocorreu = true;
-
-        for (Liga liga : ligas) {
-            for (Usuario usuario : liga.getUsuarios()){
-                usuario.getTimeUsuario().calcularPontuacao();
-            }
-        }
 
         return true;
     }
@@ -90,9 +154,13 @@ public class Simulacao {
                 jogador.calcularPontuacao();
             }
         }
+
+        // usuário é nulo ent n entra
+
         for (Liga liga : ligas) {
             for (Usuario usuario : liga.getUsuarios()){
                 usuario.getTimeUsuario().calcularPontuacao(); // vai zerar a pontuacao pois os stats estao zerados
+                timeDAO.inserirPontuacaoTime(usuario.getId(), 0.0); // n funciona9n entra no loop)
             }
         }
 
