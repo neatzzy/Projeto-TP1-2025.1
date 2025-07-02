@@ -5,10 +5,7 @@ import dao.JogadorDAO;
 
 import java.sql.Connection;
 import java.sql.*;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Set; // uso para declarar variavel da classe Set
-import java.util.HashSet; // uso para instanciar o objeto
+import java.util.*;
 
 public class Clube {
 
@@ -19,8 +16,8 @@ public class Clube {
     private Set<Jogador> jogadores;
     private int jogA, jogD;         // nro de jogadores de ataque/defesa
     private boolean partida;
-    private final ClubeDAO clubeDAO;
-    private final JogadorDAO jogadorDAO;
+    private ClubeDAO clubeDAO;
+    private JogadorDAO jogadorDAO;
 
 
     public Clube(ClubeDAO clubeDAO, JogadorDAO jogadorDAO, String nome) throws SQLException{
@@ -107,7 +104,7 @@ public class Clube {
     }
     // remove jogador do clube com parametro ID e retorna falso se o jogador nao esta no clube
     // soh remove se a simulacao nao aconteceu e apaga jogador do BD
-    public boolean removeJogadorById(Connection conn, int idJogador)throws SQLException{
+    public boolean removeJogador(Connection conn, int idJogador)throws SQLException{
         if(Simulacao.getOcorreu()) return false;
         Jogador jogador = jogadorDAO.getPlayerById(idJogador); // tenha certeza de que essa funcao esteja corretamente implementada (se o jogador com o id enviado nao existir, ela deve retornar um objeto jogador vazio ou erro)
         if (!jogadores.remove(jogador)) return false;
@@ -175,11 +172,27 @@ public class Clube {
         this.partida = partida;
     }
 
+    public void setClubeDAO(ClubeDAO clubeDAO) { this.clubeDAO = clubeDAO; }
+    public void setJogadorDAO(JogadorDAO jogadorDAO) {  this.jogadorDAO = jogadorDAO; }
+
     @Override
     public String toString() {
         return "Clube{" +
                 "nome='" + nome + '\'' +
                 ", id=" + id +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Clube clube = (Clube) o;
+        return id == clube.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }

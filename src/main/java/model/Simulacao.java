@@ -6,11 +6,7 @@ import database.Database;
 
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.Random;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set; // uso para declarar variavel da classe Set
-import java.util.HashSet; // uso para instanciar o objeto
+import java.util.*;
 // a ideia eh puxar os dados do db e colocar os clubes em uma lista, para gerar as partidas ou adiciona-las manualmente e depois simula-las
 // juntamente com a simulacao da liga
 
@@ -50,6 +46,11 @@ public class Simulacao {
         clubeFora.setPartida(true);
         return true;
     }
+
+    public static boolean removePartida(Partida partida){
+        return partidas.remove(partida);
+    }
+
     // OBS: cuidar para que todos os clubes do campeonato estejam em alguma partida antes de simular
     public static boolean simular() throws SQLException {
 
@@ -155,5 +156,15 @@ public class Simulacao {
     public static Set<Partida> getPartidas() {
         return partidas;
     }
+
+    public static List<Clube> getClubes() {
+        Set<Clube> clubesSet = new HashSet<>();
+        for (Partida partida : partidas) {
+            clubesSet.add(partida.getClubeCasa());
+            clubesSet.add(partida.getClubeFora());
+        }
+        return new ArrayList<>(clubesSet);
+    }
+
 
 }

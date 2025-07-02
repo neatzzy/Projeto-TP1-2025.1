@@ -4,6 +4,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
@@ -66,6 +67,10 @@ public class ControllerTelaMenuAdm {
     }
 
     public void abrirLigas(){
+        if (Simulacao.getOcorreu()) {
+            showAlert("Acesso bloqueado enquanto a simulação estiver ocorrendo!");
+            return;
+        }
         try{
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/screens/AdmLigaScreens/TelaViewLigas.fxml"));
             Parent root = loader.load();
@@ -87,6 +92,10 @@ public class ControllerTelaMenuAdm {
     }
 
     public void abrirUsuarios(){
+        if (Simulacao.getOcorreu()) {
+            showAlert("Acesso bloqueado enquanto a simulação estiver ocorrendo!");
+            return;
+        }
         try{
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/screens/AdmUserScreens/TelaViewUsuarios.fxml"));
             Parent root = loader.load();
@@ -108,12 +117,16 @@ public class ControllerTelaMenuAdm {
     }
 
     public void abrirClubes(){
+        if (Simulacao.getOcorreu()) {
+            showAlert("Acesso bloqueado enquanto a simulação estiver ocorrendo!");
+            return;
+        }
         try{
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/screens/AdmClubesScreens/TelaRedirectClubesAdm.fxml"));
             Parent root = loader.load();
 
-            //ControllerTelaInicio controller = (ControllerTelaInicio) loader.getController();
-            //controller.setConnection(conn);
+            ControllerTelaRedirectClubesAdm controller = (ControllerTelaRedirectClubesAdm) loader.getController();
+            controller.setConnection(conn);
 
             Stage stage = (Stage) labelTitulo.getScene().getWindow();
 
@@ -129,12 +142,16 @@ public class ControllerTelaMenuAdm {
     }
 
     public void abrirJogadores(){
+        if (Simulacao.getOcorreu()) {
+            showAlert("Acesso bloqueado enquanto a simulação estiver ocorrendo!");
+            return;
+        }
         try{
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/screens/AdmJogadorScreens/TelaRedirectJogadoresAdm.fxml"));
             Parent root = loader.load();
 
-            //ControllerTelaInicio controller = (ControllerTelaInicio) loader.getController();
-            //controller.setConnection(conn);
+            ControllerTelaRedirectJogadoresAdm controller = (ControllerTelaRedirectJogadoresAdm) loader.getController();
+            controller.setConnection(conn);
 
             Stage stage = (Stage) labelTitulo.getScene().getWindow();
 
@@ -189,6 +206,13 @@ public class ControllerTelaMenuAdm {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+    private void showAlert(String message) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Acesso Bloqueado");
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 }
 
