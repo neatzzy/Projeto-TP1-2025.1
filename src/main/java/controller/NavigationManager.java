@@ -3,6 +3,7 @@ package controller;
 import javafx.stage.Stage;
 import java.util.Stack;
 
+// facilita a navegacao entre telas com a implementacao de uma pilha de SceneInfo
 public class NavigationManager {
     private static final Stack<SceneInfo> sceneStack = new Stack<>();
 

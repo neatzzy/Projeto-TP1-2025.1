@@ -43,15 +43,14 @@ public class ControllerTelaMenuAdm {
 
 
     public void setUsuarioLogado(Admin adm) { this.adm = adm; }
+
     public void setConnection(Connection conn) { this.conn = conn; }
 
+    // cada uma desses métodos redireciona para uma parte do programa
     public void abrirSimulacao(){
         try{
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/screens/AdmSimulacaoScreens/TelaSimulacao.fxml"));
             Parent root = loader.load();
-
-            //ControllerTelaInicio controller = (ControllerTelaInicio) loader.getController();
-            //controller.setConnection(conn);
 
             Stage stage = (Stage) labelTitulo.getScene().getWindow();
 
@@ -75,7 +74,7 @@ public class ControllerTelaMenuAdm {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/screens/AdmLigaScreens/TelaViewLigas.fxml"));
             Parent root = loader.load();
 
-            ControllerTelaViewLigas controller = (ControllerTelaViewLigas) loader.getController();
+            ControllerTelaViewLigas controller = loader.getController();
             controller.setConnection(conn);
 
             Stage stage = (Stage) labelTitulo.getScene().getWindow();
@@ -100,7 +99,7 @@ public class ControllerTelaMenuAdm {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/screens/AdmUserScreens/TelaViewUsuarios.fxml"));
             Parent root = loader.load();
 
-            ControllerTelaViewUsuarios controller = (ControllerTelaViewUsuarios) loader.getController();
+            ControllerTelaViewUsuarios controller = loader.getController();
             controller.setConnection(conn);
 
             Stage stage = (Stage) labelTitulo.getScene().getWindow();
@@ -125,7 +124,7 @@ public class ControllerTelaMenuAdm {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/screens/AdmClubesScreens/TelaRedirectClubesAdm.fxml"));
             Parent root = loader.load();
 
-            ControllerTelaRedirectClubesAdm controller = (ControllerTelaRedirectClubesAdm) loader.getController();
+            ControllerTelaRedirectClubesAdm controller = loader.getController();
             controller.setConnection(conn);
 
             Stage stage = (Stage) labelTitulo.getScene().getWindow();
@@ -150,7 +149,7 @@ public class ControllerTelaMenuAdm {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/screens/AdmJogadorScreens/TelaRedirectJogadoresAdm.fxml"));
             Parent root = loader.load();
 
-            ControllerTelaRedirectJogadoresAdm controller = (ControllerTelaRedirectJogadoresAdm) loader.getController();
+            ControllerTelaRedirectJogadoresAdm controller = loader.getController();
             controller.setConnection(conn);
 
             Stage stage = (Stage) labelTitulo.getScene().getWindow();
@@ -170,9 +169,6 @@ public class ControllerTelaMenuAdm {
         try{
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/screens/AdmPartidaScreens/TelaRedirectPartidasAdm.fxml"));
             Parent root = loader.load();
-
-            //ControllerTelaInicio controller = (ControllerTelaInicio) loader.getController();
-            //controller.setConnection(conn);
 
             Stage stage = (Stage) labelTitulo.getScene().getWindow();
 
@@ -196,7 +192,7 @@ public class ControllerTelaMenuAdm {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/screens/InicialScreens/TelaInicio.fxml"));
             Parent root = loader.load();
 
-            ControllerTelaInicio controller = (ControllerTelaInicio) loader.getController();
+            ControllerTelaInicio controller = loader.getController();
             controller.setConnection(conn);
 
             Stage stage = (Stage) labelTitulo.getScene().getWindow();

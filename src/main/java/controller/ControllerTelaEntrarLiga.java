@@ -76,6 +76,7 @@ public class ControllerTelaEntrarLiga {
         btnEntrar.setOnAction(e -> tentarEntrarNaLiga());
     }
 
+    // verifica se os campos estao corretos e insere na liga (semelhante ao login)
     private void tentarEntrarNaLiga() {
         Liga ligaSelecionada = lvLigas.getSelectionModel().getSelectedItem();
         String senha = pfSenha.getText();

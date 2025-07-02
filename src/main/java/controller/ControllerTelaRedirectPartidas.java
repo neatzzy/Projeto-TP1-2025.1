@@ -7,14 +7,12 @@ import javafx.stage.Stage;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.TableCell;
 import javafx.event.ActionEvent;
 import javafx.util.Callback;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import model.Partida;
-import model.Clube;
 import model.Simulacao;
 
 public class ControllerTelaRedirectPartidas {

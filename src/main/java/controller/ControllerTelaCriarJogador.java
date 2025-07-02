@@ -12,7 +12,6 @@ import model.*;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class ControllerTelaCriarJogador {
 
@@ -56,8 +55,9 @@ public class ControllerTelaCriarJogador {
         NavigationManager.popAndApply((Stage) menuMontagem.getScene().getWindow());
     }
 
+    //carrega clubes contidos na classe Simulacao
     private void carregarClubes() {
-        List<Clube> clubesDisponiveis = Simulacao.getClubes();  // Ajuste conforme sua classe Simulacao
+        List<Clube> clubesDisponiveis = Simulacao.getClubes();
         cbClube.setItems(FXCollections.observableArrayList(clubesDisponiveis));
     }
 
@@ -66,6 +66,7 @@ public class ControllerTelaCriarJogador {
         cbPosicao.setItems(posicoes);
     }
 
+    // capta as informacoes de cada campo e salva no banco de dados e no clube local
     @FXML
     public void salvarJogador() {
         if (Simulacao.getOcorreu()) {
