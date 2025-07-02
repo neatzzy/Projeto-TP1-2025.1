@@ -287,9 +287,18 @@ public class Simulacao {
         for (Liga liga : ligas) {
             for (Usuario usuario : liga.getUsuarios()){
                 usuario.getTimeUsuario().calcularPontuacao(); // vai zerar a pontuacao pois os stats estao zerados
-                timeDAO.inserirPontuacaoTime(usuario.getId(), 0.0); // n funciona9n entra no loop)
+                timeDAO.inserirPontuacaoTime(usuario.getId(), 0.0); // n funciona entra no loop)
             }
         }
+
+
+        // reseta as pontuações dos times
+        for (Map.Entry<Integer, TimeUsuario> entry : timesComIdsGlobal.entrySet()) {
+            int idTime = entry.getKey();
+            TimeUsuario time = entry.getValue();
+            timeDAO.inserirPontuacaoTime(idTime, 0.0);
+        }
+
 
         ocorreu = false;
     }
