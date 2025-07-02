@@ -155,6 +155,11 @@ public class ControllerTelaMercado {
         tableView.setItems(filtrados);
     }
 
+    @FXML
+    private void pesquisarJogador() {
+        filtrar();
+    }
+
     // Mostra alerta simples
     private void mostrarAlerta(String titulo, String msg) {
         Alert alerta = new Alert(Alert.AlertType.INFORMATION);
