@@ -116,6 +116,7 @@ public class ControllerTelaAddUsuarioLiga {
 
         usuarioDAO.insertUsuariosLiga(selecionados, liga);
 
+        // cria o time dos usuários
         for(Usuario u : selecionados){
             if(!timeDAO.usuarioTemTime(u.getId())) {
                 timeDAO.insertTime(u.getId(), "Time de" + u.getNome(), liga.getId());

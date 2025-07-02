@@ -164,6 +164,10 @@ public class ControllerTelaViewLigaAdm {
             boolean sucesso = usuarioDAO.removerUsuarioDaLiga(selecionado, this.liga);
 
             if (sucesso) {
+
+                // se não está em uma liga, remove seu time
+                timeDAO.deleteTimeById(selecionado.getId());
+
                 mostrarAlerta("Sucesso", "Usuário removido da liga.");
                 carregarDados();
             } else {

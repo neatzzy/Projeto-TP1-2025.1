@@ -159,6 +159,9 @@ public class ControllerTelaViewLiga {
 
             if (sucesso) {
 
+                // se não está em uma liga, remove seu time
+                timeDAO.deleteTimeById(usuario.getId());
+
                 mostrarAlerta("Sucesso", "Você saiu da liga.");
 
                 // Redireciona para o menu do usuário
