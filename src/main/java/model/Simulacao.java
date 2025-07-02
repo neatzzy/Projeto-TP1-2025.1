@@ -1,13 +1,11 @@
 package model;
 
 import dao.*;
-import database.Database;
 
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.*;
-import java.sql.Time;
-import java.util.*;
+import java.util.function.Consumer;
 // a ideia eh puxar os dados do db e colocar os clubes em uma lista, para gerar as partidas ou adiciona-las manualmente e depois simula-las
 // juntamente com a simulacao da liga
 
@@ -17,6 +15,12 @@ public class Simulacao {
     private static LigaDAO ligaDAO;
     private static UsuarioDAO usuarioDAO;
     private static TimeDAO timeDAO;
+
+    // ŕa ajudar na separação das etapas
+    private static List<Liga> ligasGlobal;
+    private static Map<Integer, Jogador> jogadoresSimuladosGlobal;
+    private static Map<Integer, TimeUsuario> timesComIdsGlobal;
+
 
     public void InicializarConexoes(Connection conn){
         ligaDAO = new LigaDAO(conn);
@@ -54,6 +58,117 @@ public class Simulacao {
         return partidas.remove(partida);
     }
 
+    public static boolean simular(int etapa, Consumer<String> atualizarMensagem) throws SQLException {
+
+
+        switch (etapa) {
+            case 0:
+                atualizarMensagem.accept("Verificando ligas e times...");
+                ligasGlobal = verificarTimesValidos();
+                return true;
+            case 1:
+                atualizarMensagem.accept("Simulando partidas...");
+                simularPartidas();
+                return true;
+            case 2:
+                atualizarMensagem.accept("Calculando pontuações...");
+                timesComIdsGlobal = calcularPontuacoes();
+                return true;
+            case 3:
+                atualizarMensagem.accept("Salvando resultados no banco...");
+                salvarResultados();
+                ocorreu = true;
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    private static List<Liga> verificarTimesValidos() throws SQLException {
+        List<Liga> ligas = ligaDAO.getAllLigas();
+        for (Liga liga : ligas) {
+            for (Usuario usuario : liga.getUsuarios()) {
+                if (!usuario.getTimeUsuario().isValido()) {
+                    throw new SQLException("Time inválido.");
+                }
+            }
+        }
+
+        return ligas;
+    }
+
+    private static void simularPartidas() {
+
+        jogadoresSimuladosGlobal = new HashMap<>();
+
+        for (Partida partida : partidas) {
+            partida.simular();
+
+            for (Jogador j : partida.getClubeCasa().getJogadores()) {
+                jogadoresSimuladosGlobal.put(j.getId(), j);
+            }
+
+            for (Jogador j : partida.getClubeFora().getJogadores()) {
+                jogadoresSimuladosGlobal.put(j.getId(), j);
+            }
+        }
+    }
+
+    private static Map<Integer, TimeUsuario> calcularPontuacoes() throws SQLException {
+        Map<Integer, TimeUsuario> allTimes = new HashMap<>();
+
+        for (Liga liga : ligasGlobal) {
+
+            ocorreu = false;
+            Map<Integer, TimeUsuario> timesComIds = timeDAO.getAllTimesComIdsPorLigaId(liga.getId());
+
+            for (Map.Entry<Integer, TimeUsuario> entry : timesComIds.entrySet()) {
+
+                ocorreu = false;
+
+                int idTime = entry.getKey();
+                TimeUsuario time = entry.getValue();
+
+                List<Jogador> jogadoresAtualizados = new ArrayList<>(time.getJogadores());
+
+                for (int i = 0; i < jogadoresAtualizados.size(); i++) {
+                    Jogador original = jogadoresAtualizados.get(i);
+                    Jogador simulado = jogadoresSimuladosGlobal.get(original.getId());
+                    if (simulado != null) {
+                        jogadoresAtualizados.set(i, simulado);
+                    }
+                }
+
+                Jogador capitaoOriginal = time.getCapitao();
+                if(capitaoOriginal != null) {
+                    Jogador capitaoSimulado = jogadoresSimuladosGlobal.get(capitaoOriginal.getId());
+                    time.removeCapitao();
+                    time.setCapitao(capitaoSimulado);
+                } else {
+                    continue;
+                }
+
+                time.setJogadores(new HashSet<>(jogadoresAtualizados));
+
+                ocorreu = true;
+                time.calcularPontuacao();
+
+                allTimes.put(idTime, time);
+            }
+        }
+
+        return allTimes;
+    }
+
+        private static void salvarResultados() throws SQLException {
+            for (Map.Entry<Integer, TimeUsuario> entry : timesComIdsGlobal.entrySet()) {
+                int idTime = entry.getKey();
+                TimeUsuario time = entry.getValue();
+                timeDAO.inserirPontuacaoTime(idTime, time.getPontuacao());
+            }
+        }
+
+    /*
     // OBS: cuidar para que todos os clubes do campeonato estejam em alguma partida antes de simular
     public static boolean simular() throws SQLException {
 
@@ -85,7 +200,7 @@ public class Simulacao {
         }
 
         // usuário é nulo ent ne entra
-        /*
+
         for (Liga liga : ligas) {
             System.out.println("LIGA: " + liga);
             for (Usuario usuario : liga.getUsuarios()){
@@ -95,7 +210,7 @@ public class Simulacao {
                 timeDAO.inserirPontuacaoTime(usuario.getId(), usuario.getTimeUsuario().getPontuacao());
             }
         }
-         */
+
 
         // Agora, para cada usuário, substitua os jogadores do time pelos simulados e calcula pontuação
         for (Liga liga : ligas) {
@@ -147,6 +262,10 @@ public class Simulacao {
 
         return true;
     }
+
+    */
+
+
     // so pode ser usado apos a simulacao
     public static void resetar() throws SQLException {
 

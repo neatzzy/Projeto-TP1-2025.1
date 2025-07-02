@@ -60,6 +60,7 @@ public class ControllerTelaSimulacao implements Initializable {
         NavigationManager.popAndApply((Stage) menuMontagem.getScene().getWindow());
     }
 
+    /*
     @FXML
     private void simular() {
         btnSimular.setDisable(true);
@@ -76,6 +77,68 @@ public class ControllerTelaSimulacao implements Initializable {
 
         }).start();
     }
+
+     */
+
+    @FXML
+    private void simular() {
+        btnSimular.setDisable(true);
+        btnResetarSimulacao.setDisable(true);
+        labelMensagem.setText("");
+        progressBar.setProgress(0);
+
+        new Thread(() -> {
+            try {
+                int totalEtapas = 4;
+
+                for (int etapa = 0; etapa < totalEtapas; etapa++) {
+                    final int etapaAtual = etapa;
+
+                    boolean sucesso = Simulacao.simular(etapaAtual, mensagem -> {
+                        Platform.runLater(() -> labelMensagem.setText(mensagem));
+                    });
+
+                    if (!sucesso) {
+                        Platform.runLater(() -> {
+                            labelMensagem.setText("Erro na etapa " + etapaAtual);
+                            btnSimular.setDisable(false);
+                            btnResetarSimulacao.setDisable(false);
+                        });
+                        return;
+                    }
+
+                    // Progresso atual e alvo
+                    double progressoAtual = progressBar.getProgress();
+                    double progressoAlvo = (etapaAtual + 1) / (double) totalEtapas;
+
+                    // Incrementa suavemente até o valor alvo
+                    int steps = 40;
+                    double incremento = (progressoAlvo - progressoAtual) / steps;
+
+                    for (int i = 1; i <= steps; i++) {
+                        double novoProgresso = progressoAtual + (incremento * i);
+                        Platform.runLater(() -> progressBar.setProgress(novoProgresso));
+                        Thread.sleep(30);  // controla a suavidade
+                    }
+                }
+
+                Platform.runLater(() -> {
+                    labelMensagem.setText(mensagens[mensagens.length - 1]);
+                    btnResetarSimulacao.setDisable(false);
+                    btnSimular.setDisable(true);
+                });
+
+            } catch (SQLException | InterruptedException e) {
+                e.printStackTrace();
+                Platform.runLater(() -> {
+                    labelMensagem.setText("Erro inesperado: " + e.getMessage());
+                    btnSimular.setDisable(false);
+                    btnResetarSimulacao.setDisable(false);
+                });
+            }
+        }).start();
+    }
+
 
     private void executarAnimacaoProgresso() {
         Platform.runLater(() -> progressBar.setProgress(0));

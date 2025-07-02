@@ -3,6 +3,7 @@ package model;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.function.Consumer;
 
 import dao.JogadorDAO;
 import dao.LigaDAO;
@@ -17,8 +18,18 @@ public class Admin extends Pessoa {
         usuarioDAO = new UsuarioDAO(conn, new LigaDAO(conn));
     }
 
+    // simulação completa
     public boolean simular() throws SQLException {
-        return Simulacao.simular();
+
+        Consumer<String> atualizarMensagem = mensagem -> System.out.println(mensagem);
+
+        for (int etapa = 0; etapa <= 3; etapa++) {
+            boolean sucesso = Simulacao.simular(etapa, atualizarMensagem);
+            if (!sucesso) {
+                return false; // falhou em alguma etapa
+            }
+        }
+        return true; // tudo ok
     }
 
     public void resetarSimulacao() throws SQLException {
