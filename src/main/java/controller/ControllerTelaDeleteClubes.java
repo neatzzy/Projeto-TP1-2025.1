@@ -13,7 +13,6 @@ import model.Simulacao;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class ControllerTelaDeleteClubes {
 
@@ -66,12 +65,12 @@ public class ControllerTelaDeleteClubes {
             return;
         }
 
-        // 1. Remover do banco de dados
+        // Remove do banco de dados
         for (Clube clube : selecionados) {
             clubeDAO.deleteClubeById(clube.getId());
         }
 
-        // 2. Atualizar partidas
+        // Atualiza partidas
         List<Clube> adversarios = new ArrayList<>();
         List<Partida> partidas = new ArrayList<>();
 

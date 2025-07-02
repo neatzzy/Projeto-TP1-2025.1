@@ -30,9 +30,7 @@ public class ControllerTelaMercado {
     @FXML private TableColumn<Jogador, String> colPreco;
     @FXML private TableColumn<Jogador, Void> colComprar;
 
-
     private ObservableList<Jogador> listaJogadores = FXCollections.observableArrayList();
-
     private Connection conn;
     private TimeDAO timeDAO;
     private Usuario usuario;
@@ -43,75 +41,63 @@ public class ControllerTelaMercado {
         this.usuario = usuario;
         this.timeusuario = usuario.getTimeUsuario();
         this.timeDAO = timedao;
-
         inicializarInterface();
     }
 
     @FXML
     public void voltar(){
-
         try {
             NavigationManager.pop();
-
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/screens/UsrEscalarScreens/TelaCampinho.fxml"));
-
             Parent root = loader.load();
-            ControllerTelaCampinho controller = (ControllerTelaCampinho) loader.getController();
+            ControllerTelaCampinho controller = loader.getController();
             controller.setConnection(conn, usuario);
             Stage stage = (Stage) menuMontagem.getScene().getWindow();
             stage.setScene(new Scene(root));
             stage.setTitle("Campinho");
-
             stage.show();
-        }catch (IOException e){
-               throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 
+    // Inicializa interface e configura tabela
     @FXML
     private void inicializarInterface() {
-
-        timeusuario.imprimirTime();
-
+        // Configura colunas da tabela
         colTime.setCellValueFactory(cell -> new SimpleStringProperty(cell.getValue().getClube().getNome()));
         colPosicao.setCellValueFactory(cell -> new SimpleStringProperty(cell.getValue().getStringPosicao()));
         colJogador.setCellValueFactory(cell -> new SimpleStringProperty(cell.getValue().getNome()));
         colPreco.setCellValueFactory(cell -> new SimpleStringProperty(String.format("C$%.2f", cell.getValue().getPreco())));
 
+        // Configura filtros e botão de compra
         comboBoxFiltro.getItems().addAll("Todos", "Goleiro", "Zagueiro", "Meia", "Atacante");
         comboBoxFiltro.setValue("Todos");
 
+        // Configura célula de ação (comprar/remover)
         colComprar.setCellFactory(col -> new TableCell<>() {
             private final Button btn = new Button();
 
             {
                 btn.setOnAction(e -> {
                     Jogador jogador = getTableView().getItems().get(getIndex());
-
                     try {
                         if (timeusuario.getJogadores().contains(jogador)) {
-
-                            // Remover jogador
+                            // Remove jogador do time
                             timeusuario.removeJogador(jogador);
-
                             usuario.setTimeUsuario(timeusuario);
-
                             mostrarAlerta("Remoção", "Jogador removido com sucesso!");
                         } else {
-                            // Adicionar jogador
+                            // Adiciona jogador ao time
                             boolean inseriu = timeusuario.addJogador(jogador);
                             if (!inseriu) {
                                 mostrarAlerta("Erro", "Esse jogador não pode ser adicionado!");
                                 return;
                             }
-
                             usuario.setTimeUsuario(timeusuario);
-
                             mostrarAlerta("Sucesso", "Jogador comprado com sucesso!");
                         }
-
                         tableView.refresh();
-
                     } catch (Exception ex) {
                         ex.printStackTrace();
                         mostrarAlerta("Erro", "Erro ao processar jogador.");
@@ -126,6 +112,7 @@ public class ControllerTelaMercado {
                     setGraphic(null);
                 } else {
                     Jogador jogador = getTableView().getItems().get(getIndex());
+                    // Altera texto e cor do botão conforme estado
                     if (timeusuario.getJogadores().contains(jogador)) {
                         btn.setText("Remover");
                         btn.setStyle("-fx-background-color: #E53935; -fx-text-fill: white; -fx-background-radius: 10;");
@@ -143,27 +130,18 @@ public class ControllerTelaMercado {
         botaoPesquisar.setOnAction(e -> filtrar());
     }
 
+    // Carrega jogadores das partidas
     private void carregarJogadores() {
         listaJogadores.clear();
-
-        // Usar Set para evitar duplicatas
         Set<Jogador> jogadoresUnicos = new HashSet<>();
-
         for (Partida partida : Simulacao.getPartidas()) {
             jogadoresUnicos.addAll(partida.getAllJogadores());
         }
-
         listaJogadores.addAll(jogadoresUnicos);
-
         filtrar();
     }
 
-    @FXML
-    private void pesquisarJogador() {
-        filtrar();
-    }
-
-
+    // Filtra jogadores por posição e nome
     private void filtrar() {
         String filtro = comboBoxFiltro.getValue();
         String pesquisa = campoPesquisa.getText() != null ? campoPesquisa.getText().trim().toLowerCase() : "";
@@ -177,6 +155,7 @@ public class ControllerTelaMercado {
         tableView.setItems(filtrados);
     }
 
+    // Mostra alerta simples
     private void mostrarAlerta(String titulo, String msg) {
         Alert alerta = new Alert(Alert.AlertType.INFORMATION);
         alerta.setTitle(titulo);
@@ -184,5 +163,4 @@ public class ControllerTelaMercado {
         alerta.setContentText(msg);
         alerta.showAndWait();
     }
-
 }

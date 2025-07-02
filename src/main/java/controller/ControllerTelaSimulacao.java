@@ -45,40 +45,20 @@ public class ControllerTelaSimulacao implements Initializable {
         progressBar.setProgress(1.0);
         labelMensagem.setText(mensagens[mensagens.length - 1]);
         btnResetarSimulacao.setDisable(false);
-        btnSimular.setDisable(true);  // ➜ ADIÇÃO: desabilita o botão se já ocorreu
+        btnSimular.setDisable(true);
     }
 
     private void resetarEstadoInicial() {
         progressBar.setProgress(0.0);
         labelMensagem.setText("");
         btnResetarSimulacao.setDisable(true);
-        btnSimular.setDisable(false);  // ➜ garante que volte a habilitar ao resetar
+        btnSimular.setDisable(false);
     }
 
     @FXML
     private void voltar() {
         NavigationManager.popAndApply((Stage) menuMontagem.getScene().getWindow());
     }
-
-    /*
-    @FXML
-    private void simular() {
-        btnSimular.setDisable(true);
-        btnResetarSimulacao.setDisable(true);
-
-        new Thread(() -> {
-            try {
-                Simulacao.simular();
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
-
-            executarAnimacaoProgresso();
-
-        }).start();
-    }
-
-     */
 
     @FXML
     private void simular() {

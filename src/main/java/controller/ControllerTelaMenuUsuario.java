@@ -7,7 +7,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
-import model.Simulacao;
 import model.UserType;
 import model.Usuario;
 import java.io.IOException;
@@ -40,8 +39,10 @@ public class ControllerTelaMenuUsuario {
     private Button sairButton;
 
     public void setUsuarioLogado(Usuario usuario) { this.usuario = usuario; }
+
     public void setConnection(Connection conn) { this.conn = conn; }
 
+    // cada uma desses métodos redireciona para uma parte do programa
     @FXML
     public void liga(){
         try {
@@ -52,7 +53,7 @@ public class ControllerTelaMenuUsuario {
                 SceneInfo sceneInfo = new SceneInfo(labelTitulo.getScene(), "Menu do Usuário");
                 NavigationManager.push(sceneInfo);
 
-                ControllerTelaRedirectNoLiga controller = (ControllerTelaRedirectNoLiga) loader.getController();
+                ControllerTelaRedirectNoLiga controller = loader.getController();
                 controller.setConnection(conn, this.usuario);
 
                 Stage stage = (Stage) labelTitulo.getScene().getWindow();
@@ -67,7 +68,7 @@ public class ControllerTelaMenuUsuario {
                 SceneInfo sceneInfo = new SceneInfo(labelTitulo.getScene(), "Menu do Usuário");
                 NavigationManager.push(sceneInfo);
 
-                ControllerTelaViewLiga controller = (ControllerTelaViewLiga) loader.getController();
+                ControllerTelaViewLiga controller = loader.getController();
                 controller.setConnection(conn, this.usuario.getLiga(), this.usuario);
 
                 Stage stage = (Stage) labelTitulo.getScene().getWindow();
@@ -130,9 +131,6 @@ public class ControllerTelaMenuUsuario {
             SceneInfo sceneInfo = new SceneInfo(labelTitulo.getScene(), "Menu do Usuário");
             NavigationManager.push(sceneInfo);
 
-            //ControllerTelaInicio controller = (ControllerTelaInicio) loader.getController();
-            //controller.setConnection(conn);
-
             Stage stage = (Stage) labelTitulo.getScene().getWindow();
             stage.setScene(new Scene(root));
             stage.setTitle("Partidas");
@@ -151,9 +149,6 @@ public class ControllerTelaMenuUsuario {
             SceneInfo sceneInfo = new SceneInfo(labelTitulo.getScene(), "Menu do Usuário");
             NavigationManager.push(sceneInfo);
 
-            //ControllerTelaInicio controller = (ControllerTelaInicio) loader.getController();
-            //controller.setConnection(conn);
-
             Stage stage = (Stage) labelTitulo.getScene().getWindow();
             stage.setScene(new Scene(root));
             stage.setTitle("Jogadores");
@@ -169,7 +164,7 @@ public class ControllerTelaMenuUsuario {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/screens/UsrUsuarioScreens/TelaEditPerfilUsuario.fxml"));
             Parent root = loader.load();
 
-            ControllerTelaEditPerfilUsuario controller = (ControllerTelaEditPerfilUsuario) loader.getController();
+            ControllerTelaEditPerfilUsuario controller = loader.getController();
             controller.setConnection(conn);
             controller.setUsuario(this.usuario);
 
@@ -194,7 +189,7 @@ public class ControllerTelaMenuUsuario {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/screens/InicialScreens/TelaInicio.fxml"));
             Parent root = loader.load();
 
-            ControllerTelaInicio controller = (ControllerTelaInicio) loader.getController();
+            ControllerTelaInicio controller = loader.getController();
             controller.setConnection(conn);
 
             Stage stage = (Stage) labelTitulo.getScene().getWindow();
