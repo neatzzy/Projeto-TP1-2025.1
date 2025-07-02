@@ -9,7 +9,7 @@ import java.util.function.Consumer;
 // a ideia eh puxar os dados do db e colocar os clubes em uma lista, para gerar as partidas ou adiciona-las manualmente e depois simula-las
 // juntamente com a simulacao da liga
 
-public class Simulacao {
+public class Simulacao{
     private static boolean ocorreu = false;
     private static Set<Partida> partidas = new HashSet<>();
     private static LigaDAO ligaDAO;

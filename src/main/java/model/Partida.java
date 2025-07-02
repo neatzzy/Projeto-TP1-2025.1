@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
-public class Partida implements Simulavel{
+public class Partida{
 
     private Clube clubeCasa;
     private Clube clubeFora;

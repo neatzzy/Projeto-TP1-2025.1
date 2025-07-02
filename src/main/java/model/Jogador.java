@@ -1,6 +1,6 @@
 package model;
 
-public class Jogador {
+public class Jogador implements Calculavel {
     private int id;
     private String nome;
     private Posicao posicao;

@@ -131,6 +131,19 @@ public class ControllerTelaViewLigaAdm {
             mostrarAlerta("Erro", "Erro ao carregar usuários da liga.");
             e.printStackTrace();
         }
+        listViewUsuarios.setOnMouseClicked(event -> {
+            if (event.getClickCount() == 2) {
+                if (!Simulacao.getOcorreu()) {
+                    mostrarAlerta("Simulação não realizada", "A simulação ainda não foi realizada. Você não pode visualizar os times.");
+                    return;
+                }
+
+                Usuario selecionado = listViewUsuarios.getSelectionModel().getSelectedItem();
+                if (selecionado != null) {
+                    abrirTelaVisualizarCampinho(selecionado);
+                }
+            }
+        });
     }
 
     @FXML
@@ -182,6 +195,14 @@ public class ControllerTelaViewLigaAdm {
 
     @FXML
     private void deletarLiga() {
+        if(Simulacao.getOcorreu()) {
+            Alert alerta = new Alert(Alert.AlertType.WARNING);
+            alerta.setTitle("Ação bloqueada");
+            alerta.setHeaderText(null);
+            alerta.setContentText("Você não pode deletar a liga pois a simulação já foi realizada.");
+            alerta.showAndWait();
+            return;
+        }
         try {
 
             ligaDAO.deleteLiga(this.liga.getId());
@@ -239,6 +260,29 @@ public class ControllerTelaViewLigaAdm {
         } catch (IOException e) {
             e.printStackTrace();
             mostrarAlerta("Erro", "Erro ao redirecionar para o menu.");
+        }
+    }
+
+    private void abrirTelaVisualizarCampinho(Usuario outroUsuario) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/screens/UsrLigaScreens/TelaVisualizarCampinho.fxml"));
+            Parent root = loader.load();
+
+            ControllerTelaVisualizarCampinho controller = loader.getController();
+            controller.setConnection(conn, outroUsuario);
+
+            Stage stage = (Stage) menuMontagem.getScene().getWindow();
+
+            SceneInfo sceneInfo = new SceneInfo(menuMontagem.getScene(), stage.getTitle());
+            NavigationManager.push(sceneInfo);
+
+            stage.setScene(new Scene(root));
+            stage.setTitle("Visualizar Time de " + outroUsuario.getNome());
+            stage.show();
+
+        } catch (IOException e) {
+            mostrarAlerta("Erro", "Erro ao abrir visualização do time.");
+            e.printStackTrace();
         }
     }
 
