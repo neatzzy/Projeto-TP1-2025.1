@@ -1,6 +1,5 @@
 package dao;
 
-import model.Pessoa;
 import model.TimeUsuario;
 import model.Usuario;
 import model.Jogador;

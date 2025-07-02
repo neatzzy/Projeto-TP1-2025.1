@@ -6,17 +6,14 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.*;
 import java.util.function.Consumer;
-// a ideia eh puxar os dados do db e colocar os clubes em uma lista, para gerar as partidas ou adiciona-las manualmente e depois simula-las
-// juntamente com a simulacao da liga
 
 public class Simulacao{
     private static boolean ocorreu = false;
     private static Set<Partida> partidas = new HashSet<>();
     private static LigaDAO ligaDAO;
-    private static UsuarioDAO usuarioDAO;
     private static TimeDAO timeDAO;
 
-    // ŕa ajudar na separação das etapas
+    // para ajudar na separação das etapas
     private static List<Liga> ligasGlobal;
     private static Map<Integer, Jogador> jogadoresSimuladosGlobal;
     private static Map<Integer, TimeUsuario> timesComIdsGlobal;
@@ -24,7 +21,6 @@ public class Simulacao{
 
     public void InicializarConexoes(Connection conn){
         ligaDAO = new LigaDAO(conn);
-        usuarioDAO = new UsuarioDAO(conn, new LigaDAO(conn));
         timeDAO = new TimeDAO(conn, new UsuarioDAO(conn, new LigaDAO(conn)), new JogadorDAO(conn, new ClubeDAO(conn)));
     }
 
@@ -44,7 +40,6 @@ public class Simulacao{
         return true;
     }
     // adiciona partida entre 2 clubes na simulacao, retorna falso se os clubes ja estiverem em uma partida
-    // TODO: dar override nos metodos equals/hash de Partida e talvez Clube, criar um construtor na classe Partida
     public static boolean addPartida(Clube clubeCasa, Clube clubeFora){
         if (clubeCasa.getPartida() || clubeFora.getPartida()) return false;
         Partida partida = new Partida(clubeCasa, clubeFora);
@@ -168,105 +163,7 @@ public class Simulacao{
             }
         }
 
-    /*
-    // OBS: cuidar para que todos os clubes do campeonato estejam em alguma partida antes de simular
-    public static boolean simular() throws SQLException {
-
-        System.out.println("Simular INICIOU");
-
-        List<Liga> ligas = ligaDAO.getAllLigas();
-
-        Map<Integer, Jogador> jogadoresSimulados = new HashMap<>();
-
-
-        for (Liga liga : ligas) {
-            for (Usuario usuario : liga.getUsuarios()){
-                if(!usuario.getTimeUsuario().isValido()) return false;
-            }
-        }
-
-        for (Partida partida : partidas){
-            partida.simular(); // já calcula a pontuação dos jogadores junto
-
-            // Adiciona jogadores do time da casa
-            for (Jogador j : partida.getClubeCasa().getJogadores()) {
-                jogadoresSimulados.put(j.getId(), j);
-            }
-
-            // Adiciona jogadores do time visitante
-            for (Jogador j : partida.getClubeFora().getJogadores()) {
-                jogadoresSimulados.put(j.getId(), j);
-            }
-        }
-
-        // usuário é nulo ent ne entra
-
-        for (Liga liga : ligas) {
-            System.out.println("LIGA: " + liga);
-            for (Usuario usuario : liga.getUsuarios()){
-                System.out.println("USUARIO: " + usuario);
-                usuario.getTimeUsuario().calcularPontuacao();
-                System.out.println("CALCULANDO PONTUACAO: " + usuario.getTimeUsuario().getPontuacao());
-                timeDAO.inserirPontuacaoTime(usuario.getId(), usuario.getTimeUsuario().getPontuacao());
-            }
-        }
-
-
-        // Agora, para cada usuário, substitua os jogadores do time pelos simulados e calcula pontuação
-        for (Liga liga : ligas) {
-            System.out.println("LIGA: " + liga);
-
-            ocorreu = false;
-
-            // Pega todos os times da liga direto pelo DAO
-            Map<Integer, TimeUsuario> timesComIds = timeDAO.getAllTimesComIdsPorLigaId(liga.getId());
-
-            for (Map.Entry<Integer, TimeUsuario> entry : timesComIds.entrySet()) {
-
-                ocorreu = false;
-
-                int idTime = entry.getKey();
-                TimeUsuario time = entry.getValue();
-
-                System.out.println("TIME ID: " + idTime);
-
-                time.imprimirTime();
-
-                // Substituir jogadores pelos simulados
-                List<Jogador> jogadoresOriginais = new ArrayList<>(time.getJogadores());
-
-                for (int i = 0; i < jogadoresOriginais.size(); i++) {
-                    Jogador original = jogadoresOriginais.get(i);
-                    Jogador simulado = jogadoresSimulados.get(original.getId());
-                    if (simulado != null) {
-                        jogadoresOriginais.set(i, simulado);
-                    }
-                }
-
-                time.setJogadores(new HashSet<>(jogadoresOriginais));
-
-                System.out.println("ocorreu sim1: " + ocorreu);
-
-                ocorreu = true;
-
-                // Calcula pontuação atualizada
-                time.calcularPontuacao();
-                System.out.println("CALCULANDO PONTUACAO (Time ID " + idTime + "): " + time.getPontuacao());
-
-                // Atualiza no banco usando o id do time
-                timeDAO.inserirPontuacaoTime(idTime, time.getPontuacao());
-            }
-        }
-
-        ocorreu = true;
-
-        return true;
-    }
-
-    */
-
-
-    // so pode ser usado apos a simulacao
+    // so pode ser usado apos a simulacao para reseta-la
     public static void resetar() throws SQLException {
 
         List<Liga> ligas = ligaDAO.getAllLigas();
@@ -303,6 +200,7 @@ public class Simulacao{
         ocorreu = false;
     }
 
+    // troca dois clubes de lugar em uma partida
     public static boolean trocarClubes(Clube clube1, Clube clube2) {
         if (clube1 == null || clube2 == null || clube1.equals(clube2)) return false;
 
@@ -336,13 +234,14 @@ public class Simulacao{
         return true;
     }
 
-    // TODO: implementar o metodo resetStats() que itera pelos jogadores e reseta seus stats
+    // reseta os stats de todos os jogadores que estão em alguma partida
     private static void resetPartidasStats(Set<Partida> partidas){
         for(Partida partida : partidas){
             partida.resetStats();
         }
     }
 
+    // esvazia a lista de partidas
     public static void clear(){
         for (Partida p : partidas) {
             p.getClubeCasa().setPartida(false);

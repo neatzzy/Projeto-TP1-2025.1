@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
-// nota: mudar para passar objetos como parâmetros? facilitaria visualização do programa
 
 public class LigaDAO {
 

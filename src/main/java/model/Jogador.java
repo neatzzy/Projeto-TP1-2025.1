@@ -9,7 +9,6 @@ public class Jogador implements Calculavel {
     private double overall;
     private double pontuacao = 0;
     private Stats stats;
-    //private final DbFunctions db = new DbFunctions(); sem uso?
 
     public Jogador(int id, String nome, Posicao posicao, Clube clube, double preco, double overall) {
         this.id = id;
@@ -21,51 +20,7 @@ public class Jogador implements Calculavel {
         this.stats = new Stats();
     }
 
-    public int getId() {
-        return id;
-    }
-
-    public String getNome() {
-        return nome;
-    }
-
-    public Posicao getPosicao() {
-        return posicao;
-    }
-
-    public Clube getClube() {
-        return clube;
-    }
-
-    public void setClube(Clube clube) {
-        this.clube = clube;
-    }
-
-    public double getPreco() {
-        return preco;
-    }
-
-    public double getOverall() {
-        return overall;
-    }
-
-    public String getStringPosicao(){
-        return switch (posicao) {
-            case ATACANTE -> "ATACANTE";
-            case MEIA -> "MEIA";
-            case ZAGUEIRO -> "ZAGUEIRO";
-            case GOLEIRO -> "GOLEIRO";
-        };
-    }
-
-    public Stats getStats() {
-        return stats;
-    }
-
-    public void setStats(Stats stats) {
-        this.stats = stats;
-    }
-
+    // calcula a pontuacao total do jogador baseada em seus Stats e posicao
     public double calcularPontuacao(){
         stats.setPosicao(this.getStringPosicao());
         double pontuacao = 0;
@@ -91,8 +46,49 @@ public class Jogador implements Calculavel {
         return pontuacao;
     }
 
+    public Stats getStats() {
+        return stats;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public Posicao getPosicao() {
+        return posicao;
+    }
+
+    public Clube getClube() {
+        return clube;
+    }
+
+    public double getPreco() {
+        return preco;
+    }
+
     public double getPontuacao() {
         return this.pontuacao;
+    }
+
+    public double getOverall() {
+        return overall;
+    }
+
+    public void setClube(Clube clube) {
+        this.clube = clube;
+    }
+
+    public String getStringPosicao(){
+        return switch (posicao) {
+            case ATACANTE -> "ATACANTE";
+            case MEIA -> "MEIA";
+            case ZAGUEIRO -> "ZAGUEIRO";
+            case GOLEIRO -> "GOLEIRO";
+        };
     }
 
     // só pra comparar
@@ -108,6 +104,5 @@ public class Jogador implements Calculavel {
     public int hashCode() {
         return Integer.hashCode(id);
     }
-
 }
 
