@@ -57,6 +57,13 @@ Disponível para computador, o aplicativo permite que os usuários escalem seus 
 
 Para colocar esse projeto em prática, a empresa designou três estudantes de Ciência da Computação — Elvis Miranda, Gustavo Alves e Pedro Marcinoni — para desenvolver um programa capaz de auxiliar na logística de gestão de qualquer liga de tiro-curto, servindo depois como base para o funcionamento integral do aplicativo.
 
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.4\textwidth]{LogoCartolitos.png}
+  \caption{Cartolitos CF - Fantasy Game}
+  \label{fig:cartolitos}
+\end{figure}
+
 
 \section{Definição das regras de negócio}
 \label{sec:regras}
@@ -124,69 +131,65 @@ Para colocar esse projeto em prática, a empresa designou três estudantes de Ci
 
 \subsection{Classe abstrata Pessoa}
 
-A classe abstrata \textbf{Pessoa} representa o conceito genérico de uma pessoa dentro do sistema, servindo como base para outras classes mais específicas, como usuários comuns e administradores. Ela define os principais atributos e comportamentos compartilhados por todas as pessoas cadastradas no sistema.
+A classe \textbf{Pessoa} é uma classe abstrata que representa uma pessoa genérica no sistema. Ela possui os seguintes \textbf{atributos}:
 
 \begin{itemize}
-  \item \textbf{Atributos:}
-        \begin{itemize}
-          \item \texttt{id}: identificador único de cada pessoa.
-          \item \texttt{nome}: nome da pessoa.
-          \item \texttt{senha}: senha utilizada para autenticação no sistema.
-        \end{itemize}
-  \item \textbf{Métodos:}
-        \begin{itemize}
-          \item \texttt{getId()}: retorna o identificador da pessoa.
-          \item \texttt{getNome()} e \texttt{setNome(String nome)}: obtêm e alteram o nome da pessoa.
-          \item \texttt{getSenha()} e \texttt{setSenha(String senha)}: obtêm e alteram a senha da pessoa.
-          \item \texttt{isAdmin()}: indica se a pessoa é um administrador. Por padrão, retorna \texttt{false}, mas pode ser sobrescrito em subclasses.
-        \end{itemize}
+  \item \texttt{id}: um identificador único para cada pessoa.
+  \item \texttt{nome}: armazena o nome da pessoa.
+  \item \texttt{senha}: armazena a senha da pessoa para autenticação.
 \end{itemize}
 
-Dessa forma, a classe \textbf{Pessoa} garante a reutilização de código e facilita a manutenção, permitindo que funcionalidades comuns sejam implementadas uma única vez e herdadas pelas demais classes do sistema.
+Além disso, a classe define os seguintes \textbf{métodos} (excluindo getters e setters):
+
+\begin{itemize}
+  \item \textbf{Construtor \texttt{Pessoa(int id, String nome, String senha)}}: inicializa os atributos \texttt{id}, \texttt{nome} e \texttt{senha} ao criar uma nova instância da classe (ou de suas subclasses).
+  \item \textbf{\texttt{isAdmin()}}: método que retorna \texttt{false} por padrão, indicando que a pessoa não é administradora. Esse método pode ser sobrescrito em subclasses para indicar se uma pessoa é administradora do sistema.
+\end{itemize}
+
+A classe serve como base para outras classes que representam tipos específicos de pessoas, permitindo reutilização e especialização de comportamento.
 
 \subsubsection{Sublasse Usuario}
 
-A subclasse \textbf{Usuario} representa um usuário do sistema, sendo uma especialização da classe abstrata \texttt{Pessoa}. Ela adiciona atributos e comportamentos específicos relacionados à participação do usuário em ligas e à administração dessas ligas.
+A classe \textbf{Usuario} é uma subclasse de \texttt{Pessoa} que representa um usuário do sistema, com funcionalidades específicas para participação em ligas e gerenciamento de seu time. Os principais \textbf{atributos} são:
 
 \begin{itemize}
-  \item \textbf{Atributos principais:}
-        \begin{itemize}
-          \item \texttt{cartoletas}: representa o saldo virtual do usuário, utilizado para comprar jogadores.
-          \item \texttt{tipo}: indica o tipo do usuário, podendo ser comum ou administrador de liga.
-          \item \texttt{timeUsuario}: armazena o time montado pelo usuário.
-          \item \texttt{liga}: referência à liga da qual o usuário faz parte.
-        \end{itemize}
-  \item \textbf{Métodos principais:}
-        \begin{itemize}
-          \item \texttt{editarNomeLiga(String novoNome)}: permite ao administrador de liga alterar o nome da liga.
-          \item \texttt{addUsuarioLiga(Usuario usuario)}: permite ao administrador adicionar um novo usuário à liga.
-          \item \texttt{removeUsuarioLiga(Usuario usuario)}: permite ao administrador remover um usuário da liga.
-          \item \texttt{entrarLiga(Liga liga)}: permite ao usuário entrar em uma liga, caso ainda não participe de nenhuma.
-          \item \texttt{sairLiga(Liga liga)}: permite ao usuário sair da liga atual.
-          \item \texttt{toString()}: retorna uma representação textual do usuário, exibindo seu ID e nome.
-        \end{itemize}
+  \item \texttt{cartoletas}: saldo virtual do usuário, utilizado para comprar jogadores (inicialmente 150).
+  \item \texttt{tipo}: indica o tipo do usuário, podendo ser comum ou administrador de liga.
+  \item \texttt{timeUsuario}: referência ao time montado pelo usuário.
+  \item \texttt{liga}: referência à liga da qual o usuário faz parte.
+\end{itemize}
+
+Os principais \textbf{métodos} (excluindo getters e setters) são:
+
+\begin{itemize}
+  \item \texttt{Usuario(int id, String nome, String senha, UserType tipo, Liga liga)}: construtor que inicializa o usuário com seus dados, tipo, liga e time.
+  \item \texttt{editarNomeLiga(String novoNome)}: permite ao administrador de liga alterar o nome da liga.
+  \item \texttt{addUsuarioLiga(Usuario usuario)}: permite ao administrador adicionar um novo usuário à liga.
+  \item \texttt{removeUsuarioLiga(Usuario usuario)}: permite ao administrador remover um usuário da liga.
+  \item \texttt{entrarLiga(Liga liga)}: permite ao usuário entrar em uma liga, caso ainda não participe de nenhuma.
+  \item \texttt{sairLiga(Liga liga)}: permite ao usuário sair da liga atual; se for administrador de liga, seu tipo é alterado para comum.
+  \item \texttt{toString()}: retorna uma representação textual do usuário, exibindo seu ID e nome.
 \end{itemize}
 
 Esses métodos garantem as principais operações de gerenciamento de ligas e participação dos usuários, respeitando as regras de negócio do sistema.
 
 \subsubsection{Sublasse Admin}
 
-A subclasse \textbf{Admin} representa o administrador do sistema, sendo uma especialização da classe abstrata \texttt{Pessoa}. Ela é responsável por operações administrativas, como gerenciamento de usuários e simulação de partidas.
+A subclasse \textbf{Admin} representa o administrador do sistema, sendo uma especialização da classe abstrata \texttt{Pessoa}. Ela é responsável por operações administrativas, como gerenciamento de usuários e simulação de partidas. Os principais \textbf{atributos} são:
 
 \begin{itemize}
-  \item \textbf{Atributos principais:}
-        \begin{itemize}
-          \item \texttt{usuarioDAO}: objeto responsável pelo acesso e manipulação dos dados dos usuários no banco de dados.
-        \end{itemize}
-  \item \textbf{Métodos principais:}
-        \begin{itemize}
-          \item \texttt{Admin(int id, String nome, String senha, Connection conn)}: construtor que inicializa o administrador e o objeto de acesso a dados.
-          \item \texttt{simular()}: executa a simulação das partidas do sistema.
-          \item \texttt{resetarSimulacao()}: reseta os dados da simulação realizada.
-          \item \texttt{deleteUsuario(Usuario usuario)}: remove um usuário do sistema a partir de um objeto \texttt{Usuario}.
-          \item \texttt{deleteUsuario(int id)}: remove um usuário do sistema a partir do seu identificador.
-          \item \texttt{isAdmin()}: sobrescreve o método da classe \texttt{Pessoa} para indicar que esta instância é de um administrador.
-        \end{itemize}
+  \item \texttt{usuarioDAO}: objeto responsável pelo acesso e manipulação dos dados dos usuários no banco de dados.
+\end{itemize}
+
+Os principais \textbf{métodos} (excluindo getters e setters) são:
+
+\begin{itemize}
+  \item \texttt{Admin(int id, String nome, String senha, Connection conn)}: construtor que inicializa o administrador e o objeto de acesso a dados.
+  \item \texttt{simular()}: executa a simulação das partidas do sistema, passando por todas as etapas necessárias.
+  \item \texttt{resetarSimulacao()}: reseta os dados da simulação realizada, restaurando o estado inicial.
+  \item \texttt{deleteUsuario(Usuario usuario)}: remove um usuário do sistema a partir de um objeto \texttt{Usuario}.
+  \item \texttt{deleteUsuario(int id)}: remove um usuário do sistema a partir do seu identificador.
+  \item \texttt{isAdmin()}: sobrescreve o método da classe \texttt{Pessoa} para indicar que esta instância é de um administrador.
 \end{itemize}
 
 Esses métodos permitem ao administrador controlar usuários e simulações, garantindo a manutenção e o funcionamento correto do sistema.
@@ -241,7 +244,7 @@ A classe \textbf{Liga} representa uma liga do sistema, permitindo o agrupamento 
   \item \textbf{Métodos principais:}
         \begin{itemize}
           \item \texttt{Liga(int id, String nome, String senha)}: construtor que inicializa a liga com identificador, nome e senha.
-          \item \texttt{removeAll()}: remove todos os usuários da liga.
+          \item \texttt{removeAll()}: remove todos os usuários da liga, fazendo com que cada usuário saia da liga.
           \item \texttt{addUsuario(Usuario usuario)}: adiciona um usuário à liga e incrementa o número de participantes.
           \item \texttt{removeUsuario(Usuario usuario)}: remove um usuário da liga e decrementa o número de participantes.
           \item \texttt{gerarRanking()}: gera e retorna uma lista dos times dos usuários, ordenada pela pontuação (ranking da liga).
@@ -261,39 +264,42 @@ A classe \textbf{Simulacao} é responsável por gerenciar o processo de simulaç
         \begin{itemize}
           \item \texttt{ocorreu}: indica se a simulação já foi realizada.
           \item \texttt{partidas}: conjunto de partidas que serão simuladas.
-          \item \texttt{ligaDAO}: objeto responsável pelo acesso e manipulação dos dados das ligas no banco de dados.
-          \item \texttt{usuarioDAO}: objeto responsável pelo acesso e manipulação dos dados dos usuários no banco de dados.
+          \item \texttt{ligaDAO}, \texttt{usuarioDAO}, \texttt{timeDAO}: objetos responsáveis pelo acesso e manipulação dos dados das ligas, usuários e times no banco de dados.
+          \item \texttt{ligasGlobal}: lista global de ligas envolvidas na simulação.
+          \item \texttt{jogadoresSimuladosGlobal}: mapa global de jogadores simulados, indexados por ID.
+          \item \texttt{timesComIdsGlobal}: mapa global de times simulados, indexados por ID.
         \end{itemize}
   \item \textbf{Métodos principais:}
         \begin{itemize}
           \item \texttt{InicializarConexoes(Connection conn)}: inicializa os objetos de acesso a dados com a conexão ao banco.
           \item \texttt{gerarPartidasAleatorias(List<Clube> clubes)}: sorteia clubes em partidas aleatórias, garantindo que todos participem.
           \item \texttt{addPartida(Clube clubeCasa, Clube clubeFora)}: adiciona uma partida entre dois clubes, se ambos ainda não estiverem em outra partida.
-          \item \texttt{simular()}: executa a simulação das partidas e calcula a pontuação dos jogadores e times das ligas.
+          \item \texttt{removePartida(Partida partida)}: remove uma partida da simulação.
+          \item \texttt{simular(int etapa, Consumer<String> atualizarMensagem)}: executa a simulação das partidas em etapas, desde a verificação dos times até o salvamento dos resultados.
           \item \texttt{resetar()}: reseta o estado da simulação, restaurando os dados dos jogadores e times.
           \item \texttt{trocarClubes(Clube clube1, Clube clube2)}: troca clubes entre partidas diferentes.
           \item \texttt{clear()}: limpa todas as partidas da simulação e libera os clubes para novas partidas.
         \end{itemize}
 \end{itemize}
 
-Esses métodos permitem o controle completo do ciclo de simulação das partidas, desde a geração dos confrontos até o cálculo e a reinicialização dos resultados.
+Esses métodos permitem o controle completo do ciclo de simulação das partidas, desde a geração dos confrontos até o cálculo e a reinicialização dos resultados, integrando-se com o banco de dados e garantindo a consistência das informações no sistema.
 
-\subsection{Interface Simulavel}
+\subsection{Interface Calculavel}
 
-A interface \textbf{Simulavel} define um contrato para as classes que desejam implementar a funcionalidade de simulação no sistema. Ela garante que qualquer classe que a implemente possua o método necessário para realizar uma simulação.
+A interface \textbf{Calculavel} define um contrato para as classes que desejam implementar a funcionalidade de cálculo de pontuação no sistema. Ela garante que qualquer classe que a implemente possua o método necessário para realizar esse cálculo.
 
 \begin{itemize}
   \item \textbf{Métodos principais:}
         \begin{itemize}
-          \item \texttt{simular()}: método abstrato que deve ser implementado pelas classes concretas, responsável por executar a lógica de simulação específica de cada classe.
+          \item \texttt{calcularPontuacao()}: método abstrato que deve ser implementado pelas classes concretas, responsável por calcular e retornar a pontuação de acordo com a lógica específica de cada classe.
         \end{itemize}
 \end{itemize}
 
-Dessa forma, a interface \textbf{Simulavel} promove a padronização e a reutilização de código, permitindo que diferentes componentes do sistema possam ser simulados de maneira uniforme.
+Dessa forma, a interface \textbf{Calculavel} promove a padronização e a reutilização de código, permitindo que diferentes componentes do sistema possam calcular pontuações de maneira uniforme, como na classe \texttt{Jogador} e na classe \texttt{TimeUsuario}.
 
 \subsubsection{Classe Partida}
 
-A classe \textbf{Partida}, implementação da interface \textbf{Simulavel} representa um confronto entre dois clubes no sistema, sendo responsável por simular o jogo, calcular estatísticas dos jogadores e armazenar os principais eventos da partida.
+A classe \textbf{Partida} representa um confronto entre dois clubes no sistema, sendo responsável por simular o jogo, calcular estatísticas dos jogadores e armazenar os principais eventos da partida.
 
 \begin{itemize}
   \item \textbf{Atributos principais:}
@@ -379,7 +385,7 @@ A classe \textbf{Stats} representa as estatísticas detalhadas de desempenho de 
         \end{itemize}
 \end{itemize}
 
-Esses métodos e atributos permitem registrar, manipular e exibir as estatísticas individuais dos jogadores, sendo fundamentais para o cálculo da pontuação e para a análise de desempenho nas partidas simuladas.
+Esses métodos e atributos permitem registrar, manipular e exibir as estatísticas individuais dos jogadores, sendo fundamentais para o cálculo da pontuação e para a análise de desempenho
 
 \subsection{Classe Clube}
 
@@ -407,12 +413,11 @@ A classe \textbf{Clube} representa um clube de futebol no sistema, armazenando i
           \item \texttt{recalcOverAtaqueAdd/Sub(double overall)} e \texttt{recalcOverDefesaAdd/Sub(double overall)}: recalculam a média de overall de ataque ou defesa ao adicionar ou remover jogadores.
           \item \texttt{isAtaque(Posicao posicao)} e \texttt{isDefesa(Posicao posicao)}: verificam se uma posição é considerada de ataque ou defesa.
           \item \texttt{toString()}: retorna uma representação textual do clube.
+          \item \texttt{equals(Object o)} e \texttt{hashCode()}: métodos sobrescritos para garantir a correta comparação e uso do clube em coleções.
         \end{itemize}
 \end{itemize}
 
-Esses métodos e atributos permitem o gerenciamento completo dos clubes, incluindo a manutenção dos jogadores, atualização das médias de desempenho e integração com o banco de
-
-
+Esses métodos e atributos permitem o gerenciamento completo dos clubes, incluindo a manutenção dos jogadores, atualização das médias de desempenho e integração com o banco de dados do sistema.
 
 \section{Telas}
 \label{sec:telas}
@@ -420,32 +425,268 @@ Esses métodos e atributos permitem o gerenciamento completo dos clubes, incluin
 \subsection{Telas Iniciais}
 \label{sec:telas_iniciais}
 
+\subsubsection{Tela de Início}
+\label{sec:tela_inicio}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{Telas/Iniciais/TelaInicial.png}
+  \caption{Tela de Início do Cartolitos CF}
+  \label{fig:tela_inicio}
+\end{figure}
+A tela de início é a primeira interface que o usuário vê ao abrir o programa. Ela apresenta o logotipo do Cartolitos CF e opções para acessar as funcionalidades de login e de cadastro.
+
+\subsubsection{Tela de Login}
+\label{sec:tela_login}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{Telas/Iniciais/TelaLogin.png}
+  \caption{Tela de Login do Cartolitos CF}
+  \label{fig:tela_login}
+\end{figure}
+
+A tela de login permite que o usuário insira suas credenciais (nome e senha) para acessar sua conta. Caso o usuário não tenha uma conta, ele pode optar por se cadastrar.
+
+\subsubsection{Tela de Cadastro}
+\label{sec:tela_cadastro}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{Telas/Iniciais/TelaCadastro.png}
+  \caption{Tela de Cadastro do Cartolitos CF}
+  \label{fig:tela_cadastro}
+\end{figure}
+A tela de cadastro permite que novos usuários criem uma conta no sistema, fornecendo um nome, e-mail e senha. Após o cadastro, o usuário é redirecionado para a tela de login.
+
 O programa possui dois fluxos principais: o fluxo do usuário e o fluxo do administrador. Cada um possui telas específicas para suas funcionalidades.
 
 \subsection{Fluxo do usuário}
 \label{sec:fluxo_usuario}
 \subsubsection{Menu Principal}
 \label{sec:menu_principal}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{Telas/Usuario/Menu.png}
+  \caption{Menu Principal do Cartolitos CF}
+  \label{fig:menu_principal}
+\end{figure}
+
+A tela do menu principal é exibida após o login bem-sucedido do usuário. Ela apresenta as opções disponíveis para o usuário, como visualizar seu time, participar de ligas, escalar jogadores e editar seu perfil. O usuário pode navegar entre essas opções para acessar as funcionalidades do sistema.
+
 \subsubsection{Ligas}
 \label{sec:ligasUsr}
 
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{Telas/Usuario/Liga-NoLiga.png}
+  \caption{Tela de Ligas do Cartolitos CF}
+  \label{fig:ligas}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{Telas/Usuario/AcessarLiga.png}
+  \caption{Tela de Acesso às Ligas do Cartolitos CF}
+  \label{fig:liga_acessar}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{Telas/Usuario/CriarLiga.png}
+  \caption{Tela de Criação de Liga do Cartolitos CF}
+  \label{fig:liga_criar}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{Telas/Usuario/ViewLiga.png}
+  \caption{Tela de Detalhes da Liga do Cartolitos CF}
+  \label{fig:liga_detalhes}
+\end{figure}
+
+Quando o usuário acessa a opção de ligas, ele é direcionado para uma tela que exibe as opções relacionadas às ligas. Se o usuário ainda não estiver em uma liga, ele pode optar por entrar em uma liga existente ou criar uma nova liga. Caso já esteja em uma liga, ele pode visualizar os detalhes da liga, como participantes e pontuações (caso as partidas já tenham sido simuladas).
+
+\subsubsection{Escalar Jogadores}
+\label{sec:escalar_jogadores}
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{Telas/Usuario/Campinho.png}
+  \caption{Tela de Escalação de Jogadores do Cartolitos CF}
+  \label{fig:escalar_jogadores}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{Telas/Usuario/Mercado.png}
+  \caption{Tela de Mercado do Cartolitos CF}
+  \label{fig:mercado}
+\end{figure}
+A tela de escalação de jogadores permite que o usuário monte seu time, escolhendo jogadores disponíveis no mercado. O usuário pode visualizar os jogadores por posição (goleiro, zagueiro, meio-campista e atacante) e selecioná-los para compor sua equipe. A tela também exibe informações sobre nome, clube, preço.
+
+\subsubsection{Partidas}
+\label{sec:partidas}
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{Telas/Usuario/ViewPartidas.png}
+  \caption{Tela de Partidas do Cartolitos CF}
+  \label{fig:partidas}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{Telas/Usuario/ViewPartida.png}
+  \caption{Tela de Partidas Simuladas do Cartolitos CF}
+  \label{fig:partidas_simuladas}
+\end{figure}
+A tela de partidas exibe as partidas simuladas entre os clubes da liga. O usuário pode visualizar os resultados das partidas, incluindo gols, assistências e estatísticas dos jogadores. Essa tela permite que o usuário acompanhe o desempenho de seu time e dos demais participantes da liga.
+
+\subsubsection{Jogadores}
+\label{sec:jogadores}
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{Telas/Usuario/ViewJogadores.png}
+  \caption{Tela de Jogadores do Cartolitos CF}
+  \label{fig:jogadores}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{Telas/Usuario/ViewJogador.png}
+  \caption{Tela de Detalhes do Jogador do Cartolitos CF}
+  \label{fig:jogador_detalhes}
+\end{figure}
+A tela de jogadores permite que o usuário visualize todos os jogadores disponíveis no sistema, incluindo aqueles que ele já escalou em seu time. O usuário pode acessar detalhes de cada jogador, como estatísticas, pontuação e preço. Essa tela é útil para o usuário acompanhar o desempenho dos jogadores e tomar decisões sobre escalação.
+
+\subsubsection{Editar Perfil do Usuário}
+\label{sec:perfil_usuario}
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{Telas/Usuario/EditarPerfil.png}
+  \caption{Tela de Edição de Perfil do Usuário do Cartolitos CF}
+  \label{fig:editar_perfil}
+\end{figure}
+A tela de edição de perfil permite que o usuário altere suas informações pessoais, como nome e senha. O usuário pode atualizar seus dados e salvar as alterações para manter seu perfil atualizado.
+
+\subsection{Fluxo do administrador}
+\label{sec:fluxo_admin}
+\subsubsection{Menu do Administrador}
+\label{sec:menu_admin}
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{Telas/Admin/MenuAdm.png}
+  \caption{Menu do Administrador do Cartolitos CF}
+  \label{fig:menu_admin}
+\end{figure}
+A tela do menu do administrador é exibida após o login bem-sucedido de um usuário com privilégios de administrador. Ela apresenta as opções disponíveis para o administrador, como simular partidas, gerenciar usuários e ligas, editar clubes, jogadores e confrontos entre clubes. O administrador pode navegar entre essas opções para acessar as funcionalidades administrativas do sistema.
+
+\subsubsection{Simular Partidas}
+\label{sec:simular_partidas}
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{Telas/Admin/Simulação.png}
+  \caption{Tela de Simulação de Partidas do Cartolitos CF}
+  \label{fig:simular_partidas}
+\end{figure}
+A tela de simulação de partidas permite que o administrador execute a simulação das partidas entre os clubes cadastrados. O administrador pode iniciar a simulação, que irá gerar estatísticas e pontuações para cada jogador, além de atualizar os resultados da liga.
+
+\subsubsection{Gerenciar Ligas}
+\label{sec:gerenciar_ligas}
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{Telas/Admin/Ligas.png}
+  \caption{Tela de Gerenciamento de Ligas do Cartolitos CF}
+  \label{fig:gerenciar_ligas}
+\end{figure}
+A tela de gerenciamento de ligas permite que o administrador visualize todas as ligas cadastradas no sistema. O administrador pode acessar os detalhes de cada liga, editar informações, adicionar ou remover usuários e deletar ligas, se necessário. Essa tela é essencial para o controle das competições e para garantir que as ligas estejam funcionando corretamente.
+
+\subsubsection{Gerenciar Usuários}
+\label{sec:gerenciar_usuarios}
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{Telas/Admin/Usuarios.png}
+  \caption{Tela de Gerenciamento de Usuários do Cartolitos CF}
+  \label{fig:gerenciar_usuarios}
+\end{figure}
+A tela de gerenciamento de usuários permite que o administrador visualize todos os usuários cadastrados no sistema. O administrador pode acessar os detalhes de cada usuário e excluir usuários, se necessário. Essa tela é importante para manter o controle sobre os participantes do sistema e garantir que apenas usuários válidos tenham acesso às funcionalidades.
+
+\subsubsection{Gerenciar Clubes}
+\label{sec:gerenciar_clubes}
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{Telas/Admin/Clubes.png}
+  \caption{Tela de Gerenciamento de Clubes do Cartolitos CF}
+  \label{fig:gerenciar_clubes}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{Telas/Admin/CriarClubes.png}
+  \caption{Tela de Edição de Clubes do Cartolitos CF}
+  \label{fig:editar_clube}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{Telas/Admin/DeleteClubes.png}
+  \caption{Tela de Edição de Clubes do Cartolitos CF}
+  \label{fig:editar_clube2}
+\end{figure}
+A tela de gerenciamento de clubes permite que o administrador visualize todos os clubes cadastrados no sistema. O administrador pode acessar os detalhes de cada clube, adicionar dois novos clubes (pois não pode haver um clube sem jogo na rodada) e excluir clubes, se necessário. Essa tela é essencial para manter o controle sobre os clubes participantes do sistema e garantir que as informações estejam atualizadas.
+
+\subsubsection{Gerenciar Jogadores}
+\label{sec:gerenciar_jogadores}
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{Telas/Admin/Jogadores.png}
+  \caption{Tela de Gerenciamento de Jogadores do Cartolitos CF}
+  \label{fig:gerenciar_jogadores}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{Telas/Admin/CriarJogador.png}
+  \caption{Tela de Edição de Jogadores do Cartolitos CF}
+  \label{fig:editar_jogador}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{Telas/Admin/DeleteJogador.png}
+  \caption{Tela de Edição de Jogadores do Cartolitos CF}
+  \label{fig:editar_jogador2}
+\end{figure}
+A tela de gerenciamento de jogadores permite que o administrador visualize todos os jogadores cadastrados no sistema. O administrador pode acessar os detalhes de cada jogador, adicionar novos jogadores e excluir jogadores, se necessário. Essa tela é importante para manter o controle sobre os atletas disponíveis no sistema e garantir que as informações estejam atualizadas.
+
+\subsubsection{Gerenciar Partidas}
+\label{sec:gerenciar_partidas}
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{Telas/Admin/Partidas.png}
+  \caption{Tela de Gerenciamento de Partidas do Cartolitos CF}
+  \label{fig:gerenciar_partidas}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{Telas/Admin/EditarPartidas.png}
+  \caption{Tela de Edição de Partidas do Cartolitos CF}
+  \label{fig:editar_partida}
+\end{figure}
+
+A tela de gerenciamento de partidas permite que o administrador visualize todas as partidas simuladas entre os clubes. O administrador pode acessar os detalhes de cada partida, editar os confrontos, se necessário. Essa tela é essencial para manter o controle sobre os confrontos realizados no sistema e garantir que as informações estejam atualizadas.
 
 \section{Conclusão}
 \label{sec:conclusao}
 
-Colocar aqui a conclusão do projeto. O que foi aprendido? O que poderia ser melhorado? Quais as dificuldades encontradas? Quais os próximos passos?
+
+O Cartolitos CF é um sistema de gerenciamento de ligas de futebol virtual, inspirado no famoso Cartola FC e no Rei do Pitaco. Ele permite que usuários criem e gerenciem seus times, escalem jogadores, participem de ligas e simulem partidas, tudo isso com uma interface amigável e intuitiva.
+O sistema foi desenvolvido utilizando Java, com uma arquitetura orientada a objetos que facilita a manutenção e a expansão das funcionalidades, conforme abordado em obras como \cite{weisfeld:2013,meyer:97,booch:2007}. As principais classes do sistema, como \texttt{Usuario}, \texttt{Administrador}, \texttt{TimeUsuario}, \texttt{Liga}, \texttt{Simulacao}, \texttt{Jogador}, \texttt{Stats} e \texttt{Clube}, foram projetadas para interagir de forma coesa, permitindo uma experiência fluida para o usuário, seguindo princípios de orientação a objetos descritos em \cite{horstmann-cornell:2012,horstmann-cornell:2013}.
+A implementação do sistema também inclui uma interface gráfica desenvolvida com JavaFX e um banco de dados PostgreSQL para persistência de dados, garantindo que as informações dos usuários, times, ligas e partidas sejam armazenadas de forma segura e eficiente.
 
 \bibliographystyle{sbc}
 \bibliography{relatorio}  %Aqui é a definição do arquivo .bib a ser usado pelas referências
-
-% Adicione as referências ausentes diretamente aqui para evitar erro de citação
-\begin{thebibliography}{99}
-  \bibitem{wiki:cartola}
-  Cartola FC. Disponível em: \url{https://pt.wikipedia.org/wiki/Cartola_FC}. Acesso em: 10 jun. 2024.
-
-  \bibitem{wiki:fantasy}
-  Fantasy Sports. Disponível em: \url{https://en.wikipedia.org/wiki/Fantasy_sport}. Acesso em: 10 jun. 2024.
-\end{thebibliography}
 
 
 \end{document}
