@@ -9,7 +9,7 @@
 <AnchorPane xmlns:fx="http://javafx.com/fxml"
             prefWidth="600" prefHeight="400"
             style="-fx-background-color: linear-gradient(to bottom right, #1B5E20, #004D40);"
-            fx:controller="controller.ControllerTelaInicio">
+            fx:controller="controller.InitialControllers.ControllerTelaInicio">
 
     <VBox alignment="CENTER" spacing="25.0" fillWidth="true"
           AnchorPane.topAnchor="40" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0">

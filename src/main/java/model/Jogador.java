@@ -22,6 +22,7 @@ public class Jogador implements Calculavel {
 
     // calcula a pontuacao total do jogador baseada em seus Stats e posicao
     public double calcularPontuacao(){
+
         stats.setPosicao(this.getStringPosicao());
         double pontuacao = 0;
         pontuacao += stats. getDesarmes() * 1.5;

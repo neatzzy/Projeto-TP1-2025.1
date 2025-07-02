@@ -7,7 +7,7 @@
             style="-fx-background-color: linear-gradient(to bottom right, #1B5E20, #004D40);"
             xmlns="http://javafx.com/javafx/23.0.1"
             xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="controller.ControllerTelaSimulacao">
+            fx:controller="controller.AdmSimulacaoController.ControllerTelaSimulacao">
 
     <!-- Botão de menu -->
     <Button fx:id="menuMontagem" layoutX="20.0" layoutY="14.0" onAction="#voltar" text="☰"

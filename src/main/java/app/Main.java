@@ -1,12 +1,11 @@
 package app;
 
 import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.List;
 
+import controller.InitialControllers.ControllerTelaInicio;
 import dao.*;
 import model.*;
-import controller.*;
 import io.github.cdimascio.dotenv.Dotenv;
 import javafx.application.Application;
 import javafx.scene.Parent;

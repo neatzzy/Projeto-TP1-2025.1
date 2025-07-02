@@ -5,7 +5,7 @@
 
 <AnchorPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
-            fx:controller="controller.ControllerTelaViewJogadores"
+            fx:controller="controller.UsrJogadorControllers.ControllerTelaViewJogadores"
             prefHeight="618.0" prefWidth="1056.0"
             style="-fx-background-color: linear-gradient(to bottom right, #1B5E20, #004D40);">
     <children>
