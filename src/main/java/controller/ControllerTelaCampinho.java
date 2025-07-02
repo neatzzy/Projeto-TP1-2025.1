@@ -219,6 +219,7 @@ public class ControllerTelaCampinho {
         }
 
         Jogador capitaoAtual = timeusuario.getCapitao();
+
         if (capitaoAtual != null) {
             boolean capitaoAindaNoTime = timeusuario.getJogadores().contains(capitaoAtual);
             if (capitaoAindaNoTime) {
@@ -255,15 +256,17 @@ public class ControllerTelaCampinho {
         try {
 
             Jogador capitao = timeusuario.getCapitao();
+            boolean timeValido = timeusuario.isValido();
 
-            if (capitao != null) {
+            if(timeValido && capitao != null){
                 timeDAO.setCapitao(usuario.getId(), capitao.getId());
+                timeDAO.alterarTime(usuario.getId(), timeusuario.getJogadores());
+                mostrarAlerta("Sucesso", "Time salvo com sucesso!");
+            } else if (capitao != null){
+                mostrarAlerta("Erro", "Time não é válido! A escalação deve ser feita do time completo!");
             } else {
-                timeDAO.removeCapitao(usuario.getId());
+                mostrarAlerta("Erro", "Lembre de selecionar um capitão!");
             }
-
-            timeDAO.alterarTime(usuario.getId(), timeusuario.getJogadores());
-            mostrarAlerta("Sucesso", "Time salvo com sucesso!");
 
         } catch (SQLException e) {
             e.printStackTrace();
