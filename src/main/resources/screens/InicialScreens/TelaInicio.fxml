@@ -4,24 +4,23 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
 <AnchorPane xmlns:fx="http://javafx.com/fxml"
             prefWidth="600" prefHeight="400"
             style="-fx-background-color: linear-gradient(to bottom right, #1B5E20, #004D40);"
             fx:controller="controller.ControllerTelaInicio">
 
-    <VBox alignment="CENTER" spacing="25.0"
-          layoutX="150" layoutY="80" prefWidth="300"
-          AnchorPane.topAnchor="80" AnchorPane.leftAnchor="150">
+    <VBox alignment="CENTER" spacing="25.0" fillWidth="true"
+          AnchorPane.topAnchor="40" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0">
 
-        <Label text="Cartolitos CF"
-               style="-fx-text-fill: white;
-                      -fx-font-size: 40px;
-                      -fx-font-weight: bold;
-                      -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.6), 3, 0, 0, 2);">
-            <font>
-                <Font name="Georgia" size="40"/>
-            </font>
-        </Label>
+        <ImageView fitWidth="200" fitHeight="200" preserveRatio="true"
+                   style="-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.5), 6, 0, 0, 2);"
+                   pickOnBounds="true">
+            <image>
+                <Image url="@/components/Logo.png" />
+            </image>
+        </ImageView>
 
         <Button fx:id="botaoCriar" text="Criar Usuário" prefWidth="300" prefHeight="45"
                 style="-fx-background-color: rgba(255,255,255,0.12);

@@ -12,4 +12,29 @@
 \newblock \url{https://pt.wikipedia.org/wiki/Esporte_fantasy}.
 \newblock [Online; acesso em 01-jun-2025].
 
+\bibitem[et~al 2007]{booch:2007}
+et~al, G.~B. (2007).
+\newblock {\em Object-Oriented Analysis and Design with Applications}.
+\newblock Addison-Wesley Professional, 3rd edition.
+
+\bibitem[Horstmann and Cornell 2012]{horstmann-cornell:2012}
+Horstmann, C.~S. and Cornell, G. (2012).
+\newblock {\em Core Java, Volume I - Fundamentals}.
+\newblock Prentice Hall, 9th edition.
+
+\bibitem[Horstmann and Cornell 2013]{horstmann-cornell:2013}
+Horstmann, C.~S. and Cornell, G. (2013).
+\newblock {\em Core Java, Volume II - Advanced Features}.
+\newblock Prentice Hall, 9th edition.
+
+\bibitem[Meyer 1997]{meyer:97}
+Meyer, B. (1997).
+\newblock {\em Object-Oriented Software Construction}.
+\newblock Prentice Hall, 2nd edition.
+
+\bibitem[Weisfeld 2013]{weisfeld:2013}
+Weisfeld, M. (2013).
+\newblock {\em The Object-Oriented Thought Process}.
+\newblock Addison-Wesley, 4th edition.
+
 \end{thebibliography}
