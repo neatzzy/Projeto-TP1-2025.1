@@ -1,6 +1,8 @@
 package controller;
 
+import dao.JogadorDAO;
 import dao.LigaDAO;
+import dao.TimeDAO;
 import dao.UsuarioDAO;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -10,15 +12,15 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
-import model.Liga;
-import model.Pessoa;
-import model.UserType;
-import model.Usuario;
+import model.*;
 
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ControllerTelaViewLigaAdm {
 
@@ -42,6 +44,7 @@ public class ControllerTelaViewLigaAdm {
     private Usuario usuario; // admin logado
     private UsuarioDAO usuarioDAO;
     private LigaDAO ligaDAO;
+    private TimeDAO timeDAO;
 
     public void setConnection(Connection conn, Liga liga, Usuario usuario) {
         this.conn = conn;
@@ -49,6 +52,7 @@ public class ControllerTelaViewLigaAdm {
         this.usuario = usuario;
         this.usuarioDAO = new UsuarioDAO(conn, new LigaDAO(conn));
         this.ligaDAO = new LigaDAO(conn);
+        this.timeDAO = new TimeDAO(conn, usuarioDAO, new JogadorDAO(conn, new dao.ClubeDAO(conn)));
 
         carregarDados();
     }
@@ -58,19 +62,70 @@ public class ControllerTelaViewLigaAdm {
         NavigationManager.popAndApply((Stage) menuMontagem.getScene().getWindow());
     }
 
+    private Map<Integer, Double> pontuacoesPorUsuario = new HashMap<>();
+
     private void carregarDados() {
         try {
-
-            labelTitulo.setText(liga.getNome()); // Nome da liga no título
+            labelTitulo.setText(liga.getNome());
 
             List<Pessoa> usuariosDaLiga = usuarioDAO.getAllUsuariosByLigaId(liga.getId());
-
-            List<Usuario> usuariosDaLiga2 = usuariosDaLiga.stream()
-                    .map(u -> (Usuario) u)
-                    .toList();
+            List<Usuario> usuariosDaLiga2 = new ArrayList<>(usuariosDaLiga.stream()
+                    .map(p -> (Usuario) p)
+                    .toList());
 
             ObservableList<Usuario> obs = FXCollections.observableArrayList(usuariosDaLiga2);
+
+            // se simulação ocorreu, carregar pontuações do banco
+            if (Simulacao.getOcorreu()) {
+                pontuacoesPorUsuario.clear();
+
+                for (Usuario u : usuariosDaLiga2) {
+                    try {
+                        double pontuacao = timeDAO.getPontuacaoTime(u.getId());
+                        pontuacoesPorUsuario.put(u.getId(), pontuacao);
+                    } catch (SQLException e) {
+                        pontuacoesPorUsuario.put(u.getId(), 0.0);
+                    }
+                }
+
+                usuariosDaLiga2.sort((u1, u2) -> {
+                    double p1 = pontuacoesPorUsuario.getOrDefault(u1.getId(), 0.0);
+                    double p2 = pontuacoesPorUsuario.getOrDefault(u2.getId(), 0.0);
+                    return Double.compare(p2, p1);
+                });
+
+                obs.setAll(usuariosDaLiga2);
+            }
+
             listViewUsuarios.setItems(obs);
+
+            listViewUsuarios.setCellFactory(param -> new ListCell<>() {
+                @Override
+                protected void updateItem(Usuario usuario, boolean empty) {
+                    super.updateItem(usuario, empty);
+                    if (empty || usuario == null) {
+                        setText(null);
+                        setGraphic(null);
+                        return;
+                    }
+
+                    String texto = usuario.getNome();
+
+                    if (Simulacao.getOcorreu()) {
+                        int posicao = getIndex() + 1;
+                        double pont = pontuacoesPorUsuario.getOrDefault(usuario.getId(), 0.0);
+                        setText(String.format("%dº %s - Pontuação: %.2f", posicao, texto, pont));
+
+                        if (getIndex() == 0)
+                            setStyle("-fx-background-color: #C8E6C9;");
+                        else
+                            setStyle("");
+                    } else {
+                        setText(texto);
+                        setStyle("");
+                    }
+                }
+            });
 
         } catch (SQLException e) {
             mostrarAlerta("Erro", "Erro ao carregar usuários da liga.");

@@ -255,8 +255,6 @@ public class Partida implements Simulavel{
             jogador.getStats().setCartaoVermelho(false);
         }
 
-        System.out.println("amarelos: " + total_cartoes_amarelos);
-
         // estatísticas dependentes: gols sofridos, defesa pênalti e sg
 
     }
