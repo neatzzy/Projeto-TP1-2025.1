@@ -8,8 +8,6 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-// nota: mudar para passar objetos como parâmetros? facilitaria visualização do programa
-
 public class UsuarioDAO {
 
     private final Connection conn;

@@ -7,7 +7,7 @@
 <?import javafx.scene.text.Font?>
 
 <AnchorPane prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: linear-gradient(to bottom right, #1B5E20, #004D40);" xmlns="http://javafx.com/javafx/23.0.1"
-            fx:controller="controller.ControllerTelaViewLigaAdm"
+            fx:controller="controller.UsrLigaControllers.ControllerTelaViewLigaAdm"
             xmlns:fx="http://javafx.com/fxml/1">
 
     <children>

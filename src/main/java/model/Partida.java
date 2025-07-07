@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
-public class Partida implements Simulavel{
+public class Partida{
 
     private Clube clubeCasa;
     private Clube clubeFora;
@@ -87,7 +87,6 @@ public class Partida implements Simulavel{
         Jogador atacanteMaiorOverallFora = new Jogador(0, null, null, null, 0, 0);
 
         // loop para achar goleiro e atacante de maior overall(time casa)
-        // sugestão: funções para retornar goleiros, atacantes, jogador de maior overall, ...
         for(Jogador jogador: todosJogadores){
 
             boolean timeCasa;
@@ -254,8 +253,6 @@ public class Partida implements Simulavel{
         } else {
             jogador.getStats().setCartaoVermelho(false);
         }
-
-        System.out.println("amarelos: " + total_cartoes_amarelos);
 
         // estatísticas dependentes: gols sofridos, defesa pênalti e sg
 
@@ -435,52 +432,6 @@ public class Partida implements Simulavel{
         this.cartaoVermelhoClubeFora = false;
     }
 
-
-    public void mostrarResumoPartida() {
-        System.out.println("=== RESUMO DA PARTIDA ===");
-        System.out.println("model.Clube da Casa: " + clubeCasa.getNome());
-        System.out.println("model.Clube de Fora: " + clubeFora.getNome());
-        System.out.println("Placar: " + clubeCasa.getNome() + " " + golsClubeCasa + " x " + golsClubeFora + " " + clubeFora.getNome());
-        System.out.println();
-
-        System.out.println("Gols da Casa:");
-        for (Jogador j : jogadoresGolCasa) {
-            System.out.println("- " + j.getNome() + " (" + j.getStats().getGols() + " gols)" + j.getPontuacao());
-        }
-        System.out.println("Gols de Pênalti da Casa: " + golsPenaltiCasa);
-
-        System.out.println("Assistências da Casa:");
-        for (Jogador j : jogadoresAssistenciaCasa) {
-            System.out.println("- " + j.getNome() + " (" + j.getStats().getAssistencias() + " assistências)");
-        }
-
-        System.out.println();
-        System.out.println("Gols da Fora:");
-        for (Jogador j : jogadoresGolFora) {
-            System.out.println("- " + j.getNome() + " (" + j.getStats().getGols() + " gols)" + j.getPontuacao());
-            System.out.println("- " + j.getNome() + " (" + j.getStats().getFinalizacoes() + " fin)");
-            System.out.println("- " + j.getNome() + " (" + j.getStats().getDesarmes() + " des)");
-            if (j.getPosicao() == Posicao.GOLEIRO) System.out.println("- " + j.getNome() + " (" + j.getStats().getDefesas() + " def)");
-        }
-        System.out.println("Gols de Pênalti da Fora: " + golsPenaltiFora);
-
-        System.out.println("Assistências da Fora:");
-        for (Jogador j : jogadoresAssistenciaFora) {
-            System.out.println("- " + j.getNome() + " (" + j.getStats().getAssistencias() + " assistências)");
-        }
-
-        System.out.println();
-        System.out.println("Cartões Vermelhos:");
-        if (cartaoVermelhoClubeCasa) {
-            System.out.println("- " + clubeCasa.getNome() + " teve pelo menos 1 cartão vermelho.");
-        }
-        if (cartaoVermelhoClubeFora) {
-            System.out.println("- " + clubeFora.getNome() + " teve pelo menos 1 cartão vermelho.");
-        }
-
-        System.out.println("\n=========================\n");
-    }
-
     // contrutores e setters
 
     public Clube getClubeCasa() {
@@ -503,97 +454,8 @@ public class Partida implements Simulavel{
         return golsClubeCasa;
     }
 
-    public void setGolsClubeCasa(int golsClubeCasa) {
-        this.golsClubeCasa = golsClubeCasa;
-    }
-
     public int getGolsClubeFora() {
         return golsClubeFora;
-    }
-
-    public void setGolsClubeFora(int golsClubeFora) {
-        this.golsClubeFora = golsClubeFora;
-    }
-
-    public int getAssistClubeCasa() {
-        return assistClubeCasa;
-    }
-
-    public void setAssistClubeCasa(int assistClubeCasa) {
-        this.assistClubeCasa = assistClubeCasa;
-    }
-
-    public int getAssistClubeFora() {
-        return assistClubeFora;
-    }
-
-    public void setAssistClubeFora(int assistClubeFora) {
-        this.assistClubeFora = assistClubeFora;
-    }
-
-    public int getGolsPenaltiCasa() {
-        return golsPenaltiCasa;
-    }
-
-    public void setGolsPenaltiCasa(int golsPenaltiCasa) {
-        this.golsPenaltiCasa = golsPenaltiCasa;
-    }
-
-    public int getGolsPenaltiFora() {
-        return golsPenaltiFora;
-    }
-
-    public void setGolsPenaltiFora(int golsPenaltiFora) {
-        this.golsPenaltiFora = golsPenaltiFora;
-    }
-
-    public List<Jogador> getJogadoresGolCasa() {
-        return jogadoresGolCasa;
-    }
-
-    public void setJogadoresGolCasa(List<Jogador> jogadoresGolCasa) {
-        this.jogadoresGolCasa = jogadoresGolCasa;
-    }
-
-    public List<Jogador> getJogadoresGolFora() {
-        return jogadoresGolFora;
-    }
-
-    public void setJogadoresGolFora(List<Jogador> jogadoresGolFora) {
-        this.jogadoresGolFora = jogadoresGolFora;
-    }
-
-
-    public List<Jogador> getJogadoresAssistenciaCasa() {
-        return jogadoresAssistenciaCasa;
-    }
-
-    public void setJogadoresAssistenciaCasa(List<Jogador> jogadoresAssistenciaCasa) {
-        this.jogadoresAssistenciaCasa = jogadoresAssistenciaCasa;
-    }
-
-    public List<Jogador> getJogadoresAssistenciaFora() {
-        return jogadoresAssistenciaFora;
-    }
-
-    public void setJogadoresAssistenciaFora(List<Jogador> jogadoresAssistenciaFora) {
-        this.jogadoresAssistenciaFora = jogadoresAssistenciaFora;
-    }
-
-    public boolean isCartaoVermelhoClubeCasa() {
-        return cartaoVermelhoClubeCasa;
-    }
-
-    public void setCartaoVermelhoClubeCasa(boolean cartaoVermelhoClubeCasa) {
-        this.cartaoVermelhoClubeCasa = cartaoVermelhoClubeCasa;
-    }
-
-    public boolean isCartaoVermelhoClubeFora() {
-        return cartaoVermelhoClubeFora;
-    }
-
-    public void setCartaoVermelhoClubeFora(boolean cartaoVermelhoClubeFora) {
-        this.cartaoVermelhoClubeFora = cartaoVermelhoClubeFora;
     }
     
     public List<Jogador> getAllJogadores(){

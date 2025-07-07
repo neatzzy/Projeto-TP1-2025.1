@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="600.0" prefWidth="900.0"
+            style="-fx-background-color: linear-gradient(to bottom right, #1B5E20, #004D40);"
+            xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="controller.AdmJogadorControllers.ControllerTelaDeleteJogadores">
+
+    <VBox alignment="TOP_CENTER" spacing="24.0"
+          AnchorPane.topAnchor="0.0" AnchorPane.bottomAnchor="0.0"
+          AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+
+        <!-- Barra superior com botão de menu e busca -->
+        <HBox alignment="CENTER_LEFT" spacing="8.0" style="-fx-padding: 10;">
+            <Button fx:id="menuMontagem"
+                    mnemonicParsing="false"
+                    onAction="#voltar"
+                    text="☰"
+                    style="-fx-background-color: rgba(255,255,255,0.12);
+                           -fx-background-radius: 10;
+                           -fx-text-fill: white;
+                           -fx-font-size: 20px;
+                           -fx-font-weight: bold;
+                           -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.4), 3, 0, 0, 2);" />
+
+            <TextField fx:id="tfBuscaJogador"
+                       promptText="Buscar por nome ou clube..."
+                       style="-fx-background-radius: 8; -fx-font-size: 16px;" />
+
+            <Button fx:id="btnBuscar"
+                    text="Buscar"
+                    onAction="#buscarJogadores"
+                    style="-fx-background-color: #009688;
+                           -fx-text-fill: white;
+                           -fx-font-size: 16px;
+                           -fx-font-weight: bold;
+                           -fx-background-radius: 8;" />
+        </HBox>
+
+        <!-- Título -->
+        <Label text="Jogadores Cadastrados"
+               style="-fx-font-size: 40px;
+                      -fx-text-fill: white;
+                      -fx-font-family: 'Helvetica Rounded', Arial, sans-serif;
+                      -fx-font-weight: bold;
+                      -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.6), 2, 0, 0, 1);" />
+
+        <!-- Tabela de Jogadores -->
+        <TableView fx:id="tableJogadores"
+                   VBox.vgrow="ALWAYS"
+                   style="-fx-font-size: 16px;
+                          -fx-background-color: rgba(255,255,255,0.08);
+                          -fx-border-color: white;
+                          -fx-border-radius: 8;
+                          -fx-background-radius: 8;">
+            <columns>
+                <TableColumn fx:id="colNome" text="Nome" />
+                <TableColumn fx:id="colClube" text="Clube" />
+                <TableColumn fx:id="colOVR" text="OVR" />
+                <TableColumn fx:id="colPreco" text="Preço" />
+                <TableColumn fx:id="colAcoes" text="Ações" />
+            </columns>
+            <columnResizePolicy>
+                <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
+            </columnResizePolicy>
+        </TableView>
+    </VBox>
+</AnchorPane>

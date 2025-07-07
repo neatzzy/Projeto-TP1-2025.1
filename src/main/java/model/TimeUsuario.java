@@ -3,7 +3,7 @@ package model;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class TimeUsuario {
+public class TimeUsuario implements Calculavel {
 
     private Usuario usuario;
     private Set<Jogador> jogadores; // jogadores que estao no time do usuario
@@ -27,24 +27,27 @@ public class TimeUsuario {
     // Construtor para retornar dados do banco de dados, já incluindo os jogadores do time
     public TimeUsuario(Usuario usuario, Set<Jogador> jogadores, Jogador jogcapitao){
         this.usuario = usuario;
-        this.jogadores = jogadores;
-        this.pontuacao = 0;
-        this.preco = 0;
-        this.capitao = jogcapitao;
-        valido = false;
-        contG = contZ = contM = contA = 0;
+        this.jogadores = new HashSet<>();
+        for (Jogador jogador : jogadores){
+            this.addJogador(jogador);
+        }
+        this.setCapitao(jogcapitao);
+        pontuacao = 0;
+        capitao = jogcapitao;
     }
 
 
     // calcula a pontuacao ou retorna falso se a escalacao eh invalida ou se a simulacao nao ocorreu
-    public boolean calcularPontuacao(){
-        if (!Simulacao.getOcorreu() || valido == false) return false;
+    public double calcularPontuacao(){
+
         pontuacao = 0;
         for (Jogador jogadori : jogadores){
             pontuacao += jogadori.calcularPontuacao();
         }
+
         pontuacao += capitao.getPontuacao(); // adiciona a pontuacao do capitao duplicadamente
-        return true;
+
+        return pontuacao;
     }
 
     // calcula o preço
@@ -56,9 +59,9 @@ public class TimeUsuario {
         return preco;
     }
 
-    // adiciona jogador no time se houver vaga 
+    // adiciona jogador no time se houver vaga
     public boolean addJogador(Jogador jogador){
-        if (Simulacao.getOcorreu() || this.isFull() || (preco + jogador.getPreco()) > usuario.getCartoletas()) return false;
+        if (this.isFull() || (preco + jogador.getPreco()) > usuario.getCartoletas()) return false;
         Posicao posicao = jogador.getPosicao();
         if(posicao == Posicao.GOLEIRO){
             if (contG == MAX_G) return false;
@@ -83,7 +86,7 @@ public class TimeUsuario {
     }
     // remove jogador do time se houver jogador
     public boolean removeJogador(Jogador jogador){
-        if (Simulacao.getOcorreu() || this.isEmpty() || !jogadores.contains(jogador)) return false;
+        if (this.isEmpty() || !jogadores.contains(jogador)) return false;
         jogadores.remove(jogador);
         preco-=jogador.getPreco();
         valido = false;
@@ -151,6 +154,12 @@ public class TimeUsuario {
         System.out.println();
     }
     // getters
+
+
+    public void setJogadores(Set<Jogador> jogadores) {
+        this.jogadores = jogadores;
+    }
+
     public Usuario getUsuario() {
         return usuario;
     }

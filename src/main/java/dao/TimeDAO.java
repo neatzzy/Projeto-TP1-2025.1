@@ -1,15 +1,11 @@
 package dao;
 
-import model.Pessoa;
 import model.TimeUsuario;
 import model.Usuario;
 import model.Jogador;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class TimeDAO {
 
@@ -53,6 +49,7 @@ public class TimeDAO {
                 jogadoresSet.add(jogador);
             }
         }
+
         return new TimeUsuario(usuario, jogadoresSet, jogadorcap);
     }
 
@@ -64,6 +61,7 @@ public class TimeDAO {
                 "jogadoresids INTEGER[], " +
                 "capitaoid INT," +
                 "ligaid INT, " +
+                "pontuacao DOUBLE PRECISION, " +
                 "FOREIGN KEY (timeid) REFERENCES usuarios(usuarioid) ON DELETE CASCADE," +
                 "FOREIGN KEY (ligaid) REFERENCES ligas(ligaid) ON DELETE CASCADE" +
                 ")";
@@ -79,7 +77,7 @@ public class TimeDAO {
     // Adiciona Time no banco de dados(sem jogadores)
     public int insertTime(int usuarioid, String name, int ligaid) throws SQLException {
 
-        String insertQuery = "INSERT INTO times (timeid, nome, jogadoresids, capitaoid, ligaid) VALUES (?, ?, ?, ?, ?) RETURNING timeid";
+        String insertQuery = "INSERT INTO times (timeid, nome, jogadoresids, capitaoid, ligaid, pontuacao) VALUES (?, ?, ?, ?, ?, ?) RETURNING timeid";
 
         try(PreparedStatement insertStmt = conn.prepareStatement(insertQuery)){
 
@@ -88,6 +86,7 @@ public class TimeDAO {
             insertStmt.setNull(3, java.sql.Types.ARRAY);
             insertStmt.setNull(4, java.sql.Types.INTEGER);
             insertStmt.setInt(5, ligaid);
+            insertStmt.setDouble(6, 0.0);
 
             try(ResultSet rs = insertStmt.executeQuery()){
                 if(rs.next()) {
@@ -179,6 +178,47 @@ public class TimeDAO {
         }
     }
 
+    // Atualiza a pontuação do time no banco de dados
+    public boolean inserirPontuacaoTime(int timeId, double pontuacao) throws SQLException {
+        String updateQuery = "UPDATE times SET pontuacao = ? WHERE timeid = ?";
+
+        try (PreparedStatement stmt = conn.prepareStatement(updateQuery)) {
+            stmt.setDouble(1, pontuacao);
+            stmt.setInt(2, timeId);
+            int rowsUpdated = stmt.executeUpdate();
+            if (rowsUpdated > 0) {
+                System.out.println("Pontuação do time " + timeId + " atualizada para " + pontuacao);
+                return true;
+            } else {
+                System.out.println("Time com ID " + timeId + " não encontrado para atualização de pontuação.");
+                return false;
+            }
+        } catch (SQLException e) {
+            System.out.println("Erro ao atualizar pontuação do time: " + e.getMessage());
+            throw e;
+        }
+    }
+
+    // Retorna a pontuação do time a partir do ID
+    public double getPontuacaoTime(int timeId) throws SQLException {
+        String selectQuery = "SELECT pontuacao FROM times WHERE timeid = ?";
+
+        try (PreparedStatement stmt = conn.prepareStatement(selectQuery)) {
+            stmt.setInt(1, timeId);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getDouble("pontuacao");
+                } else {
+                    System.out.println("Time com ID " + timeId + " não encontrado.");
+                    return 0.0;
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Erro ao buscar pontuação do time: " + e.getMessage());
+            throw e;
+        }
+    }
+
 
     // Remove Jogador do Time do Usuário
     public boolean removeJogadorTime(int jogadorid, int timeid) throws SQLException {
@@ -253,6 +293,20 @@ public class TimeDAO {
 
     }
 
+    // Verifica se o usuário já tem time
+    public boolean usuarioTemTime(int usuarioId) throws SQLException {
+        String sql = "SELECT 1 FROM times WHERE timeid = ? LIMIT 1";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, usuarioId);
+            try (ResultSet rs = stmt.executeQuery()) {
+                return rs.next();
+            }
+        } catch ( SQLException e ) {
+            System.out.println(e);
+            throw e;
+        }
+    }
+
     // Retorna lista de todos os objetos Time
     public List<TimeUsuario> getAllTimes() throws SQLException {
 
@@ -274,6 +328,30 @@ public class TimeDAO {
             throw e;
         }
 
+    }
+
+    // Retorna Mapa com id e time
+    public Map<Integer, TimeUsuario> getAllTimesComIdsPorLigaId(int ligaId) throws SQLException {
+        Map<Integer, TimeUsuario> timesMap = new HashMap<>();
+
+        String dataQuery = "SELECT * FROM times WHERE ligaid = ?";
+
+        try (PreparedStatement dataStmt = conn.prepareStatement(dataQuery)) {
+            dataStmt.setInt(1, ligaId);
+
+            try (ResultSet rs = dataStmt.executeQuery()) {
+                while (rs.next()) {
+                    int id = rs.getInt("timeid");
+                    TimeUsuario time = construirTime(rs);
+                    timesMap.put(id, time);
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Erro ao buscar times da liga com ID " + ligaId + ": " + e.getMessage());
+            throw e;
+        }
+
+        return timesMap;
     }
 
     // Retorna objeto Time a partir de um id da liga
@@ -309,6 +387,20 @@ public class TimeDAO {
             int rowsUpdated = stmt.executeUpdate();
             return rowsUpdated > 0;
         } catch ( SQLException e ) {
+            System.out.println(e);
+            throw e;
+        }
+    }
+
+    // Remove o capitão do time
+    public boolean removeCapitao(int timeId) throws SQLException {
+        String sql = "UPDATE times SET capitaoid = NULL WHERE timeid = ?";
+
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, timeId);
+            int rowsUpdated = stmt.executeUpdate();
+            return rowsUpdated > 0;
+        } catch (SQLException e) {
             System.out.println(e);
             throw e;
         }
